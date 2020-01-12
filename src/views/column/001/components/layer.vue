@@ -25,7 +25,7 @@
                 </el-form-item>
                 <el-form-item label="选择ICON">
                     <el-radio-group v-model="addForm.columnIcon" class="el-icon-list">
-                        <el-radio-button :label="item.id" v-for="(item,index) in iconList" :key="item.id" class="el-icon-inner">
+                        <el-radio-button :label="item.id" v-for="(item) in iconList" :key="item.id" class="el-icon-inner">
                             <div class="el-icon-item">
                                 <span class="el-item-center" :class="item.name"></span>
                                 <p class="el-item-des" v-text="item.name">
@@ -44,127 +44,125 @@
     </el-dialog>
 </template>
 <script>
-    import Common from '../../../../utils/common';
-    import { createNamespacedHelpers } from 'vuex';
-    const { mapGetters,mapActions } = createNamespacedHelpers('module001');
-    export default {
-        data(){
-            let adminId = Common.checkInvalid(localStorage.getItem('adminId'))?'':localStorage.getItem('adminId');
-          return {
-              addForm:{
-                  columnTitle:'',
-                  grade:'',
-                  columnIcon:'',
-                  columnRouterName:'',
-                  parentColumnId:'',
-                  adminId:adminId
-              }
-          }
-        },
-        computed:{
-            ...mapGetters(['dialogVisible','addMessage','iconList',"columnList",'selectTableData','editType'])
-        },
-        watch:{
-            addForm:{
-                handler(n){
-                    console.log(n)
-                },
-                deep:true
-            },
-            addMessage(n){
-                let t = this;
-                if(n){
-                    t.$message({
-                        showClose: true,
-                        message: '创建栏目成功',
-                        type: 'success'
-                    });
-                    t.hideMsg();
-                }
-            },
-            dialogVisible(n){
-                console.log(n);
-                if(n){
-                    let _this = this;
-                    if(parseInt(_this.editType,10)===0){
-                        _this.resetForm();
-                    }else{
-                        _this.checkForm(_this.selectTableData);
-                    }
-
-                }
-            },
-            selectTableData:{
-                handler(newVal){
-                    let _this = this;
-                    if(parseInt(_this.editType,10)===0){
-                        _this.resetForm();
-                    }else{
-                        _this.checkForm(newVal);
-                    }
-                },
-                deep:true
-            },
-            editType(newVal){
-                let _this = this;
-                if(parseInt(newVal,10)===0){
-                    _this.resetForm();
-                }
-            }
-        },
-        methods:{
-            ...mapActions(['showLayer','hideLayer','createColumn','hideMsg','tableCurrentChange']),
-            handleClose(){
-                let t = this;
-                t.hideLayer();
-                _this.resetForm();
-            },
-            resetForm(){
-              let _this = this;
-                let adminId = Common.checkInvalid(localStorage.getItem('adminId'))?'':localStorage.getItem('adminId');
-                _this.addForm = {
-                    columnTitle:'',
-                    grade:'',
-                    columnIcon:'',
-                    columnRouterName:'',
-                    parentColumnId:'',
-                    adminId:adminId
-                };
-            },
-            checkForm(newVal){
-                let _this = this;
-                if(!Common.isEmptyObject(newVal)){
-                    console.log('=========');
-                    console.log(newVal);
-                    console.log('=========');
-                    let adminId = Common.checkInvalid(localStorage.getItem('adminId'))?'':localStorage.getItem('adminId');
-                    _this.addForm.columnIcon = newVal.iconId;
-                    _this.addForm.columnTitle = newVal.title;
-                    console.log(newVal.grade,newVal.routerName);
-                    _this.addForm.grade = newVal.grade;
-
-                    _this.addForm.columnRouterName = newVal.routerName;
-                    _this.addForm.parentColumnId = newVal.parentColumnId;
-                    _this.adminId = adminId;
-                }
-            },
-            addColumn(){
-                let t = this;
-                console.log(t.addForm);
-                let normalOnOff = t.addForm.adminId.length>0&&t.addForm.columnTitle.length>0&&t.addForm.grade.length>0&&t.addForm.grade.length>0&&t.addForm.columnRouterName.length>0;
-                let addOnOff = parseInt(t.addForm.grade,10)===0?normalOnOff:normalOnOff&&t.addForm.parentColumnId.length>0;
-                if(addOnOff){
-                    t.createColumn(JSON.parse(JSON.stringify(t.addForm)));
-                }else{
-                    t.$message({
-                        message: '创建字段不足',
-                        type: 'warning'
-                    });
-                }
-
-            }
-        }
+import Common from '../../../../utils/common'
+import { createNamespacedHelpers } from 'vuex'
+const { mapGetters, mapActions } = createNamespacedHelpers('module001')
+export default {
+  data () {
+    const adminId = Common.checkInvalid(localStorage.getItem('adminId')) ? '' : localStorage.getItem('adminId')
+    return {
+      addForm: {
+        columnTitle: '',
+        grade: '',
+        columnIcon: '',
+        columnRouterName: '',
+        parentColumnId: '',
+        adminId: adminId
+      }
     }
+  },
+  computed: {
+    ...mapGetters(['dialogVisible', 'addMessage', 'iconList', 'columnList', 'selectTableData', 'editType'])
+  },
+  watch: {
+    addForm: {
+      handler (n) {
+        console.log(n)
+      },
+      deep: true
+    },
+    addMessage (n) {
+      const t = this
+      if (n) {
+        t.$message({
+          showClose: true,
+          message: '创建栏目成功',
+          type: 'success'
+        })
+        t.hideMsg()
+      }
+    },
+    dialogVisible (n) {
+      console.log(n)
+      if (n) {
+        const _this = this
+        if (parseInt(_this.editType, 10) === 0) {
+          _this.resetForm()
+        } else {
+          _this.checkForm(_this.selectTableData)
+        }
+      }
+    },
+    selectTableData: {
+      handler (newVal) {
+        const _this = this
+        if (parseInt(_this.editType, 10) === 0) {
+          _this.resetForm()
+        } else {
+          _this.checkForm(newVal)
+        }
+      },
+      deep: true
+    },
+    editType (newVal) {
+      const _this = this
+      if (parseInt(newVal, 10) === 0) {
+        _this.resetForm()
+      }
+    }
+  },
+  methods: {
+    ...mapActions(['showLayer', 'hideLayer', 'createColumn', 'hideMsg', 'tableCurrentChange']),
+    handleClose () {
+      const _this = this
+      _this.hideLayer()
+      _this.resetForm()
+    },
+    resetForm () {
+      const _this = this
+      const adminId = Common.checkInvalid(localStorage.getItem('adminId')) ? '' : localStorage.getItem('adminId')
+      _this.addForm = {
+        columnTitle: '',
+        grade: '',
+        columnIcon: '',
+        columnRouterName: '',
+        parentColumnId: '',
+        adminId: adminId
+      }
+    },
+    checkForm (newVal) {
+      const _this = this
+      if (!Common.isEmptyObject(newVal)) {
+        console.log('=========')
+        console.log(newVal)
+        console.log('=========')
+        const adminId = Common.checkInvalid(localStorage.getItem('adminId')) ? '' : localStorage.getItem('adminId')
+        _this.addForm.columnIcon = newVal.iconId
+        _this.addForm.columnTitle = newVal.title
+        console.log(newVal.grade, newVal.routerName)
+        _this.addForm.grade = newVal.grade
+
+        _this.addForm.columnRouterName = newVal.routerName
+        _this.addForm.parentColumnId = newVal.parentColumnId
+        _this.adminId = adminId
+      }
+    },
+    addColumn () {
+      const t = this
+      console.log(t.addForm)
+      const normalOnOff = t.addForm.adminId.length > 0 && t.addForm.columnTitle.length > 0 && t.addForm.grade.length > 0 && t.addForm.grade.length > 0 && t.addForm.columnRouterName.length > 0
+      const addOnOff = parseInt(t.addForm.grade, 10) === 0 ? normalOnOff : normalOnOff && t.addForm.parentColumnId.length > 0
+      if (addOnOff) {
+        t.createColumn(JSON.parse(JSON.stringify(t.addForm)))
+      } else {
+        t.$message({
+          message: '创建字段不足',
+          type: 'warning'
+        })
+      }
+    }
+  }
+}
 </script>
 <style lang="scss" scoped>
     .el-icon-item{

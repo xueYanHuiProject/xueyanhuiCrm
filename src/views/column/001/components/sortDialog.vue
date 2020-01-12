@@ -19,105 +19,102 @@
     </el-dialog>
 </template>
 <script>
-    import axios from 'axios';
-    import Common from '../../../../utils/common';
-    import { createNamespacedHelpers } from 'vuex';
-    const { mapGetters,mapActions } = createNamespacedHelpers('module001');
-    export default {
-        data(){
-            let adminId = Common.checkInvalid(localStorage.getItem('adminId'))?'':localStorage.getItem('adminId');
-            return {
-                sortList: [],
-                storeSortList:[]
-            }
-        },
-        computed:{
-            ...mapGetters(['sortOnOff','selectTableData','originalTable'])
-        },
-        methods:{
-            ...mapActions(['hideSort','triggerTable','tableCurrentChange']),
-            handleClose(){
-                let _this = this;
-                _this.hideSort();
-            },
-            sortColumn(){
-                let _this = this;
-                console.log('确定排序');
-                let createOrderData = (data)=>{
-                  let resultList = [];
-                  let orginalData = JSON.parse(JSON.stringify(data));
-                  for(let num = 0;num<orginalData.length;num++){
-                      let item = {
-                          id:orginalData[num].id,
-                          orderBy:num+1
-                      };
-                      resultList.push(item);
-                  }
-                  return resultList;
-                };
-                axios({
-                    method: 'post',
-                    url: '/api/columns/updateOrder',
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest'
-                    },
-                    data: createOrderData(_this.storeSortList)
-                }).then(function(response) {
-                    let reqData = response.data;
-                    if(parseInt(reqData.code,10)===200){
-                        _this.hideSort();
-                        _this.sortList = [];
-                        _this.storeSortList = [];
-                        _this.$message({
-                            showClose: true,
-                            message: '更新成功',
-                            type: 'success'
-                        });
-                        _this.triggerTable();
-                    }
-                    console.log(response.data);
-                });
-
-            },
-            draggedInit(){
-                let _this = this;
-                _this.$dragging.$on('dragged', ({ value }) => {
-                    console.log(value.item)
-                    console.log(value.list)
-                    _this.storeSortList = value.list;
-                    console.log(value.otherData)
-                })
-            }
-        },
-        watch:{
-            sortOnOff(newVal){
-                let _this = this;
-                if(newVal){
-                    let selectGrade = _this.selectTableData.grade;
-                    let changeDataList = (data)=>{
-                        let originalList = JSON.parse(JSON.stringify(data));
-                        for(let num = 0;num<originalList.length;num++){
-                            let item = originalList[num];
-                            if((_this.selectTableData.parentColumnId==item.id)&&item.OneColList.length){
-                                return  item.OneColList;
-                            }
-                        }
-                    };
-                    if(parseInt(selectGrade,10)===0){
-                        _this.sortList = JSON.parse(JSON.stringify(_this.originalTable));
-                    }else{
-                        _this.sortList = JSON.parse(JSON.stringify(changeDataList(_this.originalTable)));
-                    }
-                    console.log(_this.selectTableData);
-                }
-            }
-        },
-        mounted() {
-            let _this = this;
-            console.log('进入到这里');
-            _this.draggedInit();
-        }
+import axios from 'axios'
+import { createNamespacedHelpers } from 'vuex'
+const { mapGetters, mapActions } = createNamespacedHelpers('module001')
+export default {
+  data () {
+    return {
+      sortList: [],
+      storeSortList: []
     }
+  },
+  computed: {
+    ...mapGetters(['sortOnOff', 'selectTableData', 'originalTable'])
+  },
+  methods: {
+    ...mapActions(['hideSort', 'triggerTable', 'tableCurrentChange']),
+    handleClose () {
+      const _this = this
+      _this.hideSort()
+    },
+    sortColumn () {
+      const _this = this
+      console.log('确定排序')
+      const createOrderData = (data) => {
+        const resultList = []
+        const orginalData = JSON.parse(JSON.stringify(data))
+        for (let num = 0; num < orginalData.length; num++) {
+          const item = {
+            id: orginalData[num].id,
+            orderBy: num + 1
+          }
+          resultList.push(item)
+        }
+        return resultList
+      }
+      axios({
+        method: 'post',
+        url: '/api/columns/updateOrder',
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest'
+        },
+        data: createOrderData(_this.storeSortList)
+      }).then(function (response) {
+        const reqData = response.data
+        if (parseInt(reqData.code, 10) === 200) {
+          _this.hideSort()
+          _this.sortList = []
+          _this.storeSortList = []
+          _this.$message({
+            showClose: true,
+            message: '更新成功',
+            type: 'success'
+          })
+          _this.triggerTable()
+        }
+        console.log(response.data)
+      })
+    },
+    draggedInit () {
+      const _this = this
+      _this.$dragging.$on('dragged', ({ value }) => {
+        console.log(value.item)
+        console.log(value.list)
+        _this.storeSortList = value.list
+        console.log(value.otherData)
+      })
+    }
+  },
+  watch: {
+    sortOnOff (newVal) {
+      const _this = this
+      if (newVal) {
+        const selectGrade = _this.selectTableData.grade
+        const changeDataList = (data) => {
+          const originalList = JSON.parse(JSON.stringify(data))
+          for (let num = 0; num < originalList.length; num++) {
+            const item = originalList[num]
+            if ((_this.selectTableData.parentColumnId === item.id) && item.tabList.length) {
+              return item.tabList
+            }
+          }
+        }
+        if (parseInt(selectGrade, 10) === 0) {
+          _this.sortList = JSON.parse(JSON.stringify(_this.originalTable))
+        } else {
+          _this.sortList = JSON.parse(JSON.stringify(changeDataList(_this.originalTable)))
+        }
+        console.log(_this.selectTableData)
+      }
+    }
+  },
+  mounted () {
+    const _this = this
+    console.log('进入到这里')
+    _this.draggedInit()
+  }
+}
 </script>
 <style lang="scss" scoped>
     .columnContainer{

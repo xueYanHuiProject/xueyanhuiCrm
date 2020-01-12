@@ -6,34 +6,34 @@
     </ul>
 </template>
 <script>
-    export default {
-        data(){
-            return {
-                styleJson:{
-                    left:0,
-                    top:0
-                }
-
-            }
-        },
-        methods:{
-            closeTab(type){
-                let t = this;
-                switch (type){
-                    case 0:
-                        t.$emit('deleteIt');
-                        break;
-                    case 1:
-                        t.$emit('deleteOthers');
-                        break;
-                    case 2:
-                        t.$emit('deleteAll');
-                        break;
-                }
-            }
-        }
+export default {
+  data () {
+    return {
+      styleJson: {
+        left: 0,
+        top: 0
+      }
 
     }
+  },
+  methods: {
+    closeTab (type) {
+      const t = this
+      switch (type) {
+        case 0:
+          t.$emit('deleteIt')
+          break
+        case 1:
+          t.$emit('deleteOthers')
+          break
+        case 2:
+          t.$emit('deleteAll')
+          break
+      }
+    }
+  }
+
+}
 </script>
 <style lang="scss" scoped>
     .contextMenu{

@@ -12,39 +12,38 @@
     </el-dialog>
 </template>
 <script>
-    import {mapGetters,mapActions} from 'vuex';
-    export default {
-        data() {
-            return {
-                centerDialogVisible: false
-            };
-        },
-        methods:{
-            cancelDialog(type){
-              this.centerDialogVisible = false;
-              if(type===0){
-                  this.cancelOutLogin();
-              }else{
-                  this.outLogin();
-              }
-
-            },
-            handleClose(){
-                this.centerDialogVisible = false;
-                this.cancelOutLogin();
-            },
-            ...mapActions(['cancelOutLogin','outLogin'])
-        },
-        watch:{
-            outLoginDialogOnOff(n){
-                let t = this;
-                if(n){
-                    t.centerDialogVisible = true;
-                }
-            }
-        },
-        computed:{
-            ...mapGetters(['outLoginDialogOnOff'])
-        }
-    };
+import { mapGetters, mapActions } from 'vuex'
+export default {
+  data () {
+    return {
+      centerDialogVisible: false
+    }
+  },
+  methods: {
+    cancelDialog (type) {
+      this.centerDialogVisible = false
+      if (type === 0) {
+        this.cancelOutLogin()
+      } else {
+        this.outLogin()
+      }
+    },
+    handleClose () {
+      this.centerDialogVisible = false
+      this.cancelOutLogin()
+    },
+    ...mapActions(['cancelOutLogin', 'outLogin'])
+  },
+  watch: {
+    outLoginDialogOnOff (n) {
+      const t = this
+      if (n) {
+        t.centerDialogVisible = true
+      }
+    }
+  },
+  computed: {
+    ...mapGetters(['outLoginDialogOnOff'])
+  }
+}
 </script>

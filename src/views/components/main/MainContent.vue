@@ -8,8 +8,8 @@
                 text-color="#97a8be"
                 active-text-color="#ffd04b">
                 <Hamburger class="adminNav" @click.native.stop="toggleSide" :class="{'rotateClassName':toggleOnOff}"></Hamburger>
-                <!--<p class="adminTitle">后台管理系统</p>
-                <div class="adminWelcome">心心相遇，欢迎您admin</div>-->
+                <p class="adminTitle">后台管理系统</p>
+                <div class="adminWelcome">学研汇CRM</div>
                 <div class="right-menu">
                     <section class="adminUser">
                         <section class="adminUserLogo">
@@ -149,7 +149,6 @@
                         border-radius: 10px;
                     }
 
-
                 }
             }
 
@@ -157,40 +156,40 @@
     }
 </style>
 <script>
-    import Tab from '../../tab/index';
-    import common from '../../../utils/common';
-    import Hamburger from '../Hamburger/index';
-    import {mapGetters,mapActions} from 'vuex'
-    export default {
-        data(){
-            return {
-               list:{}
-            }
-        },
-        computed:{
-            ...mapGetters(['toggleOnOff','nowTabData']),
-            marTop(){
-                let t = this;
-                console.log(common.isEmptyObject(t.nowTabData));
-                return !common.isEmptyObject(t.nowTabData);
-            }
-        },
-        watch:{
-            nowTabData(n){
-                let t = this;
-                console.log(common.isEmptyObject(t.nowTabData));
-                console.log(n);
-            }
-        },
-        methods:{
-            ...mapActions(['toggleSide'])
-        },
-        components:{
-            Hamburger,Tab
-        },
-        mounted(){
-            let t = this;
-            console.log(common.isEmptyObject(t.nowTabData));
-        }
+import Tab from '../../tab/index'
+import common from '../../../utils/common'
+import Hamburger from '../Hamburger/index'
+import { mapGetters, mapActions } from 'vuex'
+export default {
+  data () {
+    return {
+      list: {}
     }
+  },
+  computed: {
+    ...mapGetters(['toggleOnOff', 'nowTabData']),
+    marTop () {
+      const t = this
+      console.log(common.isEmptyObject(t.nowTabData))
+      return !common.isEmptyObject(t.nowTabData)
+    }
+  },
+  watch: {
+    nowTabData (n) {
+      const t = this
+      console.log(common.isEmptyObject(t.nowTabData))
+      console.log(n)
+    }
+  },
+  methods: {
+    ...mapActions(['toggleSide'])
+  },
+  components: {
+    Hamburger, Tab
+  },
+  mounted () {
+    const t = this
+    console.log(common.isEmptyObject(t.nowTabData))
+  }
+}
 </script>

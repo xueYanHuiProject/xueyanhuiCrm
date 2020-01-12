@@ -14,14 +14,14 @@
     </div>
 </template>
 <script>
-    import { createNamespacedHelpers } from 'vuex'
-    const { mapGetters,mapActions } = createNamespacedHelpers('module001');
-    export default {
-        computed:{
-            ...mapGetters(['pageIndex','pageSize','count'])
-        },
-        methods:{
-            ...mapActions(['handleCurrentChange','handleSizeChange'])
-        }
-    }
+import { createNamespacedHelpers } from 'vuex'
+const { mapGetters, mapActions } = createNamespacedHelpers('module001')
+export default {
+  computed: {
+    ...mapGetters(['pageIndex', 'pageSize', 'count'])
+  },
+  methods: {
+    ...mapActions(['handleCurrentChange', 'handleSizeChange'])
+  }
+}
 </script>

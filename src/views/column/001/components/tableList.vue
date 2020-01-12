@@ -59,74 +59,71 @@
 </template>
 
 <script>
-    const xhrUrl = {
-      "getTableList":"/api/columns/query"
-    };
-    import Common from '../../../../utils/common';
-    import { createNamespacedHelpers } from 'vuex'
-    const { mapGetters,mapActions } = createNamespacedHelpers('module001');
-    import axios from 'axios';
-    export default {
-        data(){
-            return {
+import Common from '../../../../utils/common'
+import { createNamespacedHelpers } from 'vuex'
+import axios from 'axios'
+const xhrUrl = {
+  getTableList: '/api/columns/query'
+}
+const { mapGetters, mapActions } = createNamespacedHelpers('module001')
+export default {
+  data () {
+    return {
 
-            }
-        },
-        computed:{
-            ...mapGetters(['tableData',"pageIndex","pageSize",'triggerTableNum','formInline'])
-        },
-        watch:{
-            pageIndex(){
-                let _this = this;
-                _this.getTableList();
-            },
-            pageSize(){
-                let _this = this;
-                _this.getTableList();
-            },
-            triggerTableNum(){
-                let _this = this;
-                _this.getTableList();
-            }
-        },
-        mounted(){
-          let _this = this;
-            _this.getTableList();
-        },
-        methods:{
-            ...mapActions(['tableCurrentChange',"saveTableList"]),
-            formatIndex(row, column){
-                let t = this;
-                let columnIndex = row['grade'];
-                return parseInt(columnIndex,10)===0?'一级':'二级';
-            },
-            formatterValid(row,column){
-                let t = this;
-                let type = row['isValid'];
-                return Common.formatterValid(type);
-            },
-            formatterTime(row,column){
-                let t = this;
-                let time = row['createTime'];
-                return Common.formatDate(time);
-            },
-            getTableList(){
-                let _this = this;
-                console.log('--------------------');
-                console.log(_this.formInline);
-                axios.get(xhrUrl.getTableList, {
-                    params: {}
-                })
-                    .then(function (response) {
-                        console.log(response);
-                        _this.saveTableList(response.data);
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
-            }
-        }
     }
+  },
+  computed: {
+    ...mapGetters(['tableData', 'pageIndex', 'pageSize', 'triggerTableNum', 'formInline'])
+  },
+  watch: {
+    pageIndex () {
+      const _this = this
+      _this.getTableList()
+    },
+    pageSize () {
+      const _this = this
+      _this.getTableList()
+    },
+    triggerTableNum () {
+      const _this = this
+      _this.getTableList()
+    }
+  },
+  mounted () {
+    const _this = this
+    _this.getTableList()
+  },
+  methods: {
+    ...mapActions(['tableCurrentChange', 'saveTableList']),
+    formatIndex (row, column) {
+      const columnIndex = row.grade
+      return parseInt(columnIndex, 10) === 0 ? '一级' : '二级'
+    },
+    formatterValid (row, column) {
+      const type = row.isValid
+      return Common.formatterValid(type)
+    },
+    formatterTime (row, column) {
+      const time = row.createTime
+      return Common.formatDate(time)
+    },
+    getTableList () {
+      const _this = this
+      console.log('--------------------')
+      console.log(_this.formInline)
+      axios.get(xhrUrl.getTableList, {
+        params: {}
+      })
+        .then(function (response) {
+          console.log(response)
+          _this.saveTableList(response.data)
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
+    }
+  }
+}
 </script>
 
 <style scoped>

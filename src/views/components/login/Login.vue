@@ -3,10 +3,10 @@
         <el-form :model="ruleForm2" status-icon :rules="rules2" ref="ruleForm2" label-width="100px" class="demo-ruleForm" v-show="!registerOnOff">
             <!--<i class="el-icon-close"></i>-->
             <el-form-item label="账号" prop="pass">
-                <el-input type="email" v-model="ruleForm2.pass" auto-complete="off"></el-input>
+                <el-input type="email" v-model="ruleForm2.pass" auto-complete="off" placeholder="请输入您的邮箱/手机号/身份证号"></el-input>
             </el-form-item>
             <el-form-item label="密码" prop="checkPass">
-                <el-input type="password" v-model="ruleForm2.checkPass" auto-complete="off"></el-input>
+                <el-input type="password" v-model="ruleForm2.checkPass" auto-complete="off" placeholder="请输入您的密码"></el-input>
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" @click="submitForm('ruleForm2')">提交</el-button>
@@ -80,288 +80,279 @@
     }
 </style>
 <script>
-    import {mapActions} from 'vuex';
-    import regularTest from '../../../utils/regularTest.js';
-    import axios from 'axios';
-    import md5 from 'blueimp-md5';
-    export default {
-        data() {
-            var validatePass = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('请输入账号'));
-                } else {
-                    console.log(this.ruleForm2.checkPass);
-                    if (this.ruleForm2.checkPass !== '') {
-                        this.$refs.ruleForm2.validateField('checkPass');
-                    }
-                    callback();
-                }
-            };
-            var validatePass2 = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('请输入密码'));
-                }  else {
-                    callback();
-                }
-            };
-            var validateName = (rule,value,callBack)=>{
-              if(value===''){
-                  callBack(new Error('请输入名字'));
-              }else{
-                  console.log(this.registerForm.registerName,value,regularTest.testName(value));
-                  if(!regularTest.testName(value)){
-                      callBack(new Error('请输入正确的名字'));
-                  }else{
-                      this.$refs.registerForm.validateField('registerEmail');
-                      callBack();
-                  }
-              }
-
-            };
-            var validateEmail = (rule,value,callBack)=>{
-                if(value===''){
-                    callBack(new Error('请输入邮件'));
-                }else{
-                    if(regularTest.testEmail(value)){
-                        this.$refs.registerForm.validateField('registerPhoneNum');
-                    }else{
-                        callBack(new Error('请输入正确的邮件'));
-                    }
-                    callBack();
-                }
-
-            };
-            var validateIdentityNum = (rule,value,callBack)=>{
-                if(value===''){
-                    callBack(new Error('请输入身份号'));
-                }else{
-                    if(regularTest.testID(value)){
-                        this.$refs.registerForm.validateField('registerGrade');
-                    }else{
-                        callBack(new Error('请输入正确的身份号'));
-                    }
-                    callBack();
-                }
-
-            };
-            var validateGrade = (rule,value,callBack)=>{
-                if(value===''){
-                    callBack(new Error('请选择管理员级别'));
-                }else{
-                    this.$refs.registerForm.validateField('registerPassWord');
-                    callBack();
-                }
-            };
-            var validatePhoneNum = (rule,value,callBack)=>{
-                if(value===''){
-                    callBack(new Error('请输入手机号'));
-                }else{
-                    if(regularTest.testPhoneNum(value)){
-                        this.$refs.registerForm.validateField('registerIdentityNum');
-                    }else{
-                        callBack(new Error('请输入正确的手机号'));
-                    }
-                    callBack();
-                }
-
-            };
-            var validatePassWord = (rule,value,callBack)=>{
-                if(value===''){
-                    callBack(new Error('请输入密码'));
-                }else{
-                   callBack();
-                }
-            };
-            return {
-                options: [{
-                    value: '0',
-                    label: '超级管理员'
-                }, {
-                    value: '1',
-                    label: '管理员'
-                }],
-                ruleForm2: {
-                    pass: '',
-                    checkPass: ''
-                },
-                registerForm:{
-                    registerName:'',
-                    registerEmail:'',
-                    registerPhoneNum:'',
-                    registerIdentityNum:'',
-                    registerGrade:'',
-                    registerPassWord:'',
-                    gender:'1'
-                },
-                registerRules:{
-                    registerName:[
-                        {
-                            validator:validateName,trigger:'blur'
-                        }
-                    ],
-                    registerEmail:[
-                        {
-                            validator:validateEmail,trigger:'blur'
-                        }
-                    ],
-                    registerPhoneNum:[
-                        {
-                            validator:validatePhoneNum,trigger:'blur'
-                        }
-                    ],
-                    registerIdentityNum:[
-                        {
-                            validator:validateIdentityNum,trigger:'blur'
-                        }
-                    ],
-                    registerPassWord:[
-                        {
-                            validator:validatePassWord,trigger:'blur'
-                        }
-                    ],
-                    registerGrade:[
-                        {
-                            validator:validateGrade,trigger:'change'
-                        }
-                    ]
-                },
-                rules2: {
-                    pass: [
-                        { validator: validatePass, trigger: 'blur' }
-                    ],
-                    checkPass: [
-                        { validator: validatePass2, trigger: 'blur' }
-                    ]
-                },
-                registerOnOff:false
-            };
+import { mapActions } from 'vuex'
+import { testName, testEmail, testID, testPhoneNum } from '../../../utils/regularTest'
+import axios from 'axios'
+import md5 from 'blueimp-md5'
+export default {
+  data () {
+    const validatePass = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入账号'))
+      } else {
+        console.log(this.ruleForm2.checkPass)
+        if (this.ruleForm2.checkPass !== '') {
+          this.$refs.ruleForm2.validateField('checkPass')
+        }
+        callback()
+      }
+    }
+    const validatePass2 = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入密码'))
+      } else {
+        callback()
+      }
+    }
+    const validateName = (rule, value, callBack) => {
+      if (value === '') {
+        callBack(new Error('请输入名字'))
+      } else {
+        console.log(this.registerForm.registerName, value, testName(value))
+        if (!testName(value)) {
+          callBack(new Error('请输入正确的名字'))
+        } else {
+          this.$refs.registerForm.validateField('registerEmail')
+          callBack()
+        }
+      }
+    }
+    const validateEmail = (rule, value, callBack) => {
+      if (value === '') {
+        callBack(new Error('请输入邮件'))
+      } else {
+        if (testEmail(value)) {
+          this.$refs.registerForm.validateField('registerPhoneNum')
+        } else {
+          callBack(new Error('请输入正确的邮件'))
+        }
+        callBack()
+      }
+    }
+    const validateIdentityNum = (rule, value, callBack) => {
+      if (value === '') {
+        callBack(new Error('请输入身份号'))
+      } else {
+        if (testID(value)) {
+          this.$refs.registerForm.validateField('registerGrade')
+        } else {
+          callBack(new Error('请输入正确的身份号'))
+        }
+        callBack()
+      }
+    }
+    const validateGrade = (rule, value, callBack) => {
+      if (value === '') {
+        callBack(new Error('请选择管理员级别'))
+      } else {
+        this.$refs.registerForm.validateField('registerPassWord')
+        callBack()
+      }
+    }
+    const validatePhoneNum = (rule, value, callBack) => {
+      if (value === '') {
+        callBack(new Error('请输入手机号'))
+      } else {
+        if (testPhoneNum(value)) {
+          this.$refs.registerForm.validateField('registerIdentityNum')
+        } else {
+          callBack(new Error('请输入正确的手机号'))
+        }
+        callBack()
+      }
+    }
+    const validatePassWord = (rule, value, callBack) => {
+      if (value === '') {
+        callBack(new Error('请输入密码'))
+      } else {
+        callBack()
+      }
+    }
+    return {
+      options: [{
+        value: '0',
+        label: '超级管理员'
+      }, {
+        value: '1',
+        label: '管理员'
+      }],
+      ruleForm2: {
+        pass: '',
+        checkPass: ''
+      },
+      registerForm: {
+        registerName: '',
+        registerEmail: '',
+        registerPhoneNum: '',
+        registerIdentityNum: '',
+        registerGrade: '',
+        registerPassWord: '',
+        gender: '1'
+      },
+      registerRules: {
+        registerName: [
+          {
+            validator: validateName, trigger: 'blur'
+          }
+        ],
+        registerEmail: [
+          {
+            validator: validateEmail, trigger: 'blur'
+          }
+        ],
+        registerPhoneNum: [
+          {
+            validator: validatePhoneNum, trigger: 'blur'
+          }
+        ],
+        registerIdentityNum: [
+          {
+            validator: validateIdentityNum, trigger: 'blur'
+          }
+        ],
+        registerPassWord: [
+          {
+            validator: validatePassWord, trigger: 'blur'
+          }
+        ],
+        registerGrade: [
+          {
+            validator: validateGrade, trigger: 'change'
+          }
+        ]
+      },
+      rules2: {
+        pass: [
+          { validator: validatePass, trigger: 'blur' }
+        ],
+        checkPass: [
+          { validator: validatePass2, trigger: 'blur' }
+        ]
+      },
+      registerOnOff: false
+    }
+  },
+  methods: {
+    ...mapActions(['login']),
+    submitRegisterForm (formName) {
+      const t = this
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          t.registerAdmin()
+        } else {
+          t.$message.error('请填写正确的注册信息')
+          return false
+        }
+      })
+    },
+    registerAdmin () {
+      const t = this
+      axios({
+        method: 'post',
+        url: '/api/admin/register',
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest'
         },
-        methods: {
-            ...mapActions(['login']),
-            submitRegisterForm(formName){
-              let t = this;
-                this.$refs[formName].validate((valid) => {
-                    if (valid) {
-                        t.registerAdmin()
-                    } else {
-                        t.$message.error('请填写正确的注册信息');
-                        return false;
-                    }
-                });
-            },
-            registerAdmin(){
-              let t = this;
-                axios({
-                    method: 'post',
-                    url: '/api/admin/register',
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest'
-                    },
-                    data: {
-                        grade:t.registerForm.registerGrade,//管理员等级，0超级管理员，1普通管理员
-                        name:t.registerForm.registerName,//管理员姓名
-                        loginName:t.registerForm.registerName,//管理员姓名
-                        email:t.registerForm.registerEmail,//管理员邮箱
-                        phoneNum:t.registerForm.registerPhoneNum,//管理员电话号
-                        identityNum:t.registerForm.registerIdentityNum,//管理员身份证号
-                        passWord:md5(t.registerForm.registerPassWord),//
-                        gender:t.registerForm.gender
-                    }
-                }).then(function(response) {
-                    let reqData = response.data;
-                    console.log(reqData);
-                    /*if(reqData.responseObject.responseStatus){
+        data: {
+          grade: t.registerForm.registerGrade, // 管理员等级，0超级管理员，1普通管理员
+          name: t.registerForm.registerName, // 管理员姓名
+          loginName: t.registerForm.registerName, // 管理员姓名
+          email: t.registerForm.registerEmail, // 管理员邮箱
+          phoneNum: t.registerForm.registerPhoneNum, // 管理员电话号
+          identityNum: t.registerForm.registerIdentityNum, // 管理员身份证号
+          passWord: md5(t.registerForm.registerPassWord), //
+          gender: t.registerForm.gender
+        }
+      }).then(function (response) {
+        const reqData = response.data
+        console.log(reqData)
+        /* if(reqData.responseObject.responseStatus){
                         t.$message({
                             type: 'success',
                             message: '管理员注册成功!'
                         });
                         t.registerOnOff = false;
                         t.resetForm('registerForm');
-                    }*/
-                    console.log(response.data);
-                });
-            },
-            changeGrade(state){
-              let t = this;
-              console.log(state);
-            },
-            checkLogin(){
-                let t = this;
-                axios.get('/api/admin/login', {
-                    params: {
-                        loginName:t.ruleForm2.pass,
-                        password:md5(t.ruleForm2.checkPass)
-                    }
-                })
-                    .then(function (response) {
-                        console.log(response);
-                        let reqData = response.data;
-                        console.log(reqData);
-                        if(reqData.success){
-                            let code = parseInt(reqData.code,10);
-                            let message = '';
-                            switch (code) {
-                                case 200:
-                                    message = '登录成功';
-                                    break;
-                                case 201:
-                                    message = '用户名不存在';
-                                    break;
-                                case 202:
-                                    message = '密码错误';
-                                    break;
-                                case 203:
-                                    message = '您暂未通过审核';
-                                    break;
-                                case 204:
-                                    message = '重名';
-                                    break;
-                                case 500:
-                                    message = '登录失败';
-                                    break;
-
-                            }
-                            if(code===200){
-                                t.$message({
-                                    type: 'success',
-                                    message: message
-                                });
-                            }else{
-                                t.$message.error(message);
-                            }
-                            t.login(reqData.result.loginName);
-                            localStorage.setItem('userName',reqData.result.loginName);
-                            localStorage.setItem('adminId',reqData.result.id);
-                        }else{
-                            t.$message.error('登录失败！');
-                        }
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
-            },
-            goRegister(){
-              let t = this;
-              t.registerOnOff = true;
-            },
-            goLogin(){
-              let t = this;
-                t.registerOnOff = false;
-            },
-            submitForm(formName) {
-                let t = this;
-                this.$refs[formName].validate((valid) => {
-                    if (valid) {
-                        t.checkLogin()
-                    } else {
-                        t.$message.error('请填写正确的登录信息');
-                        return false;
-                    }
-                });
-            },
-            resetForm(formName) {
-                this.$refs[formName].resetFields();
-            }
+                    } */
+        console.log(response.data)
+      })
+    },
+    checkLogin () {
+      const t = this
+      axios.get('/api/admin/login', {
+        params: {
+          loginName: t.ruleForm2.pass,
+          password: md5(t.ruleForm2.checkPass)
         }
+      })
+        .then(function (response) {
+          console.log(response)
+          const reqData = response.data
+          console.log(reqData)
+          if (reqData.success) {
+            const code = parseInt(reqData.code, 10)
+            let message = ''
+            switch (code) {
+              case 200:
+                message = '登录成功'
+                break
+              case 201:
+                message = '用户名不存在'
+                break
+              case 202:
+                message = '密码错误'
+                break
+              case 203:
+                message = '您暂未通过审核'
+                break
+              case 204:
+                message = '重名'
+                break
+              case 500:
+                message = '登录失败'
+                break
+            }
+            if (code === 200) {
+              t.$message({
+                type: 'success',
+                message: message
+              })
+            } else {
+              t.$message.error(message)
+            }
+            t.login(reqData.result.loginName)
+            localStorage.setItem('userName', reqData.result.loginName)
+            localStorage.setItem('adminId', reqData.result.id)
+          } else {
+            t.$message.error('登录失败！')
+          }
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
+    },
+    goRegister () {
+      const t = this
+      t.registerOnOff = true
+    },
+    goLogin () {
+      const t = this
+      t.registerOnOff = false
+    },
+    submitForm (formName) {
+      const t = this
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          t.checkLogin()
+        } else {
+          t.$message.error('请填写正确的登录信息')
+          return false
+        }
+      })
+    },
+    resetForm (formName) {
+      this.$refs[formName].resetFields()
     }
+  }
+}
 </script>

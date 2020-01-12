@@ -54,110 +54,110 @@
     </el-form>
 </template>
 <script>
-    import { createNamespacedHelpers } from 'vuex'
-    const { mapGetters,mapActions } = createNamespacedHelpers('module001');
-    export default {
-        data(){
-            return {
-                formInline:{
-                    columnIndex:'',
-                    isValid:'',
-                    columnId:'',
-                    columnTitle:'',
-                    columnIcon:'',
-                    createDuringTime:[],
-                    updateDuringTime:[]
-                },
-                originalForm:{
-                    columnIndex:'',
-                    isValid:'',
-                    columnId:'',
-                    columnTitle:'',
-                    columnIcon:'',
-                    createDuringTime:[],
-                    updateDuringTime:[]
-                },
-                createPickerOptions: {
-                    shortcuts: [{
-                        text: '最近一周',
-                        onClick(picker) {
-                            const end = new Date();
-                            const start = new Date();
-                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-                            picker.$emit('pick', [start, end]);
-                        }
-                    }, {
-                        text: '最近一个月',
-                        onClick(picker) {
-                            const end = new Date();
-                            const start = new Date();
-                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-                            picker.$emit('pick', [start, end]);
-                        }
-                    }, {
-                        text: '最近三个月',
-                        onClick(picker) {
-                            const end = new Date();
-                            const start = new Date();
-                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-                            picker.$emit('pick', [start, end]);
-                        }
-                    }]
-                },
-                updatePickerOptions: {
-                    shortcuts: [{
-                        text: '最近一周',
-                        onClick(picker) {
-                            const end = new Date();
-                            const start = new Date();
-                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-                            picker.$emit('pick', [start, end]);
-                        }
-                    }, {
-                        text: '最近一个月',
-                        onClick(picker) {
-                            const end = new Date();
-                            const start = new Date();
-                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-                            picker.$emit('pick', [start, end]);
-                        }
-                    }, {
-                        text: '最近三个月',
-                        onClick(picker) {
-                            const end = new Date();
-                            const start = new Date();
-                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-                            picker.$emit('pick', [start, end]);
-                        }
-                    }]
-                },
-            }
-        },
-        watch:{
-            formInline:{
-                handler(n){
-                    let t = this;
-                    console.log(n);
-                    t.changeFormInline(n);
-                },
-                deep:true
-            }
-        },
-        methods:{
-            ...mapActions(['changeFormInline','triggerTable']),
-            onSubmit(){
-                console.log('初始化')
-            },
-            resetList(){
-                let t = this;
-                t.formInline = JSON.parse(JSON.stringify(t.originalForm));
-                t.changeFormInline({});
-            }
-        },
-        mounted(){
-            let t = this;
-            //t.getList();
-            console.log(t.formInline)
-        }
+import { createNamespacedHelpers } from 'vuex'
+const { mapActions } = createNamespacedHelpers('module001')
+export default {
+  data () {
+    return {
+      formInline: {
+        columnIndex: '',
+        isValid: '',
+        columnId: '',
+        columnTitle: '',
+        columnIcon: '',
+        createDuringTime: [],
+        updateDuringTime: []
+      },
+      originalForm: {
+        columnIndex: '',
+        isValid: '',
+        columnId: '',
+        columnTitle: '',
+        columnIcon: '',
+        createDuringTime: [],
+        updateDuringTime: []
+      },
+      createPickerOptions: {
+        shortcuts: [{
+          text: '最近一周',
+          onClick (picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+            picker.$emit('pick', [start, end])
+          }
+        }, {
+          text: '最近一个月',
+          onClick (picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+            picker.$emit('pick', [start, end])
+          }
+        }, {
+          text: '最近三个月',
+          onClick (picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+            picker.$emit('pick', [start, end])
+          }
+        }]
+      },
+      updatePickerOptions: {
+        shortcuts: [{
+          text: '最近一周',
+          onClick (picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+            picker.$emit('pick', [start, end])
+          }
+        }, {
+          text: '最近一个月',
+          onClick (picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+            picker.$emit('pick', [start, end])
+          }
+        }, {
+          text: '最近三个月',
+          onClick (picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+            picker.$emit('pick', [start, end])
+          }
+        }]
+      }
     }
+  },
+  watch: {
+    formInline: {
+      handler (n) {
+        const t = this
+        console.log(n)
+        t.changeFormInline(n)
+      },
+      deep: true
+    }
+  },
+  methods: {
+    ...mapActions(['changeFormInline', 'triggerTable']),
+    onSubmit () {
+      console.log('初始化')
+    },
+    resetList () {
+      const t = this
+      t.formInline = JSON.parse(JSON.stringify(t.originalForm))
+      t.changeFormInline({})
+    }
+  },
+  mounted () {
+    const t = this
+    // t.getList();
+    console.log(t.formInline)
+  }
+}
 </script>

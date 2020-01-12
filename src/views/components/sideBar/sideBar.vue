@@ -3,13 +3,13 @@
     <aside class="adminSide" :class="{'active':!toggleOnOff}">
         <el-menu default-active="1-4-1" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose"
                  :collapse="toggleOnOff" text-color="#BFCBD9" >
-            <el-submenu :index="i+''" v-for="(item,i) in tabList" :key="i">
+            <el-submenu :index="i+''" v-for="(item,i) in columnList" :key="item.index">
                 <template slot="title">
-                    <i :class="item.iconName"></i>
+                    <i :class="item.icon"></i>
                     <span slot="title">{{item.title}}</span>
                 </template>
-                <el-menu-item :index="(''+i)+'-'+(index+'')" v-for="(inItem,index) in item.OneColList" :key="inItem.id" @click.native.stop="routerDirec(inItem)" @mouseup.native.stop="runFn(inItem)">
-                    <i :class="inItem.iconName"></i>
+                <el-menu-item :index="(''+i)+'-'+(index+'')" v-for="(inItem,index) in item.tabList" :key="inItem.index" @click.native.stop="routerDirec(inItem)" @mouseup.native.stop="runFn(inItem)">
+                    <i :class="inItem.icon"></i>
                     {{inItem.title}}
                 </el-menu-item>
             </el-submenu>
@@ -94,59 +94,57 @@
 </style>
 
 <script>
-    import AV from 'leancloud-storage';
-    import {mapGetters,mapActions} from 'vuex';
-    import axios from 'axios';
-    export default {
-        data() {
-            return {
-                tabList:[]
-            };
-        },
-        computed:{
-            ...mapGetters(['toggleOnOff'])
-        },
-        mounted(){
-            let t = this;
-            t.getSideData();
-        },
-        methods: {
-            ...mapActions(['addTab','outLoginOne']),
-            getSideData(){
-                let t = this;
-                axios.get('/api/columns/query', {
-                    params: {}
-                })
-                    .then(function (response) {
-                        let reqData = response.data;
-                        console.log(reqData.result);
-                        if(reqData.result){
-                            console.log('获取导数据');
-                            console.log(reqData.result);
-                            console.log('获取导数据');
-                            t.tabList = reqData.result;
-                            t.saveColumnList(reqData.result);
-                        }
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
-            },
-            runFn(v){
-                let t = this;
-                t[v.eventFn]&&t[v.eventFn]();
-            },
-            routerDirec(v){
-                let t = this;
-                t.addTab(v);
-                t.$router.push({ path: "/"+v.routerName });
-            },
-            handleOpen(key, keyPath) {
-                console.log(key, keyPath);
-            },
-            handleClose(key, keyPath) {
-                console.log(key, keyPath);
-            }
-        }
+import { mapGetters, mapActions } from 'vuex'
+import axios from 'axios'
+export default {
+  computed: {
+    ...mapGetters(['toggleOnOff', 'columnList'])
+  },
+  mounted () {
+    const t = this
+    t.getSideData()
+    setTimeout(() => {
+      console.log(t.columnList)
+    }, 2000)
+  },
+  methods: {
+    ...mapActions(['addTab', 'outLoginOne', 'saveColumnList']),
+    getSideData () {
+      const t = this
+      axios.get('/src/tabData/tabJson.json', {
+        params: {}
+      })
+        .then(function (response) {
+          const reqData = response.data
+          console.log(reqData.result)
+          if (reqData.result) {
+            console.log('获取导数据')
+            console.log(reqData.result)
+            console.log('获取导数据')
+            t.tabList = reqData.result
+            console.log(reqData.result.tabList)
+            t.saveColumnList(reqData.result.tabList)
+          }
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
+    },
+    runFn (v) {
+      const t = this
+      t[v.eventFn] && t[v.eventFn]()
+    },
+    routerDirec (v) {
+      const t = this
+      t.addTab(v)
+      t.$router.push({ path: '/' + v.routerName })
+    },
+    handleOpen (key, keyPath) {
+      console.log(key, keyPath)
+    },
+    handleClose (key, keyPath) {
+      console.log(key, keyPath)
     }
+  }
+}
 </script>

@@ -20,43 +20,43 @@
     }
 </style>
 <script>
-    import OutLoginDialog from './views/components/Dialog/OutLogin.vue';
-    import common from './utils/common';
-    import LoginBar from './views/components/login/Login.vue'
-    import SideBar from './views/components/sideBar/sideBar';
-    import ContentBar from './views/components/main/MainContent';
-    import {mapGetters,mapActions} from 'vuex';
-    export default {
-        data(){
-            return {
-                mag:"",
-                Context:false
-            }
-        },
-        components:{
-            SideBar,
-            ContentBar,
-            LoginBar,
-            OutLoginDialog
-        },
-        mounted(){
-            let t = this;
-            /*if(common.isEmptyObject(t.nowTabData)){
-                t.$router.push({ path: '/' });
-            }*/
-            setTimeout(()=>{
-                console.log(t.loginOnOff);
-            },2000);
-        },
-        computed:{
-            ...mapGetters(['nowTabData','loginOnOff'])
-        },
-        methods:{
-            ...mapActions(['ContextOff']),
-            closeMask(e){
-                let t = this;
-                t.ContextOff();
-            }
-        }
+import OutLoginDialog from './views/components/Dialog/OutLogin.vue'
+import LoginBar from './views/components/login/Login.vue'
+import SideBar from './views/components/sideBar/sideBar'
+import ContentBar from './views/components/main/MainContent'
+import { mapGetters, mapActions } from 'vuex'
+import common from './utils/common'
+export default {
+  data () {
+    return {
+      mag: '',
+      Context: false
     }
+  },
+  components: {
+    SideBar,
+    ContentBar,
+    LoginBar,
+    OutLoginDialog
+  },
+  mounted () {
+    const t = this
+    if (common.isEmptyObject(t.nowTabData)) {
+      t.$router.push({ path: '/' })
+    }
+    setTimeout(() => {
+      console.log(t.loginOnOff)
+    }, 2000)
+  },
+  computed: {
+    ...mapGetters(['nowTabData', 'loginOnOff'])
+  },
+  methods: {
+    ...mapActions(['ContextOff']),
+    closeMask (e) {
+      const t = this
+      t.ContextOff()
+    }
+  }
+}
 </script>

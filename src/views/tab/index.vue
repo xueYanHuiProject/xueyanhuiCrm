@@ -9,84 +9,84 @@
     </section>
 </template>
 <script>
-    import ContextCom from '../components/contextmenu/Contextmenu'
-    import {mapGetters,mapActions} from "vuex";
-    export default {
-        data() {
-            return {
-                list:{},
-                editableTabsValue: '2',
-                tabIndex: 2,
-                editOnOff:true,
-                contextData:null,
-                styleJson:{
-                    position:'absolute',
-                    left:0,
-                    top:0
-                }
+import ContextCom from '../components/contextmenu/Contextmenu'
+import { mapGetters, mapActions } from 'vuex'
+export default {
+  data () {
+    return {
+      list: {},
+      editableTabsValue: '2',
+      tabIndex: 2,
+      editOnOff: true,
+      contextData: null,
+      styleJson: {
+        position: 'absolute',
+        left: 0,
+        top: 0
+      }
 
-            }
-        },
-        computed:{
-            ...mapGetters(['Context','loginOnOff','nowTabData'])
-        },
-        components:{
-            ContextCom
-        },
-        watch:{
-            loginOnOff(n,o){
-                let t = this;
-                if(n.length===0){
-                    t.closeAll();
-                }
-            }
-        },
-        methods: {
-            ...mapActions(['deleteTab','ContextOff','ContextOn']),
-            closeAll(){
-                let t = this;
-                for(let key in t.nowTabData){
-                    t.closeTab(t.nowTabData[key]);
-                }
-            },
-            closeIt(){
-                let t = this;
-                t.closeTab(t.contextData);
-            },
-            closeOthers(){
-                let t = this;
-                for(let key in t.nowTabData){
-                    if(t.nowTabData[key].routerName!==t.contextData.routerName){
-                        t.closeTab(t.nowTabData[key]);
-                    }
-                }
-            },
-            rightClose(e,v){
-                let t = this;
-                t.contextData = v;
-                t.styleJson.left = (e.clientX)+'px';
-                t.styleJson.top= e.offsetY+'px';
-                t.ContextOn();
-            },
-            closeTab(v){
-                let t = this;
-                let nowPathname = this.$route.path.substring(1,1000);
-                this.deleteTab(v);
-                let  lastKey = '';
-                if((v.routerName)&&(nowPathname===v.routerName)){
-                    for(let key in t.nowTabData){
-                        lastKey = key;
-                    }
-                    if(lastKey.length){
-                        t.$router.push({ path: t.nowTabData[lastKey].routerName});
-                    }else{
-                        t.$router.push({ path: '/' });
-                    }
-                }
-                t.ContextOff();
-            }
-        }
     }
+  },
+  computed: {
+    ...mapGetters(['Context', 'loginOnOff', 'nowTabData'])
+  },
+  components: {
+    ContextCom
+  },
+  watch: {
+    loginOnOff (n, o) {
+      const t = this
+      if (n.length === 0) {
+        t.closeAll()
+      }
+    }
+  },
+  methods: {
+    ...mapActions(['deleteTab', 'ContextOff', 'ContextOn']),
+    closeAll () {
+      const t = this
+      for (const key in t.nowTabData) {
+        t.closeTab(t.nowTabData[key])
+      }
+    },
+    closeIt () {
+      const t = this
+      t.closeTab(t.contextData)
+    },
+    closeOthers () {
+      const t = this
+      for (const key in t.nowTabData) {
+        if (t.nowTabData[key].routerName !== t.contextData.routerName) {
+          t.closeTab(t.nowTabData[key])
+        }
+      }
+    },
+    rightClose (e, v) {
+      const t = this
+      t.contextData = v
+      t.styleJson.left = (e.clientX) + 'px'
+      t.styleJson.top = e.offsetY + 'px'
+      t.ContextOn()
+    },
+    closeTab (v) {
+      const t = this
+      const nowPathname = this.$route.path.substring(1, 1000)
+      this.deleteTab(v)
+      let lastKey = ''
+      if ((v.routerName) && (nowPathname === v.routerName)) {
+        for (const key in t.nowTabData) {
+          lastKey = key
+        }
+        if (lastKey.length) {
+          t.$router.push({ path: t.nowTabData[lastKey].routerName })
+        } else {
+          t.$router.push({ path: '/' })
+        }
+      }
+      t.ContextOff()
+    }
+  }
+}
 </script>
 <style lang="scss">
     .full-calendar-header{

@@ -20,117 +20,117 @@
     </div>
 </template>
 <script>
-    import Common from '../../../../utils/common';
-    import { createNamespacedHelpers } from 'vuex'
-    const { mapGetters,mapActions } = createNamespacedHelpers('module001');
-    import axios from 'axios';
-    export default {
-        methods:{
-            ...mapActions(['showLayer',"changeEditType","showSort",'triggerTable','tableCurrentChange']),
-            addColumn(){
-              let _this = this;
-              _this.changeEditType(0);
-              _this.showLayer();
-              console.log('选择');
-                _this.tableCurrentChange({});
-            },
-            editColumn(){
-              let _this = this;
-              if(!Common.isEmptyObject(_this.selectTableData)){
-                  _this.changeEditType(1);
-                  _this.showLayer();
-              }else{
-                  _this.$message.error('请选择一条数据');
-              }
-            },
-            showSortDialog(){
-              let _this = this;
-                if(Common.isEmptyObject(_this.selectTableData)){
-                    _this.$message.error('请选择一条数据');
-                }else{
-                    _this.showSort();
-                }
-            },
-            showPassDialog(){
-                let _this = this;
-                if(Common.isEmptyObject(_this.selectTableData)){
-                    _this.$message.error('请选择一条数据');
-                }else{
-                    _this.$confirm('您确定要激活该栏目', '提示', {
-                        confirmButtonText: '确定',
-                        cancelButtonText: '取消',
-                        type: 'info'
-                    }).then(() => {
-                        _this.valid(1,()=>{
-                            _this.$message({
-                                type: 'success',
-                                message: '已激活!'
-                            });
-                        });
-                    }).catch(() => {
-                        _this.$message({
-                            type: 'info',
-                            message: '已取消'
-                        });
-                    });
-                }
-            },
-            valid(isValid,callback){
-                let _this = this;
-                console.log("操作");
-                axios({
-                    method: 'post',
-                    url: '/api/columns/update',
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest'
-                    },
-                    data: {
-                        id:_this.selectTableData.id,
-                        isValid:isValid
-                    }
-                }).then(function(response) {
-                    console.log('进入成功');
-                    let reqData = response.data;
-                    if(parseInt(reqData.code,10)===200){
-                        _this.triggerTable();
-                        callback&&callback();
-                    }
-                    console.log(response.data);
-                }).catch((res) => {
-                    console.log(res);
-                    _this.$message({
-                        type: 'info',
-                        message: '操作失败'
-                    });
-                });
-            },
-            rejectDialog(){
-                let _this = this;
-                if(Common.isEmptyObject(_this.selectTableData)){
-                    _this.$message.error('请选择一条数据');
-                }else{
-                    _this.$confirm('您确定要无效会员管理栏目', '提示', {
-                        confirmButtonText: '确定',
-                        cancelButtonText: '取消',
-                        type: 'warning'
-                    }).then(() => {
-                        _this.valid(0,()=>{
-                            _this.$message({
-                                type: 'success',
-                                message: '已无效!'
-                            });
-                        });
-                    }).catch(() => {
-                        _this.$message({
-                            type: 'info',
-                            message: '已取消'
-                        });
-                    });
-                }
-            },
+import Common from '../../../../utils/common'
+import { createNamespacedHelpers } from 'vuex'
+import axios from 'axios'
+const { mapGetters, mapActions } = createNamespacedHelpers('module001')
+export default {
+  methods: {
+    ...mapActions(['showLayer', 'changeEditType', 'showSort', 'triggerTable', 'tableCurrentChange']),
+    addColumn () {
+      const _this = this
+      _this.changeEditType(0)
+      _this.showLayer()
+      console.log('选择')
+      _this.tableCurrentChange({})
+    },
+    editColumn () {
+      const _this = this
+      if (!Common.isEmptyObject(_this.selectTableData)) {
+        _this.changeEditType(1)
+        _this.showLayer()
+      } else {
+        _this.$message.error('请选择一条数据')
+      }
+    },
+    showSortDialog () {
+      const _this = this
+      if (Common.isEmptyObject(_this.selectTableData)) {
+        _this.$message.error('请选择一条数据')
+      } else {
+        _this.showSort()
+      }
+    },
+    showPassDialog () {
+      const _this = this
+      if (Common.isEmptyObject(_this.selectTableData)) {
+        _this.$message.error('请选择一条数据')
+      } else {
+        _this.$confirm('您确定要激活该栏目', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'info'
+        }).then(() => {
+          _this.valid(1, () => {
+            _this.$message({
+              type: 'success',
+              message: '已激活!'
+            })
+          })
+        }).catch(() => {
+          _this.$message({
+            type: 'info',
+            message: '已取消'
+          })
+        })
+      }
+    },
+    valid (isValid, callback) {
+      const _this = this
+      console.log('操作')
+      axios({
+        method: 'post',
+        url: '/api/columns/update',
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest'
         },
-        computed:{
-            ...mapGetters(['selectTableData'])
+        data: {
+          id: _this.selectTableData.id,
+          isValid: isValid
         }
+      }).then(function (response) {
+        console.log('进入成功')
+        const reqData = response.data
+        if (parseInt(reqData.code, 10) === 200) {
+          _this.triggerTable()
+          callback && callback()
+        }
+        console.log(response.data)
+      }).catch((res) => {
+        console.log(res)
+        _this.$message({
+          type: 'info',
+          message: '操作失败'
+        })
+      })
+    },
+    rejectDialog () {
+      const _this = this
+      if (Common.isEmptyObject(_this.selectTableData)) {
+        _this.$message.error('请选择一条数据')
+      } else {
+        _this.$confirm('您确定要无效会员管理栏目', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          _this.valid(0, () => {
+            _this.$message({
+              type: 'success',
+              message: '已无效!'
+            })
+          })
+        }).catch(() => {
+          _this.$message({
+            type: 'info',
+            message: '已取消'
+          })
+        })
+      }
     }
+  },
+  computed: {
+    ...mapGetters(['selectTableData'])
+  }
+}
 </script>

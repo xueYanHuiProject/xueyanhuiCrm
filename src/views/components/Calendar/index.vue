@@ -18,23 +18,23 @@
     }
 </style>
 <script>
-    import FullCalendar from 'vue-fullcalendar';
-    let demoEvents = [
-        {
-            title : 'Sunny Out of Office',
-            start : '2018-04-13',
-            end : '2017-07-27'
-        }
-    ];
-    export default {
-        data(){
-          return{
-              msg:"index",
-              fcEvents : demoEvents
-          }
-        },
-        components:{
-            FullCalendar
-        }
+import FullCalendar from 'vue-fullcalendar'
+const demoEvents = [
+  {
+    title: 'Sunny Out of Office',
+    start: '2018-04-13',
+    end: '2017-07-27'
+  }
+]
+export default {
+  data () {
+    return {
+      msg: 'index',
+      fcEvents: demoEvents
     }
+  },
+  components: {
+    FullCalendar
+  }
+}
 </script>
