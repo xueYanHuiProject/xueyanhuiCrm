@@ -1,0 +1,96 @@
+.adminContentContainer004{
+    .jurisdiction-item{
+        margin: 10px;
+    }
+    .jurisdiction-info{
+        padding: 0 0 20px 0;
+        text-align: center;
+        font-size: 20px;
+    }
+    .blackWarnTextarea{
+        width: 80%;
+    }
+    .admin-audit-panel{
+        height: 600px;
+        width: 870px;
+        margin: 0 auto;
+        background: #f3f3f3;
+        .admin-audit-image{
+            width:600px;
+            height: 600px;
+            float: left;
+            //background: #00ABEC;
+            .admin-audit-picture{
+                width: 500px;
+                height: 500px;
+                margin: 20px auto 10px auto;
+                //background: #5daf34;
+                background: url("https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=3245994356,1314206822&fm=26&gp=0.jpg") no-repeat center center/cover;
+            }
+            .admin-audit-num{
+                font-size: 16px;
+                font-family: MicrosoftYaHei;
+                color: #333;
+                line-height: 21px;
+                width: 228px;
+                margin-top: 9px;
+                padding-left: 50px;
+            }
+        }
+        .admin-audit-list{
+            float: left;
+            height: 580px;
+            width:266px;
+            //background: #1bbc9b;
+            overflow-x: hidden;
+            overflow-y: auto;
+            padding-top: 20px;
+            border-left:1px solid #bfbfbf;
+            .admin-audit-type{
+                width:246px;
+            }
+            .admin-audit-title{
+                height: 19px;
+                font-size: 19px;
+                font-family: PingFangSC-Medium;
+                font-weight: 500;
+                color: #000;
+                line-height: 19px;
+                display: block;
+                padding: 10px;
+            }
+            .admin-att-list{
+                .admin-att-item{
+                    width: 228px;
+                    height: 165px;
+                    margin: 0 auto 15px auto;
+                    .admin-att-logo{
+                        background: #8c939d;
+                        width: 228px;
+                        height: 137px;
+                        margin: 0 auto;
+                    }
+                    .admin-att-num{
+                        font-size: 16px;
+                        font-family: MicrosoftYaHei;
+                        color: #333;
+                        line-height: 21px;
+                        width: 228px;
+                        margin-top: 9px;
+                    }
+                }
+            }
+        }
+    }
+    .admin-audit-word{
+        padding: 10px 0 13px 0;
+        min-height: 24px;
+        height: auto;
+        font-size: 16px;
+        font-family: MicrosoftYaHei;
+        color: #333;
+        line-height: 20px;
+        display: inline-block;
+    }
+
+}

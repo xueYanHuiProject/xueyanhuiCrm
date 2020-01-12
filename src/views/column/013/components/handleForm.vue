@@ -1,0 +1,157 @@
+<template>
+    <el-form :inline="true" :model="formInline" class="demo-form-inline" label-width="80px" label-position="left">
+        <el-form-item label="管理员ID">
+            <el-input v-model="formInline.adminId" placeholder="管理员ID" class="adminInputEl"></el-input>
+        </el-form-item>
+        <el-form-item label="姓名">
+            <el-input v-model="formInline.adminName" placeholder="管理员姓名" class="adminInputEl"></el-input>
+        </el-form-item>
+        <el-form-item label="Email">
+            <el-input v-model="formInline.email" placeholder="Email" class="adminInputEl"></el-input>
+        </el-form-item>
+        <el-form-item label="性别">
+            <el-select v-model="formInline.gender" placeholder="性别" class="adminInputEl">
+                <el-option label="男" value="1"></el-option>
+                <el-option label="女" value="2"></el-option>
+            </el-select>
+        </el-form-item>
+        <el-form-item label="审核状态">
+            <el-select v-model="formInline.checkState" placeholder="审核状态" class="adminInputEl">
+                <el-option label="0" value="0">待审核
+                </el-option>
+                <el-option label="1" value="1">审核通过</el-option>
+                <el-option label="2" value="2">审核未通过</el-option>
+            </el-select>
+        </el-form-item>
+        <el-form-item label="电话">
+            <el-input v-model="formInline.phoneNumber" placeholder="联系电话" class="adminInputEl"></el-input>
+        </el-form-item>
+        <!--<el-form-item label="创建时间">
+            <el-date-picker
+                v-model="formInline.createDuringTime"
+                type="datetimerange"
+                :picker-options="createPickerOptions"
+                range-separator="至"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+                align="right">
+            </el-date-picker>
+        </el-form-item>
+        <el-form-item label="更新时间">
+            <el-date-picker
+                v-model="formInline.updateDuringTime"
+                type="datetimerange"
+                :picker-options="updatePickerOptions"
+                range-separator="至"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+                align="right">
+            </el-date-picker>
+        </el-form-item>-->
+        <div class="block">
+            <el-form-item>
+                <el-button type="primary" @click="getList">查询</el-button>
+            </el-form-item>
+            <el-form-item>
+                <el-button type="default" @click="resetList">重置</el-button>
+            </el-form-item>
+        </div>
+    </el-form>
+</template>
+<script>
+    import { createNamespacedHelpers } from 'vuex'
+    const { mapGetters,mapActions } = createNamespacedHelpers('module013');
+    export default {
+        data(){
+            return {
+                formInline:{
+                    adminId:'',
+                    phoneNumber:"",
+                    adminName:'',
+                    email:"",
+                    gender:"",
+                    checkState:""
+                },
+                originalForm:{
+                    adminId:'',
+                    phoneNumber:"",
+                    adminName:'',
+                    email:"",
+                    gender:"",
+                    checkState:""
+                },
+                createPickerOptions: {
+                    shortcuts: [{
+                        text: '最近一周',
+                        onClick(picker) {
+                            const end = new Date();
+                            const start = new Date();
+                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+                            picker.$emit('pick', [start, end]);
+                        }
+                    }, {
+                        text: '最近一个月',
+                        onClick(picker) {
+                            const end = new Date();
+                            const start = new Date();
+                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+                            picker.$emit('pick', [start, end]);
+                        }
+                    }, {
+                        text: '最近三个月',
+                        onClick(picker) {
+                            const end = new Date();
+                            const start = new Date();
+                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+                            picker.$emit('pick', [start, end]);
+                        }
+                    }]
+                },
+                updatePickerOptions: {
+                    shortcuts: [{
+                        text: '最近一周',
+                        onClick(picker) {
+                            const end = new Date();
+                            const start = new Date();
+                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+                            picker.$emit('pick', [start, end]);
+                        }
+                    }, {
+                        text: '最近一个月',
+                        onClick(picker) {
+                            const end = new Date();
+                            const start = new Date();
+                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+                            picker.$emit('pick', [start, end]);
+                        }
+                    }, {
+                        text: '最近三个月',
+                        onClick(picker) {
+                            const end = new Date();
+                            const start = new Date();
+                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+                            picker.$emit('pick', [start, end]);
+                        }
+                    }]
+                },
+            }
+        },
+        methods:{
+            ...mapActions(['changeFormInline']),
+            resetList(){
+                let t = this;
+                t.formInline = JSON.parse(JSON.stringify(t.originalForm));
+                //t.changeFormInline({});
+            },
+            getList(){
+                let _this = this;
+                _this.$emit("getTableList",_this.formInline);
+            }
+        },
+        mounted(){
+            let t = this;
+            t.getList();
+            console.log(t.formInline)
+        }
+    }
+</script>

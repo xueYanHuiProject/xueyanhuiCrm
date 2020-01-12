@@ -1,0 +1,30 @@
+const actions  = {
+    getList:({commit,state})=>{
+        commit('getList');
+    },
+    createIcon:({commit,state},data)=>{
+        commit("createIcon",data);
+    },
+    showLayer:({commit,state})=>{
+    commit("showLayer");
+    },
+    showRejectWarn:({commit,state})=>{
+    commit("showRejectWarn");
+    },
+    hideRejectWarn:({commit,state})=>{
+    commit("hideRejectWarn");
+    },
+    hidePassDialog:({commit,state})=>{
+    commit("hidePassDialog");
+    },
+    showPassDialog:({commit,state})=>{
+    commit("showPassDialog");
+    },
+    hideLayer:({commit,state})=>{
+    commit("hideLayer");
+    },
+    hideMsg:({commit,state})=>{
+    commit("hideMsg");
+    },
+};
+export default actions;
