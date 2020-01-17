@@ -332,7 +332,7 @@ export default {
 }
 </script>
 <style lang="scss">
-    @import "../../../static/scss/common";
+    @import "../../../static/scss/untils/common";
     .adminLogin{
         @include maskBg();
         display: flex;

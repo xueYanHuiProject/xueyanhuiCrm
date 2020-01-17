@@ -13,7 +13,7 @@
                 <div class="right-menu">
                     <section class="adminUser">
                         <section class="adminUserLogo">
-                            <img src="../../../images/userLogo.jpg" alt="">
+                            <img src="../../../static/images/userLogo.jpg" alt="">
                         </section>
                     </section>
                 </div>
