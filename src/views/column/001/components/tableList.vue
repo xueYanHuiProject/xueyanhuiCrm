@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import Common from '../../../../utils/common'
+import { formatterValid, formatDate } from '../../../../utils/common'
 import { createNamespacedHelpers } from 'vuex'
 import axios from 'axios'
 const xhrUrl = {
@@ -101,11 +101,11 @@ export default {
     },
     formatterValid (row, column) {
       const type = row.isValid
-      return Common.formatterValid(type)
+      return formatterValid(type)
     },
     formatterTime (row, column) {
       const time = row.createTime
-      return Common.formatDate(time)
+      return formatDate(time)
     },
     getTableList () {
       const _this = this

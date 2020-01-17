@@ -157,7 +157,7 @@
 </style>
 <script>
 import Tab from '../../tab/index'
-import common from '../../../utils/common'
+import { isEmptyObject } from '../../../utils/common'
 import Hamburger from '../Hamburger/index'
 import { mapGetters, mapActions } from 'vuex'
 export default {
@@ -170,14 +170,14 @@ export default {
     ...mapGetters(['toggleOnOff', 'nowTabData']),
     marTop () {
       const t = this
-      console.log(common.isEmptyObject(t.nowTabData))
-      return !common.isEmptyObject(t.nowTabData)
+      console.log(isEmptyObject(t.nowTabData))
+      return !isEmptyObject(t.nowTabData)
     }
   },
   watch: {
     nowTabData (n) {
       const t = this
-      console.log(common.isEmptyObject(t.nowTabData))
+      console.log(isEmptyObject(t.nowTabData))
       console.log(n)
     }
   },
@@ -189,7 +189,7 @@ export default {
   },
   mounted () {
     const t = this
-    console.log(common.isEmptyObject(t.nowTabData))
+    console.log(isEmptyObject(t.nowTabData))
   }
 }
 </script>

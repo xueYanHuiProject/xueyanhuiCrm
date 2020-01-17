@@ -44,12 +44,12 @@
     </el-dialog>
 </template>
 <script>
-import Common from '../../../../utils/common'
+import { checkInvalid, isEmptyObject } from '../../../../utils/common'
 import { createNamespacedHelpers } from 'vuex'
 const { mapGetters, mapActions } = createNamespacedHelpers('module001')
 export default {
   data () {
-    const adminId = Common.checkInvalid(localStorage.getItem('adminId')) ? '' : localStorage.getItem('adminId')
+    const adminId = checkInvalid(localStorage.getItem('adminId')) ? '' : localStorage.getItem('adminId')
     return {
       addForm: {
         columnTitle: '',
@@ -120,7 +120,7 @@ export default {
     },
     resetForm () {
       const _this = this
-      const adminId = Common.checkInvalid(localStorage.getItem('adminId')) ? '' : localStorage.getItem('adminId')
+      const adminId = checkInvalid(localStorage.getItem('adminId')) ? '' : localStorage.getItem('adminId')
       _this.addForm = {
         columnTitle: '',
         grade: '',
@@ -132,11 +132,11 @@ export default {
     },
     checkForm (newVal) {
       const _this = this
-      if (!Common.isEmptyObject(newVal)) {
+      if (!isEmptyObject(newVal)) {
         console.log('=========')
         console.log(newVal)
         console.log('=========')
-        const adminId = Common.checkInvalid(localStorage.getItem('adminId')) ? '' : localStorage.getItem('adminId')
+        const adminId = checkInvalid(localStorage.getItem('adminId')) ? '' : localStorage.getItem('adminId')
         _this.addForm.columnIcon = newVal.iconId
         _this.addForm.columnTitle = newVal.title
         console.log(newVal.grade, newVal.routerName)

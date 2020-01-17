@@ -254,7 +254,7 @@
     }
 </style>
 <script>
-import Common from '../../../utils/common.js'
+import {blackReason,formatterValid,formatterValid} from '../../../utils/common.js'
 import axios from 'axios'
 export default {
   data () {
@@ -355,7 +355,7 @@ export default {
   },
   computed: {
     blackReason () {
-      return Common.blackReason()
+      return blackReason()
     }
   },
   watch: {
@@ -536,7 +536,6 @@ export default {
       }
     },
     handleSelectionChange (val) {
-      const t = this
       this.multipleSelection = val
     },
     handleSizeChange (val) {
@@ -548,9 +547,8 @@ export default {
       t.pageIndex = parseInt(val, 10)
     },
     formatterValid (row, column) {
-      const t = this
       const type = row.isValid
-      return Common.formatterValid(type)
+      return formatterValid(type)
     }
   }
 }

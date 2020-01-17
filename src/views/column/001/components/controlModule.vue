@@ -20,7 +20,7 @@
     </div>
 </template>
 <script>
-import Common from '../../../../utils/common'
+import { isEmptyObject } from '../../../../utils/common'
 import { createNamespacedHelpers } from 'vuex'
 import axios from 'axios'
 const { mapGetters, mapActions } = createNamespacedHelpers('module001')
@@ -36,7 +36,7 @@ export default {
     },
     editColumn () {
       const _this = this
-      if (!Common.isEmptyObject(_this.selectTableData)) {
+      if (!isEmptyObject(_this.selectTableData)) {
         _this.changeEditType(1)
         _this.showLayer()
       } else {
@@ -45,7 +45,7 @@ export default {
     },
     showSortDialog () {
       const _this = this
-      if (Common.isEmptyObject(_this.selectTableData)) {
+      if (isEmptyObject(_this.selectTableData)) {
         _this.$message.error('请选择一条数据')
       } else {
         _this.showSort()
@@ -53,7 +53,7 @@ export default {
     },
     showPassDialog () {
       const _this = this
-      if (Common.isEmptyObject(_this.selectTableData)) {
+      if (isEmptyObject(_this.selectTableData)) {
         _this.$message.error('请选择一条数据')
       } else {
         _this.$confirm('您确定要激活该栏目', '提示', {
@@ -106,7 +106,7 @@ export default {
     },
     rejectDialog () {
       const _this = this
-      if (Common.isEmptyObject(_this.selectTableData)) {
+      if (isEmptyObject(_this.selectTableData)) {
         _this.$message.error('请选择一条数据')
       } else {
         _this.$confirm('您确定要无效会员管理栏目', '提示', {

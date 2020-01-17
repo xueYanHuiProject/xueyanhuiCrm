@@ -20,12 +20,11 @@
     }
 </style>
 <script>
-import OutLoginDialog from './views/components/Dialog/OutLogin.vue'
 import LoginBar from './views/components/login/Login.vue'
 import SideBar from './views/components/sideBar/sideBar'
 import ContentBar from './views/components/main/MainContent'
 import { mapGetters, mapActions } from 'vuex'
-import common from './utils/common'
+import { isEmptyObject } from './utils/common'
 export default {
   data () {
     return {
@@ -36,12 +35,11 @@ export default {
   components: {
     SideBar,
     ContentBar,
-    LoginBar,
-    OutLoginDialog
+    LoginBar
   },
   mounted () {
     const t = this
-    if (common.isEmptyObject(t.nowTabData)) {
+    if (isEmptyObject(t.nowTabData)) {
       t.$router.push({ path: '/' })
     }
     setTimeout(() => {
