@@ -3,7 +3,6 @@
         <SideBar></SideBar>
         <ContentBar></ContentBar>
         <LoginBar v-show="!(loginOnOff.length>0)"></LoginBar>
-        <OutLoginDialog></OutLoginDialog>
     </el-container>
 </template>
 <style lang="scss" scoped >
