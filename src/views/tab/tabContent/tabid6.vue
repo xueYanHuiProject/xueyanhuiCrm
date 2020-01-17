@@ -145,223 +145,220 @@
     </section>
 </template>
 <script>
-    import Common from '../../../utils/common.js';
-    import axios from 'axios';
-    export default {
-        data(){
-            return {
-                formInline: {
-                    blackId:'',//该拉黑的唯一标识
-                    customerId:'',//拉黑用户的id
-                    customerName:'',//拉黑用户的名字
-                    blackReason:'',//拉黑的原因0营销诈骗、1淫秽色情、2不友善行为、3诱导欺骗、4虚假资料
-                    blackState:'',//拉黑的状态，0新建，1已激活
-                    getType:4,
-                    pageSize:10,
-                    pageIndex:1
-                },
-                pageSize:10,
-                pageIndex:1,
-                count:0,
-                pickerOptions1: {
-                    disabledDate(time) {
-                        return time.getTime() > Date.now();
-                    },
-                    shortcuts: [{
-                        text: '今天',
-                        onClick(picker) {
-                            picker.$emit('pick', new Date());
-                        }
-                    }, {
-                        text: '昨天',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() - 3600 * 1000 * 24);
-                            picker.$emit('pick', date);
-                        }
-                    }, {
-                        text: '一周前',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-                            picker.$emit('pick', date);
-                        }
-                    }]
-                },
-                value2:"",
-                activateOnOff:false,
-                rejectAuditReason:"",
-                selectedData:{},
-                centerDialogVisible:false,
-                selectedOne:false,
-                msg:"",
-                currentPage4:4,
-                tableData:[]
-            }
+import Common from '../../../utils/common.js'
+import axios from 'axios'
+export default {
+  data () {
+    return {
+      formInline: {
+        blackId: '', // 该拉黑的唯一标识
+        customerId: '', // 拉黑用户的id
+        customerName: '', // 拉黑用户的名字
+        blackReason: '', // 拉黑的原因0营销诈骗、1淫秽色情、2不友善行为、3诱导欺骗、4虚假资料
+        blackState: '', // 拉黑的状态，0新建，1已激活
+        getType: 4,
+        pageSize: 10,
+        pageIndex: 1
+      },
+      pageSize: 10,
+      pageIndex: 1,
+      count: 0,
+      pickerOptions1: {
+        disabledDate (time) {
+          return time.getTime() > Date.now()
         },
-        mounted(){
-          let t = this;
-          t.getBlackUserList();
-        },
-        computed:{
-            dialogReason(){
-                let t = this;
-              return (!isNaN(parseInt(t.selectedData.blackReason,10)))&&t.blackReason[parseInt(t.selectedData.blackReason,10)]['reasonName']?t.blackReason[parseInt(t.selectedData.blackReason,10)]['reasonName']:'';
-            },
-            blackReason(){
-                return Common.blackReason();
-            }
-        },
-        watch:{
-            pageIndex(newVal){
-                let t = this;
-                t.formInline.pageIndex = newVal;
-                t.getBlackUserList();
-            },
-            pageSize(newVal){
-                let t = this;
-                t.formInline.pageSize = newVal;
-                console.log('执行');
-                t.getBlackUserList();
-            }
-        },
-        methods:{
-            checkList(){
-                let t = this;
-                t.pageIndex === 1 ? t.getBlackUserList() : t.pageIndex = 1;
-            },
-            tableCurrentChange(val){
-                let t = this;
-                if(val){
-                    console.log(val);
-                    t.selectedOne = true;
-                    t.selectedData = val;
-                }
-
-            },
-            blackReasonFormat(row,column){
-                let t = this;
-                let type = row['blackReason'];
-                return Common.blackReasonFormat(type);
-            },
-            blackStateFormat(row,column){
-                let t = this;
-                let type = row['blackState'];
-                return Common.blackState(type);
-            },
-            resetList(){
-                let t = this;
-                t.pageSize = 10;
-                t.pageIndex = 1;
-                t.formInline={
-                    blackId:'',//该拉黑的唯一标识
-                    customerId:'',//拉黑用户的id
-                    customerName:'',//拉黑用户的名字
-                    blackReason:'',//拉黑的原因0营销诈骗、1淫秽色情、2不友善行为、3诱导欺骗、4虚假资料
-                    blackState:'',//拉黑的状态，0新建，1已激活
-                    getType:4,
-                    pageSize:10,
-                    pageIndex:1
-                };
-                t.getBlackUserList();
-            },
-            feedBackContent(){
-                let t = this;
-                t.centerDialogVisible = false;
-                t.$message({
-                    message: t.selectedData.customerName+'拉黑信息已回复',
-                    type: 'success'
-                });
-            },
-            getBlackUserList(){
-                let t = this;
-                t.selectedData = {};
-                axios.get('/call/customer/getBlacklist', {
-                    params: t.formInline
-                })
-                    .then(function (response) {
-                        let reqData = response.data;
-                        if(reqData.responseObject.responseData['data_list']){
-                            t.tableData = reqData.responseObject.responseData['data_list'];
-                        }
-                        if(reqData.responseObject.responseData.totalCount){
-                            t.count = reqData.responseObject.responseData.totalCount;
-                        }
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
-            },
-            handleSelectionChange(val) {
-                this.multipleSelection = val;
-            },
-            activate(type){
-                let t = this;
-                if(!t.selectedOne){
-                    t.$message.error('请选择您要激活的用户!');
-                }else{
-                    if(type===0){
-                        t.activateOnOff = true;
-                    }else if(type===1){
-                        axios({
-                            url: '/call/customer/activate',
-                            method: "POST",
-                            data: {
-                                blackId:t.selectedData.blackId,
-                                customerId:t.selectedData.customerId,
-                                adminId:localStorage.getItem('adminId'),
-                                updateState:0,
-                                adminName:localStorage.getItem('userName')
-                            },
-                            transformRequest: [function (data) {
-                                return "paramJson=" + JSON.stringify(data);
-                            }],
-                            headers: {
-                                'X-Requested-With': 'XMLHttpRequest'
-                            },
-                            timeout: 30000
-                        }).then(function(req){
-                            t.activateOnOff = false;
-                            if(req.data.responseObject.responseCode===4){
-                                t.$message({
-                                    message:'用户已被激活',
-                                    type: 'success'
-                                });
-                                t.getBlackUserList();
-                            }else{
-                                t.$message({
-                                    message:'激活失败',
-                                    type: 'warning'
-                                });
-                            }
-                        });
-
-                    }
-
-                }
-            },
-            detailInfo(){
-                let t = this;
-                if(!t.selectedOne){
-                    t.$message.error('请选择您要变更的用户!');
-                }else{
-                    t.centerDialogVisible = true;
-                }
-            },
-            onSubmit() {
-                console.log('submit!');
-            },
-            handleSizeChange(val) {
-                console.log(`每页 ${val} 条`);
-                let t = this;
-                t.pageSize = val;
-            },
-            handleCurrentChange(val) {
-                let t = this;
-                t.pageIndex = parseInt(val,10);
-            }
-        }
+        shortcuts: [{
+          text: '今天',
+          onClick (picker) {
+            picker.$emit('pick', new Date())
+          }
+        }, {
+          text: '昨天',
+          onClick (picker) {
+            const date = new Date()
+            date.setTime(date.getTime() - 3600 * 1000 * 24)
+            picker.$emit('pick', date)
+          }
+        }, {
+          text: '一周前',
+          onClick (picker) {
+            const date = new Date()
+            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7)
+            picker.$emit('pick', date)
+          }
+        }]
+      },
+      value2: '',
+      activateOnOff: false,
+      rejectAuditReason: '',
+      selectedData: {},
+      centerDialogVisible: false,
+      selectedOne: false,
+      msg: '',
+      currentPage4: 4,
+      tableData: []
     }
+  },
+  mounted () {
+    const t = this
+    t.getBlackUserList()
+  },
+  computed: {
+    dialogReason () {
+      const t = this
+      return (!isNaN(parseInt(t.selectedData.blackReason, 10))) && t.blackReason[parseInt(t.selectedData.blackReason, 10)].reasonName ? t.blackReason[parseInt(t.selectedData.blackReason, 10)].reasonName : ''
+    },
+    blackReason () {
+      return Common.blackReason()
+    }
+  },
+  watch: {
+    pageIndex (newVal) {
+      const t = this
+      t.formInline.pageIndex = newVal
+      t.getBlackUserList()
+    },
+    pageSize (newVal) {
+      const t = this
+      t.formInline.pageSize = newVal
+      console.log('执行')
+      t.getBlackUserList()
+    }
+  },
+  methods: {
+    checkList () {
+      const t = this
+      t.pageIndex === 1 ? t.getBlackUserList() : t.pageIndex = 1
+    },
+    tableCurrentChange (val) {
+      const t = this
+      if (val) {
+        console.log(val)
+        t.selectedOne = true
+        t.selectedData = val
+      }
+    },
+    blackReasonFormat (row, column) {
+      const t = this
+      const type = row.blackReason
+      return Common.blackReasonFormat(type)
+    },
+    blackStateFormat (row, column) {
+      const t = this
+      const type = row.blackState
+      return Common.blackState(type)
+    },
+    resetList () {
+      const t = this
+      t.pageSize = 10
+      t.pageIndex = 1
+      t.formInline = {
+        blackId: '', // 该拉黑的唯一标识
+        customerId: '', // 拉黑用户的id
+        customerName: '', // 拉黑用户的名字
+        blackReason: '', // 拉黑的原因0营销诈骗、1淫秽色情、2不友善行为、3诱导欺骗、4虚假资料
+        blackState: '', // 拉黑的状态，0新建，1已激活
+        getType: 4,
+        pageSize: 10,
+        pageIndex: 1
+      }
+      t.getBlackUserList()
+    },
+    feedBackContent () {
+      const t = this
+      t.centerDialogVisible = false
+      t.$message({
+        message: t.selectedData.customerName + '拉黑信息已回复',
+        type: 'success'
+      })
+    },
+    getBlackUserList () {
+      const t = this
+      t.selectedData = {}
+      axios.get('/call/customer/getBlacklist', {
+        params: t.formInline
+      })
+        .then(function (response) {
+          const reqData = response.data
+          if (reqData.responseObject.responseData.data_list) {
+            t.tableData = reqData.responseObject.responseData.data_list
+          }
+          if (reqData.responseObject.responseData.totalCount) {
+            t.count = reqData.responseObject.responseData.totalCount
+          }
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
+    },
+    handleSelectionChange (val) {
+      this.multipleSelection = val
+    },
+    activate (type) {
+      const t = this
+      if (!t.selectedOne) {
+        t.$message.error('请选择您要激活的用户!')
+      } else {
+        if (type === 0) {
+          t.activateOnOff = true
+        } else if (type === 1) {
+          axios({
+            url: '/call/customer/activate',
+            method: 'POST',
+            data: {
+              blackId: t.selectedData.blackId,
+              customerId: t.selectedData.customerId,
+              adminId: localStorage.getItem('adminId'),
+              updateState: 0,
+              adminName: localStorage.getItem('userName')
+            },
+            transformRequest: [function (data) {
+              return 'paramJson=' + JSON.stringify(data)
+            }],
+            headers: {
+              'X-Requested-With': 'XMLHttpRequest'
+            },
+            timeout: 30000
+          }).then(function (req) {
+            t.activateOnOff = false
+            if (req.data.responseObject.responseCode === 4) {
+              t.$message({
+                message: '用户已被激活',
+                type: 'success'
+              })
+              t.getBlackUserList()
+            } else {
+              t.$message({
+                message: '激活失败',
+                type: 'warning'
+              })
+            }
+          })
+        }
+      }
+    },
+    detailInfo () {
+      const t = this
+      if (!t.selectedOne) {
+        t.$message.error('请选择您要变更的用户!')
+      } else {
+        t.centerDialogVisible = true
+      }
+    },
+    onSubmit () {
+      console.log('submit!')
+    },
+    handleSizeChange (val) {
+      console.log(`每页 ${val} 条`)
+      const t = this
+      t.pageSize = val
+    },
+    handleCurrentChange (val) {
+      const t = this
+      t.pageIndex = parseInt(val, 10)
+    }
+  }
+}
 </script>
 <style lang="scss" scoped>
     @import "../../../static/scss/common";
@@ -402,7 +399,6 @@
             }
         }
     }
-
 
     .rejectAuditInline,.feedBackArea{
         width: 100%;

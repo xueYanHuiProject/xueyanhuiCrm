@@ -156,279 +156,278 @@
     </section>
 </template>
 <script>
-    import Common from '../../../utils/common.js';
-    import axios from 'axios';
-    export default {
-        data() {
-            return {
-                formInline: {
-                    pageIndex:1,
-                    pageSize:10,
-                    articleId:'',//该消息的唯一标识
-                    articleTitle:'',//消息的标题
-                    templateId:'',//消息使用的模板id
-                    customerId:'',//该消息的作者id,
-                    customerName:'',//该消息的作者Name,
-                    'isValid':''//，0无效,1有效
-                },
-                count:0,
-                pageIndex:1,
-                pageSize:10,
-                swiperOption: {
-                    spaceBetween: 30,
-                    pagination: {
-                        el: '.swiper-pagination',
-                        clickable: true
-                    },
-                    navigation: {
-                        nextEl: '.swiper-button-next',
-                        prevEl: '.swiper-button-prev'
-                    }
-                },
-                labelPosition: 'left',
-                formLabelAlign: {
-                    name: '',
-                    region: '',
-                    type: ''
-                },
-                pickerOptions1: {
-                    disabledDate(time) {
-                        return time.getTime() > Date.now();
-                    },
-                    shortcuts: [{
-                        text: '今天',
-                        onClick(picker) {
-                            picker.$emit('pick', new Date());
-                        }
-                    }, {
-                        text: '昨天',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() - 3600 * 1000 * 24);
-                            picker.$emit('pick', date);
-                        }
-                    }, {
-                        text: '一周前',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-                            picker.$emit('pick', date);
-                        }
-                    }]
-                },
-                value2:"",
-                activateOnOff:false,
-                pushOnOff:false,
-                articleDialog:false,
-                innerVisible:false,
-                centerDialogVisible:true,
-                selectedOne:false,
-                selectedData:{},
-                currentPage4:4,
-                tableData:[]
-            }
+import Common from '../../../utils/common.js'
+import axios from 'axios'
+export default {
+  data () {
+    return {
+      formInline: {
+        pageIndex: 1,
+        pageSize: 10,
+        articleId: '', // 该消息的唯一标识
+        articleTitle: '', // 消息的标题
+        templateId: '', // 消息使用的模板id
+        customerId: '', // 该消息的作者id,
+        customerName: '', // 该消息的作者Name,
+        isValid: ''// ，0无效,1有效
+      },
+      count: 0,
+      pageIndex: 1,
+      pageSize: 10,
+      swiperOption: {
+        spaceBetween: 30,
+        pagination: {
+          el: '.swiper-pagination',
+          clickable: true
         },
-        mounted() {
-            let t = this;
-            t.getArticleList();
-        },
-        watch:{
-            pageIndex(newVal){
-                let t = this;
-                t.formInline.pageIndex = newVal;
-                t.getArticleList();
-            },
-            pageSize(newVal){
-                let t = this;
-                t.formInline.pageSize = newVal;
-                t.getArticleList();
-            }
-        },
-        methods:{
-            checkList(){
-                let t = this;
-                t.pageIndex === 1?t.getArticleList():t.pageIndex =1;
-            },
-            resetList(){
-                let t = this;
-                t.pageSize = 10;
-                t.pageIndex = 1;
-                t.formInline = {
-                    pageIndex:1,
-                    pageSize:10,
-                    articleId:'',//该消息的唯一标识
-                    articleTitle:'',//消息的标题
-                    templateId:'',//消息使用的模板id
-                    customerId:'',//该消息的作者id,
-                    customerName:'',//该消息的作者Name,
-                    'isValid':''//，0无效,1有效
-                };
-                t.getArticleList();
-            },
-            commentIdListNum(row,column){
-                let t = this;
-                let type = row['articleIdList'];
-                //console.log(type);
-                return parseInt(Common.listNum(type),10);
-            },
-            formatterValid(row,column){
-                let t = this;
-                let type = row['isValid'];
-                return Common.formatterValid(type);
-            },
-            tableCurrentChange(val){
-                let t = this;
-                if(val){
-                    console.log(val);
-                    t.selectedOne = true;
-                    t.selectedData = val;
-                }
-            },
-            getArticleList(){
-                let t = this;
-                axios.get('/call/article/getArticleList', {
-                    params: t.formInline
-                })
-                    .then(function (response) {
-                        let reqData = response.data;
-                        console.log(reqData);
-                        if(reqData.responseObject.responseData['data_list']){
-                            t.tableData = reqData.responseObject.responseData['data_list'];
-                        }
-                        if(reqData.responseObject.responseData.totalCount){
-                            t.count = reqData.responseObject.responseData.totalCount;
-                        }
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
-            },
-            callback(){
-                console.log('执行');
-            },
-            imgInit(e){
-                console.log(e);
-            },
-            activate(type){
-                let t = this;
-                if(!t.selectedOne){
-                    t.$message.error('请选择您要激活的消息!');
-                }else{
-                    if(type===0){
-                        t.activateOnOff = true;
-                    }else if(type===1){
-                        axios({
-                            url: '/call/article/active',
-                            method: "POST",
-                            data: {
-                                articleId:t.selectedData.articleId,
-                                updateState:'1'
-                            },
-                            transformRequest: [function (data) {
-                                return "paramJson=" + JSON.stringify(data);
-                            }],
-                            headers: {
-                                'X-Requested-With': 'XMLHttpRequest'
-                            },
-                            timeout: 30000
-                        }).then(function(req){
-                            t.activateOnOff = false;
-                            t.$message({
-                                message: t.selectedData.articleTitle+'消息已被激活',
-                                type: 'success'
-                            });
-                            t.getArticleList();
-                        });
-                    }
-                }
-            },
-            detailInfo(type){
-                let t = this;
-                if(!t.selectedOne){
-                    t.$message.error('请选择您要无效的消息!');
-                }else{
-                    if(type===0){
-                        t.innerVisible = true;
-                    }else if(type===1){
-                        axios({
-                            url: '/call/article/invalid',
-                            method: "POST",
-                            data: {
-                                articleId:t.selectedData.articleId,
-                                updateState:'0'
-                            },
-                            transformRequest: [function (data) {
-                                return "paramJson=" + JSON.stringify(data);
-                            }],
-                            headers: {
-                                'X-Requested-With': 'XMLHttpRequest'
-                            },
-                            timeout: 30000
-                        }).then(function(req){
-                            t.innerVisible = false;
-                            t.$message({
-                                message: t.selectedData.articleTitle+'消息已被无效',
-                                type: 'success'
-                            });
-                            t.getArticleList();
-                        });
-                    }
-                }
-            },
-            editArticle(type){
-                let t = this;
-                if(!t.selectedOne){
-                    t.$message.error('请选择您要无效的消息!');
-                }else{
-                    if(type===0){
-                        t.articleDialog = true;
-                    }else if(type===1){
-                        t.articleDialog = false;
-                        t.$message({
-                            message: t.selectedData.articleTitle+'消息已生成',
-                            type: 'success'
-                        });
-                    }
-                }
-            },
-            pushContent(type){
-                let t = this;
-                if(!t.selectedOne){
-                    t.$message.error('请选择您要推送的消息!');
-                }else{
-                    if(type===0){
-                        t.pushOnOff = true;
-                    }else if(type===1){
-                        t.pushOnOff = false;
-                        t.$message({
-                            message: t.selectedData.articleTitle+'消息已推送',
-                            type: 'success'
-                        });
-                    }
-
-                }
-                console.log('推送');
-            },
-            handleSelectionChange(val) {
-                this.multipleSelection = val;
-            },
-            onSubmit() {
-                console.log('submit!');
-            },
-            handleSizeChange(val) {
-                console.log(`每页 ${val} 条`);
-                let t = this;
-                t.pageSize = val;
-            },
-            handleCurrentChange(val) {
-                let t = this;
-                /*t.selectedOne = true;
-                t.selectedData = val;*/
-                t.pageIndex = val;
-                console.log(`当前页: ${val}`);
-            }
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev'
         }
+      },
+      labelPosition: 'left',
+      formLabelAlign: {
+        name: '',
+        region: '',
+        type: ''
+      },
+      pickerOptions1: {
+        disabledDate (time) {
+          return time.getTime() > Date.now()
+        },
+        shortcuts: [{
+          text: '今天',
+          onClick (picker) {
+            picker.$emit('pick', new Date())
+          }
+        }, {
+          text: '昨天',
+          onClick (picker) {
+            const date = new Date()
+            date.setTime(date.getTime() - 3600 * 1000 * 24)
+            picker.$emit('pick', date)
+          }
+        }, {
+          text: '一周前',
+          onClick (picker) {
+            const date = new Date()
+            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7)
+            picker.$emit('pick', date)
+          }
+        }]
+      },
+      value2: '',
+      activateOnOff: false,
+      pushOnOff: false,
+      articleDialog: false,
+      innerVisible: false,
+      centerDialogVisible: true,
+      selectedOne: false,
+      selectedData: {},
+      currentPage4: 4,
+      tableData: []
     }
+  },
+  mounted () {
+    const t = this
+    t.getArticleList()
+  },
+  watch: {
+    pageIndex (newVal) {
+      const t = this
+      t.formInline.pageIndex = newVal
+      t.getArticleList()
+    },
+    pageSize (newVal) {
+      const t = this
+      t.formInline.pageSize = newVal
+      t.getArticleList()
+    }
+  },
+  methods: {
+    checkList () {
+      const t = this
+      t.pageIndex === 1 ? t.getArticleList() : t.pageIndex = 1
+    },
+    resetList () {
+      const t = this
+      t.pageSize = 10
+      t.pageIndex = 1
+      t.formInline = {
+        pageIndex: 1,
+        pageSize: 10,
+        articleId: '', // 该消息的唯一标识
+        articleTitle: '', // 消息的标题
+        templateId: '', // 消息使用的模板id
+        customerId: '', // 该消息的作者id,
+        customerName: '', // 该消息的作者Name,
+        isValid: ''// ，0无效,1有效
+      }
+      t.getArticleList()
+    },
+    commentIdListNum (row, column) {
+      const t = this
+      const type = row.articleIdList
+      // console.log(type);
+      return parseInt(Common.listNum(type), 10)
+    },
+    formatterValid (row, column) {
+      const t = this
+      const type = row.isValid
+      return Common.formatterValid(type)
+    },
+    tableCurrentChange (val) {
+      const t = this
+      if (val) {
+        console.log(val)
+        t.selectedOne = true
+        t.selectedData = val
+      }
+    },
+    getArticleList () {
+      const t = this
+      axios.get('/call/article/getArticleList', {
+        params: t.formInline
+      })
+        .then(function (response) {
+          const reqData = response.data
+          console.log(reqData)
+          if (reqData.responseObject.responseData.data_list) {
+            t.tableData = reqData.responseObject.responseData.data_list
+          }
+          if (reqData.responseObject.responseData.totalCount) {
+            t.count = reqData.responseObject.responseData.totalCount
+          }
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
+    },
+    callback () {
+      console.log('执行')
+    },
+    imgInit (e) {
+      console.log(e)
+    },
+    activate (type) {
+      const t = this
+      if (!t.selectedOne) {
+        t.$message.error('请选择您要激活的消息!')
+      } else {
+        if (type === 0) {
+          t.activateOnOff = true
+        } else if (type === 1) {
+          axios({
+            url: '/call/article/active',
+            method: 'POST',
+            data: {
+              articleId: t.selectedData.articleId,
+              updateState: '1'
+            },
+            transformRequest: [function (data) {
+              return 'paramJson=' + JSON.stringify(data)
+            }],
+            headers: {
+              'X-Requested-With': 'XMLHttpRequest'
+            },
+            timeout: 30000
+          }).then(function (req) {
+            t.activateOnOff = false
+            t.$message({
+              message: t.selectedData.articleTitle + '消息已被激活',
+              type: 'success'
+            })
+            t.getArticleList()
+          })
+        }
+      }
+    },
+    detailInfo (type) {
+      const t = this
+      if (!t.selectedOne) {
+        t.$message.error('请选择您要无效的消息!')
+      } else {
+        if (type === 0) {
+          t.innerVisible = true
+        } else if (type === 1) {
+          axios({
+            url: '/call/article/invalid',
+            method: 'POST',
+            data: {
+              articleId: t.selectedData.articleId,
+              updateState: '0'
+            },
+            transformRequest: [function (data) {
+              return 'paramJson=' + JSON.stringify(data)
+            }],
+            headers: {
+              'X-Requested-With': 'XMLHttpRequest'
+            },
+            timeout: 30000
+          }).then(function (req) {
+            t.innerVisible = false
+            t.$message({
+              message: t.selectedData.articleTitle + '消息已被无效',
+              type: 'success'
+            })
+            t.getArticleList()
+          })
+        }
+      }
+    },
+    editArticle (type) {
+      const t = this
+      if (!t.selectedOne) {
+        t.$message.error('请选择您要无效的消息!')
+      } else {
+        if (type === 0) {
+          t.articleDialog = true
+        } else if (type === 1) {
+          t.articleDialog = false
+          t.$message({
+            message: t.selectedData.articleTitle + '消息已生成',
+            type: 'success'
+          })
+        }
+      }
+    },
+    pushContent (type) {
+      const t = this
+      if (!t.selectedOne) {
+        t.$message.error('请选择您要推送的消息!')
+      } else {
+        if (type === 0) {
+          t.pushOnOff = true
+        } else if (type === 1) {
+          t.pushOnOff = false
+          t.$message({
+            message: t.selectedData.articleTitle + '消息已推送',
+            type: 'success'
+          })
+        }
+      }
+      console.log('推送')
+    },
+    handleSelectionChange (val) {
+      this.multipleSelection = val
+    },
+    onSubmit () {
+      console.log('submit!')
+    },
+    handleSizeChange (val) {
+      console.log(`每页 ${val} 条`)
+      const t = this
+      t.pageSize = val
+    },
+    handleCurrentChange (val) {
+      const t = this
+      /* t.selectedOne = true;
+                t.selectedData = val; */
+      t.pageIndex = val
+      console.log(`当前页: ${val}`)
+    }
+  }
+}
 </script>
 <style lang="scss" scoped>
     @import "../../../static/scss/common";

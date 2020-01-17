@@ -110,158 +110,157 @@
     </section>
 </template>
 <script>
-    import userData from '../../../virtualData/feedback';
-    import axios from 'axios';
-    export default {
-        data(){
-            return {
-                formInline: {
-                    feedbackId:'',//该反馈的唯一标识
-                    customerId:'',//反馈用户的id
-                    customerName:'',//反馈用户的名字
-                    feedbackState:'',//反馈的状态，0新建，1已回复
-                    pageSize:10,
-                    getType:2,
-                    pageIndex:1 
-                },
-                pageSize:10,
-                pageIndex:1,
-                count:0,
-                pickerOptions1: {
-                    disabledDate(time) {
-                        return time.getTime() > Date.now();
-                    },
-                    shortcuts: [{
-                        text: '今天',
-                        onClick(picker) {
-                            picker.$emit('pick', new Date());
-                        }
-                    }, {
-                        text: '昨天',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() - 3600 * 1000 * 24);
-                            picker.$emit('pick', date);
-                        }
-                    }, {
-                        text: '一周前',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-                            picker.$emit('pick', date);
-                        }
-                    }]
-                },
-                value2:"",
-                rejectAuditReason:"",
-                selectedData:{},
-                centerDialogVisible:false,
-                selectedOne:false,
-                msg:"",
-                currentPage4:4,
-                tableData:[]
-            }
+import userData from '../../../virtualData/feedback'
+import axios from 'axios'
+export default {
+  data () {
+    return {
+      formInline: {
+        feedbackId: '', // 该反馈的唯一标识
+        customerId: '', // 反馈用户的id
+        customerName: '', // 反馈用户的名字
+        feedbackState: '', // 反馈的状态，0新建，1已回复
+        pageSize: 10,
+        getType: 2,
+        pageIndex: 1
+      },
+      pageSize: 10,
+      pageIndex: 1,
+      count: 0,
+      pickerOptions1: {
+        disabledDate (time) {
+          return time.getTime() > Date.now()
         },
-        watch:{
-            pageIndex(newVal){
-                let t = this;
-                t.formInline.pageIndex = newVal; 
-                t.getFeedBackList();       
-            },
-            pageSize(newVal){
-                let t = this;
-                t.formInline.pageSize = newVal;
-                t.getFeedBackList();
-            }
-        },
-        mounted(){
-            let t = this;
-            console.log('执行');
-            t.getFeedBackList();
-        },
-        methods:{
-            checkList(){
-                let t = this;
-                t.pageIndex === 1 ? t.getFeedBackList() : t.pageIndex = 1;
-            },
-            feedBackContent(){
-              let t = this;
-              t.centerDialogVisible = false;
-                t.$message({
-                    message: t.selectedData.customerName+'反馈信息已回复',
-                    type: 'success'
-                });
-            },
-            resetList(){
-                let t = this;
-                t.pageSize = 10;
-                t.pageIndex = 1;
-                t.formInline={
-                    feedbackId:'',//该反馈的唯一标识
-                    customerId:'',//反馈用户的id
-                    customerName:'',//反馈用户的名字
-                    feedbackState:'',//反馈的状态，0新建，1已回复
-                    pageSize:10,
-                    getType:2,
-                    pageIndex:1 
-                };
-                t.getFeedBackList();
-            },
-            getFeedBackList(){
-                 let t = this;
-                t.selectedData = {};
-                axios.get('/call/customer/getFeedBackList', {
-                    params: t.formInline
-                })
-                    .then(function (response) {
-                        let reqData = response.data;
-                        if(reqData.responseObject.responseData['data_list']){
-                            t.tableData = reqData.responseObject.responseData['data_list'];
-                        }
-                        if(reqData.responseObject.responseData.totalCount){
-                            t.count = reqData.responseObject.responseData.totalCount;
-                        }
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
-            },
-            handleSelectionChange(val) {
-                this.multipleSelection = val;
-            },
-            detailInfo(){
-              let t = this;
-              if(!t.selectedOne){
-                  t.$message.error('请选择您要回复的用户!');
-              }else{
-                  t.centerDialogVisible = true;
-              }
-            },
-            handleSizeChange(val) {
-                let t = this;
-                t.pageSize = val;
-                console.log(`每页 ${val} 条`);
-            },
-            formateState(row,column){
-                let t = this;
-                let type = parseInt(row['feedbackState'],10);
-                return type===0?'新建':'已回复' ;
-            },
-            tableCurrentChange(val){
-                let t = this;
-                if(val){
-                 console.log(val);
-                 t.selectedOne = true;
-                 t.selectedData = val;
-                }
-                
-            },
-            handleCurrentChange(val) {
-                let t = this;
-                t.pageIndex = val;
-            }
-        }
+        shortcuts: [{
+          text: '今天',
+          onClick (picker) {
+            picker.$emit('pick', new Date())
+          }
+        }, {
+          text: '昨天',
+          onClick (picker) {
+            const date = new Date()
+            date.setTime(date.getTime() - 3600 * 1000 * 24)
+            picker.$emit('pick', date)
+          }
+        }, {
+          text: '一周前',
+          onClick (picker) {
+            const date = new Date()
+            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7)
+            picker.$emit('pick', date)
+          }
+        }]
+      },
+      value2: '',
+      rejectAuditReason: '',
+      selectedData: {},
+      centerDialogVisible: false,
+      selectedOne: false,
+      msg: '',
+      currentPage4: 4,
+      tableData: []
     }
+  },
+  watch: {
+    pageIndex (newVal) {
+      const t = this
+      t.formInline.pageIndex = newVal
+      t.getFeedBackList()
+    },
+    pageSize (newVal) {
+      const t = this
+      t.formInline.pageSize = newVal
+      t.getFeedBackList()
+    }
+  },
+  mounted () {
+    const t = this
+    console.log('执行')
+    t.getFeedBackList()
+  },
+  methods: {
+    checkList () {
+      const t = this
+      t.pageIndex === 1 ? t.getFeedBackList() : t.pageIndex = 1
+    },
+    feedBackContent () {
+      const t = this
+      t.centerDialogVisible = false
+      t.$message({
+        message: t.selectedData.customerName + '反馈信息已回复',
+        type: 'success'
+      })
+    },
+    resetList () {
+      const t = this
+      t.pageSize = 10
+      t.pageIndex = 1
+      t.formInline = {
+        feedbackId: '', // 该反馈的唯一标识
+        customerId: '', // 反馈用户的id
+        customerName: '', // 反馈用户的名字
+        feedbackState: '', // 反馈的状态，0新建，1已回复
+        pageSize: 10,
+        getType: 2,
+        pageIndex: 1
+      }
+      t.getFeedBackList()
+    },
+    getFeedBackList () {
+      const t = this
+      t.selectedData = {}
+      axios.get('/call/customer/getFeedBackList', {
+        params: t.formInline
+      })
+        .then(function (response) {
+          const reqData = response.data
+          if (reqData.responseObject.responseData.data_list) {
+            t.tableData = reqData.responseObject.responseData.data_list
+          }
+          if (reqData.responseObject.responseData.totalCount) {
+            t.count = reqData.responseObject.responseData.totalCount
+          }
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
+    },
+    handleSelectionChange (val) {
+      this.multipleSelection = val
+    },
+    detailInfo () {
+      const t = this
+      if (!t.selectedOne) {
+        t.$message.error('请选择您要回复的用户!')
+      } else {
+        t.centerDialogVisible = true
+      }
+    },
+    handleSizeChange (val) {
+      const t = this
+      t.pageSize = val
+      console.log(`每页 ${val} 条`)
+    },
+    formateState (row, column) {
+      const t = this
+      const type = parseInt(row.feedbackState, 10)
+      return type === 0 ? '新建' : '已回复'
+    },
+    tableCurrentChange (val) {
+      const t = this
+      if (val) {
+        console.log(val)
+        t.selectedOne = true
+        t.selectedData = val
+      }
+    },
+    handleCurrentChange (val) {
+      const t = this
+      t.pageIndex = val
+    }
+  }
+}
 </script>
 <style lang="scss" scoped>
     @import "../../../static/scss/common";

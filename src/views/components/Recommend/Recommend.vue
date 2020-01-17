@@ -48,91 +48,90 @@
     </el-dialog>
 </template>
 <script>
-    import Common from '../../../utils/common';
-    import { mapGetters,mapActions } from 'vuex';
-    export default {
-        data(){
-            let adminId = Common.checkInvalid(localStorage.getItem('adminId'))?'':localStorage.getItem('adminId');
-            return {
-                checkAll: false,
-                checkedCities: ['上海', '北京'],
-                cities: ['上网', '90后', '男生', '女生','聊天','老师','程序员','计算机'],
-                isIndeterminate: true,
-                formInline:{
-                    columnTitle:'',
-                    columnIndex:'',
-                    columnIcon:'',
-                    columnRouterName:'',
-                    parentColumnId:'',
-                    adminId:adminId
-                }
-            }
-        },
-        computed:{
-            ...mapGetters(['recommendDialog'])
-        },
-        watch:{
-            addForm:{
-                handler(n){
-                    console.log(n)
-                },
-                deep:true
-            },
-            addMessage(n){
-                let t = this;
-                if(n){
-                    t.$message({
-                        showClose: true,
-                        message: '创建栏目成功',
-                        type: 'success'
-                    });
-                    t.hideMsg();
-                }
-            },
-            dialogVisible(n){
-                console.log(n);
-            }
-        },
-        methods:{
-            ...mapActions(['showLayer','hideRecommend','createColumn','hideMsg']),
-            handleClose(){
-                let t = this;
-                t.hideRecommend();
-                t.addForm = {
-                    columnTitle:'',
-                    columnIndex:'',
-                    columnIcon:'',
-                    columnRouterName:'',
-                    parentColumnId:'',
-                    adminId:t.adminId
-                };
-            },
-            handleCheckAllChange(val) {
-                this.checkedCities = val ? cityOptions : [];
-                this.isIndeterminate = false;
-            },
-            handleCheckedCitiesChange(value) {
-                let checkedCount = value.length;
-                this.checkAll = checkedCount === this.cities.length;
-                this.isIndeterminate = checkedCount > 0 && checkedCount < this.cities.length;
-            },
-            addColumn(){
-                let t = this;
-                console.log(t.addForm);
-                let normalOnOff = t.addForm.adminId.length>0&&t.addForm.columnTitle.length>0&&t.addForm.columnIndex.length>0&&t.addForm.columnIcon.length>0&&t.addForm.columnRouterName.length>0;
-                let addOnOff = parseInt(t.columnIndex,10)===0?normalOnOff:normalOnOff&&t.addForm.parentColumnId.length>0;
-                if(addOnOff){
-                    t.createColumn(JSON.parse(JSON.stringify(t.addForm)));
-                }else{
-                    t.$message({
-                        message: '创建字段不足',
-                        type: 'warning'
-                    });
-                }
-
-            }
-        }
+import Common from '../../../utils/common'
+import { mapGetters, mapActions } from 'vuex'
+export default {
+  data () {
+    const adminId = Common.checkInvalid(localStorage.getItem('adminId')) ? '' : localStorage.getItem('adminId')
+    return {
+      checkAll: false,
+      checkedCities: ['上海', '北京'],
+      cities: ['上网', '90后', '男生', '女生', '聊天', '老师', '程序员', '计算机'],
+      isIndeterminate: true,
+      formInline: {
+        columnTitle: '',
+        columnIndex: '',
+        columnIcon: '',
+        columnRouterName: '',
+        parentColumnId: '',
+        adminId: adminId
+      }
     }
+  },
+  computed: {
+    ...mapGetters(['recommendDialog'])
+  },
+  watch: {
+    addForm: {
+      handler (n) {
+        console.log(n)
+      },
+      deep: true
+    },
+    addMessage (n) {
+      const t = this
+      if (n) {
+        t.$message({
+          showClose: true,
+          message: '创建栏目成功',
+          type: 'success'
+        })
+        t.hideMsg()
+      }
+    },
+    dialogVisible (n) {
+      console.log(n)
+    }
+  },
+  methods: {
+    ...mapActions(['showLayer', 'hideRecommend', 'createColumn', 'hideMsg']),
+    handleClose () {
+      const t = this
+      t.hideRecommend()
+      t.addForm = {
+        columnTitle: '',
+        columnIndex: '',
+        columnIcon: '',
+        columnRouterName: '',
+        parentColumnId: '',
+        adminId: t.adminId
+      }
+    },
+    handleCheckAllChange (val) {
+      this.checkedCities = val ? cityOptions : []
+      this.isIndeterminate = false
+    },
+    handleCheckedCitiesChange (value) {
+      const checkedCount = value.length
+      this.checkAll = checkedCount === this.cities.length
+      this.isIndeterminate = checkedCount > 0 && checkedCount < this.cities.length
+    },
+    addColumn () {
+      const t = this
+      console.log(t.addForm)
+      const normalOnOff = t.addForm.adminId.length > 0 && t.addForm.columnTitle.length > 0 && t.addForm.columnIndex.length > 0 && t.addForm.columnIcon.length > 0 && t.addForm.columnRouterName.length > 0
+      const addOnOff = parseInt(t.columnIndex, 10) === 0 ? normalOnOff : normalOnOff && t.addForm.parentColumnId.length > 0
+      if (addOnOff) {
+        t.createColumn(JSON.parse(JSON.stringify(t.addForm)))
+      } else {
+        t.$message({
+          message: '创建字段不足',
+          type: 'warning'
+        })
+      }
+    }
+  }
+}
 </script>
 <style lang="scss" scoped>
     .el-icon-item{

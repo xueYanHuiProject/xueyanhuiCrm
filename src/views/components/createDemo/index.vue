@@ -5,11 +5,11 @@
 </template>
 <!--栏目:demo-->
 <script>
-    export default {
-        data(){
-            return {
-                name:'demo模块'
-            }
-        }
+export default {
+  data () {
+    return {
+      name: 'demo模块'
     }
+  }
+}
 </script>

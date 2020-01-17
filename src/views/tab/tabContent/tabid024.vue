@@ -216,304 +216,302 @@
     </section>
 </template>
 <script>
-    import userData from '../../../virtualData/recommendData';
-    import Common from '../../../utils/common.js';
-    import axios from 'axios';
-    export default {
-        data() {
-            return {
-                formInline: {
-                    pageIndex:1,
-                    pageSize:10,
-                    recommendId:'',//该推荐的唯一标识
-                    recommendPosition:'',//推荐的位置0遇见栏目，1首页栏目，2消息栏目
-                    recommendGrade:'',//推荐的优先级0按序推荐，1优先推荐
-                    recommendResourceType:'',//推荐的资源类型0文章，1话题
-                    recommendResourceId:'',//推荐的资源id
-                    recommendType:'',//推荐的类型0全站推送，1单独推送
-                    isValid:''//0无效，1有效
-                },
-                pageIndex:1,
-                pageSize:10,
-                swiperOption: {
-                    spaceBetween: 30,
-                    pagination: {
-                        el: '.swiper-pagination',
-                        clickable: true
-                    },
-                    navigation: {
-                        nextEl: '.swiper-button-next',
-                        prevEl: '.swiper-button-prev'
-                    }
-                },
-                labelPosition: 'left',
-                formLabelAlign: {
-                    name: '',
-                    region: '',
-                    type: ''
-                },
-                editDialogData:{},
-                pushOnOff:false,
-                activateOnOff:false,
-                articleDialog:false,
-                innerVisible:false,
-                centerDialogVisible:false,
-                selectedOne:false,
-                selectedData:{},
-                currentPage4:4,
-                count:0,
-                tableData:[]
-            }
+import userData from '../../../virtualData/recommendData'
+import Common from '../../../utils/common.js'
+import axios from 'axios'
+export default {
+  data () {
+    return {
+      formInline: {
+        pageIndex: 1,
+        pageSize: 10,
+        recommendId: '', // 该推荐的唯一标识
+        recommendPosition: '', // 推荐的位置0遇见栏目，1首页栏目，2消息栏目
+        recommendGrade: '', // 推荐的优先级0按序推荐，1优先推荐
+        recommendResourceType: '', // 推荐的资源类型0文章，1话题
+        recommendResourceId: '', // 推荐的资源id
+        recommendType: '', // 推荐的类型0全站推送，1单独推送
+        isValid: ''// 0无效，1有效
+      },
+      pageIndex: 1,
+      pageSize: 10,
+      swiperOption: {
+        spaceBetween: 30,
+        pagination: {
+          el: '.swiper-pagination',
+          clickable: true
         },
-        mounted() {
-            let t = this;
-            t.getRecommendList();
-        },
-        watch:{
-            pageIndex(newVal){
-                let t = this;
-                t.formInline.pageIndex = newVal;
-                t.getRecommendList();
-            },
-            pageSize(newVal){
-                let t = this;
-                t.formInline.pageSize = newVal;
-                t.getRecommendList();
-            }
-        },
-        methods:{
-            checkList(){
-                let t = this;
-                t.pageIndex === 1 ? t.getRecommendList() : t.pageIndex = 1;
-            },
-            tableCurrentChange(val){
-                let t = this;
-                if(val){
-                    console.log(val);
-                    t.selectedOne = true;
-                    t.selectedData = val;
-                }
-
-            },
-            formatterValid(row,column){
-                let t = this;
-                let type = row['isValid'];
-                return Common.formatterValid(type);
-            },
-            formatterResourceType(row, column) {
-                let t = this;
-                let type = row['recommendResourceType'];
-                return Common.recommendResourceType(type);
-            },
-            formatterRecommendType(row, column) {
-                let t = this;
-                let type = row['recommendType'];
-                return Common.recommendType(type);
-            },
-            formatterRecommendPosition(row, column) {
-                let t = this;
-                let type = row['recommendPosition'];
-                return Common.recommendPosition(type);
-            },
-            formatterRecommendGrade(row, column) {
-                let t = this;
-                let type = row['recommendGrade'];
-                return Common.recommendGrade(type);
-            },
-            resetList(){
-              let t = this;
-                t.pageSize = 10;
-                t.pageIndex = 1;
-              t.formInline = {
-                  pageIndex:1,
-                  pageSize:10,
-                  recommendId:'',//该推荐的唯一标识
-                  recommendPosition:'',//推荐的位置0遇见栏目，1首页栏目，2消息栏目
-                  recommendGrade:'',//推荐的优先级0按序推荐，1优先推荐
-                  recommendResourceType:'',//推荐的资源类型0文章，1话题
-                  recommendResourceId:'',//推荐的资源id
-                  recommendType:'',//推荐的类型0全站推送，1单独推送
-                  isValid:''//0无效，1有效
-              };
-              t.getRecommendList();
-            },
-            getRecommendList(){
-              let t = this;
-                axios.get('/call/recommend/getRecommendList', {
-                    params: t.formInline
-                })
-                    .then(function (response) {
-                        let reqData = response.data;
-                        console.log(reqData);
-                        if(reqData.responseObject.responseData['data_list']){
-                            t.tableData = reqData.responseObject.responseData['data_list'];
-                        }
-                        if(reqData.responseObject.responseData.totalCount){
-                            t.count = reqData.responseObject.responseData.totalCount;
-                        }
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
-            },
-            callback(){
-                console.log('执行');
-            },
-            imgInit(e){
-              console.log(e);
-            },
-            activate(type){
-                let t = this;
-                if(!t.selectedOne){
-                    t.$message.error('请选择您要激活的推荐!');
-                }else{
-                    if(type===0){
-                        t.activateOnOff = true;
-                    }else if(type===1){
-                        axios({
-                            url: '/call/recommend/active',
-                            method: "POST",
-                            data: {
-                                recommendId:t.selectedData.recommendId,
-                                updateState:'1'
-                            },
-                            transformRequest: [function (data) {
-                                return "paramJson=" + JSON.stringify(data);
-                            }],
-                            headers: {
-                                'X-Requested-With': 'XMLHttpRequest'
-                            },
-                            timeout: 30000
-                        }).then(function(req){
-                            t.activateOnOff = false;
-                            t.$message({
-                                message: '推荐已被激活',
-                                type: 'success'
-                            });
-                            t.getRecommendList();
-                        });
-                    }
-                }
-            },
-            detailInfo(type){
-                let t = this;
-                if(!t.selectedOne){
-                    t.$message.error('请选择您要无效的文章!');
-                }else{
-                    if(type===0){
-                        t.innerVisible = true;
-                    }else if(type===1){
-                        axios({
-                            url: '/call/recommend/invalid',
-                            method: "POST",
-                            data: {
-                                recommendId:t.selectedData.recommendId,
-                                updateState:'0'
-                            },
-                            transformRequest: [function (data) {
-                                return "paramJson=" + JSON.stringify(data);
-                            }],
-                            headers: {
-                                'X-Requested-With': 'XMLHttpRequest'
-                            },
-                            timeout: 30000
-                        }).then(function(req){
-                            t.innerVisible = false;
-                            t.$message({
-                                message: '推荐已被无效',
-                                type: 'success'
-                            });
-                            t.getRecommendList();
-                        });
-                    }
-                }
-            },
-            editArticle(type){
-              let t = this;
-                if(!t.selectedOne){
-                    t.$message.error('请选择您要无效的文章!');
-                }else{
-                    if(type===0){
-                        t.articleDialog = true;
-                    }else if(type===1){
-                        t.articleDialog = false;
-                        t.$message({
-                            message: t.selectedData.articleTitle+'文章已生成',
-                            type: 'success'
-                        });
-                    }
-                }
-            },
-            checkSelectDataChange(lastData,newData){
-              let t = this;
-              let keyArr = Object.keys(lastData);
-              let num = 0;
-              for(let item in lastData){
-                  if(lastData[item]==newData[item]){
-                      num++;
-                  }
-              }
-              return !(num===keyArr.length);
-            },
-            pushContent(type){
-                let t = this;
-                if(!t.selectedOne){
-                    t.$message.error('请选择您要编辑的推送!');
-                }else{
-                    if(type===0){
-                        t.pushOnOff = true;
-                        t.editDialogData = JSON.parse(JSON.stringify(t.selectedData));
-                    }else if(type===1){
-                        if(t.checkSelectDataChange(t.selectedData,t.editDialogData)){
-                            //推送编辑过
-                            console.log('编辑过');
-                            axios({
-                                url: '/call/recommend/update',
-                                method: "POST",
-                                data: t.editDialogData,
-                                transformRequest: [function (data) {
-                                    return "paramJson=" + JSON.stringify(data);
-                                }],
-                                headers: {
-                                    'X-Requested-With': 'XMLHttpRequest'
-                                },
-                                timeout: 30000
-                            }).then(function(req){
-                                t.pushOnOff = false;
-                                t.$message({
-                                    message: '已推送',
-                                    type: 'success'
-                                });
-                                t.getRecommendList();
-                            });
-                        }else{
-                            //推送没编辑
-                            console.log('没编辑过');
-                            t.pushOnOff = false;
-                        }
-                    }
-
-                }
-              console.log('推送');
-            },
-            handleSelectionChange(val) {
-                this.multipleSelection = val;
-            },
-            onSubmit() {
-                console.log('submit!');
-            },
-            handleSizeChange(val) {
-                let t = this;
-                t.pageSize = val;
-                console.log(`每页 ${val} 条`);
-            },
-            handleCurrentChange(val) {
-                let t = this;
-                t.pageIndex = val;
-                console.log(`当前页: ${val}`);
-            }
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev'
         }
+      },
+      labelPosition: 'left',
+      formLabelAlign: {
+        name: '',
+        region: '',
+        type: ''
+      },
+      editDialogData: {},
+      pushOnOff: false,
+      activateOnOff: false,
+      articleDialog: false,
+      innerVisible: false,
+      centerDialogVisible: false,
+      selectedOne: false,
+      selectedData: {},
+      currentPage4: 4,
+      count: 0,
+      tableData: []
     }
+  },
+  mounted () {
+    const t = this
+    t.getRecommendList()
+  },
+  watch: {
+    pageIndex (newVal) {
+      const t = this
+      t.formInline.pageIndex = newVal
+      t.getRecommendList()
+    },
+    pageSize (newVal) {
+      const t = this
+      t.formInline.pageSize = newVal
+      t.getRecommendList()
+    }
+  },
+  methods: {
+    checkList () {
+      const t = this
+      t.pageIndex === 1 ? t.getRecommendList() : t.pageIndex = 1
+    },
+    tableCurrentChange (val) {
+      const t = this
+      if (val) {
+        console.log(val)
+        t.selectedOne = true
+        t.selectedData = val
+      }
+    },
+    formatterValid (row, column) {
+      const t = this
+      const type = row.isValid
+      return Common.formatterValid(type)
+    },
+    formatterResourceType (row, column) {
+      const t = this
+      const type = row.recommendResourceType
+      return Common.recommendResourceType(type)
+    },
+    formatterRecommendType (row, column) {
+      const t = this
+      const type = row.recommendType
+      return Common.recommendType(type)
+    },
+    formatterRecommendPosition (row, column) {
+      const t = this
+      const type = row.recommendPosition
+      return Common.recommendPosition(type)
+    },
+    formatterRecommendGrade (row, column) {
+      const t = this
+      const type = row.recommendGrade
+      return Common.recommendGrade(type)
+    },
+    resetList () {
+      const t = this
+      t.pageSize = 10
+      t.pageIndex = 1
+      t.formInline = {
+        pageIndex: 1,
+        pageSize: 10,
+        recommendId: '', // 该推荐的唯一标识
+        recommendPosition: '', // 推荐的位置0遇见栏目，1首页栏目，2消息栏目
+        recommendGrade: '', // 推荐的优先级0按序推荐，1优先推荐
+        recommendResourceType: '', // 推荐的资源类型0文章，1话题
+        recommendResourceId: '', // 推荐的资源id
+        recommendType: '', // 推荐的类型0全站推送，1单独推送
+        isValid: ''// 0无效，1有效
+      }
+      t.getRecommendList()
+    },
+    getRecommendList () {
+      const t = this
+      axios.get('/call/recommend/getRecommendList', {
+        params: t.formInline
+      })
+        .then(function (response) {
+          const reqData = response.data
+          console.log(reqData)
+          if (reqData.responseObject.responseData.data_list) {
+            t.tableData = reqData.responseObject.responseData.data_list
+          }
+          if (reqData.responseObject.responseData.totalCount) {
+            t.count = reqData.responseObject.responseData.totalCount
+          }
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
+    },
+    callback () {
+      console.log('执行')
+    },
+    imgInit (e) {
+      console.log(e)
+    },
+    activate (type) {
+      const t = this
+      if (!t.selectedOne) {
+        t.$message.error('请选择您要激活的推荐!')
+      } else {
+        if (type === 0) {
+          t.activateOnOff = true
+        } else if (type === 1) {
+          axios({
+            url: '/call/recommend/active',
+            method: 'POST',
+            data: {
+              recommendId: t.selectedData.recommendId,
+              updateState: '1'
+            },
+            transformRequest: [function (data) {
+              return 'paramJson=' + JSON.stringify(data)
+            }],
+            headers: {
+              'X-Requested-With': 'XMLHttpRequest'
+            },
+            timeout: 30000
+          }).then(function (req) {
+            t.activateOnOff = false
+            t.$message({
+              message: '推荐已被激活',
+              type: 'success'
+            })
+            t.getRecommendList()
+          })
+        }
+      }
+    },
+    detailInfo (type) {
+      const t = this
+      if (!t.selectedOne) {
+        t.$message.error('请选择您要无效的文章!')
+      } else {
+        if (type === 0) {
+          t.innerVisible = true
+        } else if (type === 1) {
+          axios({
+            url: '/call/recommend/invalid',
+            method: 'POST',
+            data: {
+              recommendId: t.selectedData.recommendId,
+              updateState: '0'
+            },
+            transformRequest: [function (data) {
+              return 'paramJson=' + JSON.stringify(data)
+            }],
+            headers: {
+              'X-Requested-With': 'XMLHttpRequest'
+            },
+            timeout: 30000
+          }).then(function (req) {
+            t.innerVisible = false
+            t.$message({
+              message: '推荐已被无效',
+              type: 'success'
+            })
+            t.getRecommendList()
+          })
+        }
+      }
+    },
+    editArticle (type) {
+      const t = this
+      if (!t.selectedOne) {
+        t.$message.error('请选择您要无效的文章!')
+      } else {
+        if (type === 0) {
+          t.articleDialog = true
+        } else if (type === 1) {
+          t.articleDialog = false
+          t.$message({
+            message: t.selectedData.articleTitle + '文章已生成',
+            type: 'success'
+          })
+        }
+      }
+    },
+    checkSelectDataChange (lastData, newData) {
+      const t = this
+      const keyArr = Object.keys(lastData)
+      let num = 0
+      for (const item in lastData) {
+        if (lastData[item] == newData[item]) {
+          num++
+        }
+      }
+      return !(num === keyArr.length)
+    },
+    pushContent (type) {
+      const t = this
+      if (!t.selectedOne) {
+        t.$message.error('请选择您要编辑的推送!')
+      } else {
+        if (type === 0) {
+          t.pushOnOff = true
+          t.editDialogData = JSON.parse(JSON.stringify(t.selectedData))
+        } else if (type === 1) {
+          if (t.checkSelectDataChange(t.selectedData, t.editDialogData)) {
+            // 推送编辑过
+            console.log('编辑过')
+            axios({
+              url: '/call/recommend/update',
+              method: 'POST',
+              data: t.editDialogData,
+              transformRequest: [function (data) {
+                return 'paramJson=' + JSON.stringify(data)
+              }],
+              headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+              },
+              timeout: 30000
+            }).then(function (req) {
+              t.pushOnOff = false
+              t.$message({
+                message: '已推送',
+                type: 'success'
+              })
+              t.getRecommendList()
+            })
+          } else {
+            // 推送没编辑
+            console.log('没编辑过')
+            t.pushOnOff = false
+          }
+        }
+      }
+      console.log('推送')
+    },
+    handleSelectionChange (val) {
+      this.multipleSelection = val
+    },
+    onSubmit () {
+      console.log('submit!')
+    },
+    handleSizeChange (val) {
+      const t = this
+      t.pageSize = val
+      console.log(`每页 ${val} 条`)
+    },
+    handleCurrentChange (val) {
+      const t = this
+      t.pageIndex = val
+      console.log(`当前页: ${val}`)
+    }
+  }
+}
 </script>
 <style lang="scss" scoped>
     @import "../../../static/scss/common";

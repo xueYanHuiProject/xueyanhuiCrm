@@ -171,292 +171,288 @@
     </section>
 </template>
 <script>
-    import userData from '../../../virtualData/templateResource';
-    import Common from '../../../utils/common.js';
-    import axios from 'axios';
-    export default {
-        data() {
-            return {
-                pageIndex:1,
-                pageSize:10,
-                formInline: {
-                    pageIndex:1,
-                    pageSize:10,
-                    templateId:'',
-                    isValid:'',
-                    templateTitle:''
-                },
-                templateContent:'',
-                templateTitle:'',
-                swiperOption: {
-                    spaceBetween: 30,
-                    pagination: {
-                        el: '.swiper-pagination',
-                        clickable: true
-                    },
-                    navigation: {
-                        nextEl: '.swiper-button-next',
-                        prevEl: '.swiper-button-prev'
-                    }
-                },
-                pickerOptions1: {
-                    disabledDate(time) {
-                        return time.getTime() > Date.now();
-                    },
-                    shortcuts: [{
-                        text: '今天',
-                        onClick(picker) {
-                            picker.$emit('pick', new Date());
-                        }
-                    }, {
-                        text: '昨天',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() - 3600 * 1000 * 24);
-                            picker.$emit('pick', date);
-                        }
-                    }, {
-                        text: '一周前',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-                            picker.$emit('pick', date);
-                        }
-                    }]
-                },
-                activateOnOff:false,
-                value2: '',
-                labelPosition: 'left',
-                formLabelAlign: {
-                    name: '',
-                    region: '',
-                    type: ''
-                },
-                infoOnOff:false,
-                articleDialog:false,
-                innerVisible:false,
-                centerDialogVisible:false,
-                selectedOne:false,
-                selectedData:{},
-                currentPage4:4,
-                count:0,
-                tableData:[]
-            }
+import userData from '../../../virtualData/templateResource'
+import Common from '../../../utils/common.js'
+import axios from 'axios'
+export default {
+  data () {
+    return {
+      pageIndex: 1,
+      pageSize: 10,
+      formInline: {
+        pageIndex: 1,
+        pageSize: 10,
+        templateId: '',
+        isValid: '',
+        templateTitle: ''
+      },
+      templateContent: '',
+      templateTitle: '',
+      swiperOption: {
+        spaceBetween: 30,
+        pagination: {
+          el: '.swiper-pagination',
+          clickable: true
         },
-        watch:{
-            pageIndex(newVal){
-                let t = this;
-                t.formInline.pageIndex = newVal;
-                t.getTemplateList();
-            },
-            pageSize(newVal){
-                let t = this;
-                t.formInline.pageSize = newVal;
-                t.getTemplateList();
-            }
-        },
-        mounted() {
-            let t = this;
-            t.getTemplateList();
-        },
-        methods:{
-            tableCurrentChange(val){
-                let t = this;
-                if(val){
-                    console.log(val);
-                    t.selectedOne = true;
-                    t.selectedData = val;
-                }
-            },
-            formatterValid(row,column){
-                let t = this;
-                let type = row['isValid'];
-                return Common.formatterValid(type);
-            },
-            resetList(){
-                let t = this;
-                t.pageSize = 10;
-                t.pageIndex = 1;
-                t.formInline = {
-                    pageIndex:1,
-                    pageSize:10,
-                    templateId:'',
-                    isValid:'',
-                    templateTitle:''
-                };
-                t.getTemplateList();
-            },
-            checkList(){
-                let t = this;
-                t.pageIndex === 1?t.getTemplateList():t.pageIndex =1;
-            },
-            getTemplateList(){
-              let t = this;
-                axios.get('/call/template/getTemplateList', {
-                    params: t.formInline
-                })
-                    .then(function (response) {
-                        let reqData = response.data;
-                        console.log(reqData);
-                        if(reqData.responseObject.responseData['data_list']){
-                            t.tableData = reqData.responseObject.responseData['data_list'];
-                        }
-                        if(reqData.responseObject.responseData.totalCount){
-                            t.count = reqData.responseObject.responseData.totalCount;
-                        }
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
-            },
-            callback(){
-                console.log('执行');
-            },
-            imgInit(e){
-              console.log(e);
-            },
-            detailCheck(type){
-              let t = this;
-                if(!t.selectedOne){
-                    t.$message.error('请选择您要查看的模板!');
-                }else{
-                    if(type===0){
-                        t.infoOnOff = true;
-                    }else if(type===1){
-                        t.infoOnOff = false;
-                    }
-                }
-            },
-            detailInfo(type){
-                let t = this;
-                if(!t.selectedOne){
-                    t.$message.error('请选择您要无效的模板!');
-                }else{
-                    if(type===0){
-                        t.innerVisible = true;
-                    }else if(type===1){
-                        axios({
-                            url: '/call/template/invalid',
-                            method: "POST",
-                            data: {
-                                templateId:t.selectedData.templateId,
-                                updateState:'0'
-                            },
-                            transformRequest: [function (data) {
-                                return "paramJson=" + JSON.stringify(data);
-                            }],
-                            headers: {
-                                'X-Requested-With': 'XMLHttpRequest'
-                            },
-                            timeout: 30000
-                        }).then(function(req){
-                            t.innerVisible = false;
-                            t.$message({
-                                message: '模板已被无效',
-                                type: 'success'
-                            });
-                            t.getTemplateList();
-                        });
-                    }
-
-                }
-            },
-            activate(type){
-                let t = this;
-                if(!t.selectedOne){
-                    t.$message.error('请选择您要激活的模板!');
-                }else{
-                    if(type===0){
-                        t.activateOnOff = true;
-                    }else if(type===1){
-                        axios({
-                            url: '/call/template/active',
-                            method: "POST",
-                            data: {
-                                templateId:t.selectedData.templateId,
-                                updateState:'1'
-                            },
-                            transformRequest: [function (data) {
-                                return "paramJson=" + JSON.stringify(data);
-                            }],
-                            headers: {
-                                'X-Requested-With': 'XMLHttpRequest'
-                            },
-                            timeout: 30000
-                        }).then(function(req){
-                            t.activateOnOff = false;
-                            t.$message({
-                                message:  t.selectedData.templateTitle+'模板已被激活',
-                                type: 'success'
-                            });
-                            t.getTemplateList();
-                        });
-
-                    }
-
-                }
-            },
-            editArticle(type){
-              let t = this;
-                if(!t.selectedOne){
-                    t.$message.error('请选择您要无效的模板!');
-                }else{
-                    if(type===0){
-                        t.templateContent = t.selectedData.templateContent;
-                        t.templateTitle = t.selectedData.templateTitle;
-                        t.articleDialog = true;
-                    }else if(type===1){
-                        if((t.selectedData.templateContent !==t.templateContent)||(t.selectedData.templateTitle!==t.templateTitle)){
-                            axios({
-                                url: '/call/template/update',
-                                method: "POST",
-                                data: {
-                                    templateId:t.selectedData.templateId,
-                                    templateContent:t.templateContent,
-                                    templateTitle:t.templateTitle,
-                                },
-                                transformRequest: [function (data) {
-                                    return "paramJson=" + JSON.stringify(data);
-                                }],
-                                headers: {
-                                    'X-Requested-With': 'XMLHttpRequest'
-                                },
-                                timeout: 30000
-                            }).then(function(req){
-                                t.articleDialog = false;
-                                t.$message({
-                                    message: t.selectedData.templateTitle+'模板已更新',
-                                    type: 'success'
-                                });
-                                t.getTemplateList();
-                            });
-                        }else{
-                            t.articleDialog = false;
-                        }
-                    }
-
-                }
-            },
-            handleSelectionChange(val) {
-                this.multipleSelection = val;
-            },
-            onSubmit() {
-                console.log('submit!');
-            },
-            handleSizeChange(val) {
-                let t = this;
-                t.pageSize = val;
-                console.log(`每页 ${val} 条`);
-            },
-            handleCurrentChange(val) {
-                let t = this;
-                //t.selectedOne = true;
-                //t.selectedData = val;
-                t.pageIndex = val;
-                console.log(`当前页: ${val}`);
-            }
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev'
         }
+      },
+      pickerOptions1: {
+        disabledDate (time) {
+          return time.getTime() > Date.now()
+        },
+        shortcuts: [{
+          text: '今天',
+          onClick (picker) {
+            picker.$emit('pick', new Date())
+          }
+        }, {
+          text: '昨天',
+          onClick (picker) {
+            const date = new Date()
+            date.setTime(date.getTime() - 3600 * 1000 * 24)
+            picker.$emit('pick', date)
+          }
+        }, {
+          text: '一周前',
+          onClick (picker) {
+            const date = new Date()
+            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7)
+            picker.$emit('pick', date)
+          }
+        }]
+      },
+      activateOnOff: false,
+      value2: '',
+      labelPosition: 'left',
+      formLabelAlign: {
+        name: '',
+        region: '',
+        type: ''
+      },
+      infoOnOff: false,
+      articleDialog: false,
+      innerVisible: false,
+      centerDialogVisible: false,
+      selectedOne: false,
+      selectedData: {},
+      currentPage4: 4,
+      count: 0,
+      tableData: []
     }
+  },
+  watch: {
+    pageIndex (newVal) {
+      const t = this
+      t.formInline.pageIndex = newVal
+      t.getTemplateList()
+    },
+    pageSize (newVal) {
+      const t = this
+      t.formInline.pageSize = newVal
+      t.getTemplateList()
+    }
+  },
+  mounted () {
+    const t = this
+    t.getTemplateList()
+  },
+  methods: {
+    tableCurrentChange (val) {
+      const t = this
+      if (val) {
+        console.log(val)
+        t.selectedOne = true
+        t.selectedData = val
+      }
+    },
+    formatterValid (row, column) {
+      const t = this
+      const type = row.isValid
+      return Common.formatterValid(type)
+    },
+    resetList () {
+      const t = this
+      t.pageSize = 10
+      t.pageIndex = 1
+      t.formInline = {
+        pageIndex: 1,
+        pageSize: 10,
+        templateId: '',
+        isValid: '',
+        templateTitle: ''
+      }
+      t.getTemplateList()
+    },
+    checkList () {
+      const t = this
+      t.pageIndex === 1 ? t.getTemplateList() : t.pageIndex = 1
+    },
+    getTemplateList () {
+      const t = this
+      axios.get('/call/template/getTemplateList', {
+        params: t.formInline
+      })
+        .then(function (response) {
+          const reqData = response.data
+          console.log(reqData)
+          if (reqData.responseObject.responseData.data_list) {
+            t.tableData = reqData.responseObject.responseData.data_list
+          }
+          if (reqData.responseObject.responseData.totalCount) {
+            t.count = reqData.responseObject.responseData.totalCount
+          }
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
+    },
+    callback () {
+      console.log('执行')
+    },
+    imgInit (e) {
+      console.log(e)
+    },
+    detailCheck (type) {
+      const t = this
+      if (!t.selectedOne) {
+        t.$message.error('请选择您要查看的模板!')
+      } else {
+        if (type === 0) {
+          t.infoOnOff = true
+        } else if (type === 1) {
+          t.infoOnOff = false
+        }
+      }
+    },
+    detailInfo (type) {
+      const t = this
+      if (!t.selectedOne) {
+        t.$message.error('请选择您要无效的模板!')
+      } else {
+        if (type === 0) {
+          t.innerVisible = true
+        } else if (type === 1) {
+          axios({
+            url: '/call/template/invalid',
+            method: 'POST',
+            data: {
+              templateId: t.selectedData.templateId,
+              updateState: '0'
+            },
+            transformRequest: [function (data) {
+              return 'paramJson=' + JSON.stringify(data)
+            }],
+            headers: {
+              'X-Requested-With': 'XMLHttpRequest'
+            },
+            timeout: 30000
+          }).then(function (req) {
+            t.innerVisible = false
+            t.$message({
+              message: '模板已被无效',
+              type: 'success'
+            })
+            t.getTemplateList()
+          })
+        }
+      }
+    },
+    activate (type) {
+      const t = this
+      if (!t.selectedOne) {
+        t.$message.error('请选择您要激活的模板!')
+      } else {
+        if (type === 0) {
+          t.activateOnOff = true
+        } else if (type === 1) {
+          axios({
+            url: '/call/template/active',
+            method: 'POST',
+            data: {
+              templateId: t.selectedData.templateId,
+              updateState: '1'
+            },
+            transformRequest: [function (data) {
+              return 'paramJson=' + JSON.stringify(data)
+            }],
+            headers: {
+              'X-Requested-With': 'XMLHttpRequest'
+            },
+            timeout: 30000
+          }).then(function (req) {
+            t.activateOnOff = false
+            t.$message({
+              message: t.selectedData.templateTitle + '模板已被激活',
+              type: 'success'
+            })
+            t.getTemplateList()
+          })
+        }
+      }
+    },
+    editArticle (type) {
+      const t = this
+      if (!t.selectedOne) {
+        t.$message.error('请选择您要无效的模板!')
+      } else {
+        if (type === 0) {
+          t.templateContent = t.selectedData.templateContent
+          t.templateTitle = t.selectedData.templateTitle
+          t.articleDialog = true
+        } else if (type === 1) {
+          if ((t.selectedData.templateContent !== t.templateContent) || (t.selectedData.templateTitle !== t.templateTitle)) {
+            axios({
+              url: '/call/template/update',
+              method: 'POST',
+              data: {
+                templateId: t.selectedData.templateId,
+                templateContent: t.templateContent,
+                templateTitle: t.templateTitle
+              },
+              transformRequest: [function (data) {
+                return 'paramJson=' + JSON.stringify(data)
+              }],
+              headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+              },
+              timeout: 30000
+            }).then(function (req) {
+              t.articleDialog = false
+              t.$message({
+                message: t.selectedData.templateTitle + '模板已更新',
+                type: 'success'
+              })
+              t.getTemplateList()
+            })
+          } else {
+            t.articleDialog = false
+          }
+        }
+      }
+    },
+    handleSelectionChange (val) {
+      this.multipleSelection = val
+    },
+    onSubmit () {
+      console.log('submit!')
+    },
+    handleSizeChange (val) {
+      const t = this
+      t.pageSize = val
+      console.log(`每页 ${val} 条`)
+    },
+    handleCurrentChange (val) {
+      const t = this
+      // t.selectedOne = true;
+      // t.selectedData = val;
+      t.pageIndex = val
+      console.log(`当前页: ${val}`)
+    }
+  }
+}
 </script>
 <style lang="scss" scoped>
     @import "../../../static/scss/common";

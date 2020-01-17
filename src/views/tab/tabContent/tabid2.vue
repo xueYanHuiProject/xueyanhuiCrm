@@ -309,307 +309,301 @@
     </section>
 </template>
 <script>
-    import Common from '../../../utils/common.js';
-    import AuditDialog from '../../components/Dialog/auditDialog';
-    import userData from '../../../virtualData/auditInformation';
-    import axios from 'axios';
-    import {mapGetters,mapActions} from 'vuex';
-    export default {
-        data() {
-            return {
-                region:'0',
-                attachmentDialog:false,
-                formInline: {
-                    customerId: '',
-                    customerName: '',
-                    customerSex: '',
-                    auditResult:'',
-                    auditType:'',
-                    getType:1,
-                    pageSize:10,
-                    pageIndex:1
-                },
-                attachmentDialogData:{
-                    '2':[],
-                    '3':[],
-                    '4':[],
-                    '6':[],
-                    '7':[]
-                },
-                formDes:{
-                  num:12545789878
-                },
-                pageSize:10,
-                pageIndex:1,
-                count:0,
-                selectedOne:false,
-                selectedData:{},
-                dialogInfo:{
-                    title:"审核信息",
-                    degreeImg:"",
-                    degreeNum:"",
-                    professionImg:"",
-                    professionNum:"",
-                    otherImg:"",
-                    otherNum:""
-                },
-                rejectAuditReason:'',
-                rejectDialogVisible:false,
-                centerDialogVisible:false,
-                tableData:[]
-            }
-        },
-        watch:{
-            pageIndex(newVal){
-                let t = this;
-                t.formInline.pageIndex = newVal;
-                t.getAuditList();
-            },
-            pageSize(newVal){
-                let t = this;
-                t.formInline.pageSize = newVal;
-                t.getAuditList();
-            }
-        },
-        methods: {
-            ...mapActions(['tab2ShowDialog']),
-            checkList(){
-                let t = this;
-                t.pageIndex === 1 ? t.getAuditList() : t.pageIndex = 1;
-            },
-            tableCurrentChange(val){
-                let t = this;
-                if(val){
-                    console.log(val);
-                    t.selectedOne = true;
-                    t.selectedData = val;
-                }
-
-            },
-            auditResult(row,column){
-                let t = this;
-                let type = row['auditResult'];
-                return Common.auditResult(type);
-            },
-            auditType(row,column){
-                let t = this;
-                let type = row['auditType'];
-                return Common.auditType(type);
-            },
-            customerDegree(row,column){
-                let t = this;
-                let type = row['customerDegree'];
-                return Common.customerDegree(type);
-            },
-            jsGetAge(row,column){
-                let t = this;
-                let birthDay = row['customerBirthday'];
-                return Common.jsGetAge(birthDay);
-            },
-            sexFormat(row, column){
-                let t = this;
-                let type = row['customerSex'];
-                return Common.sexFormat(type);
-            },
-            passAudit(step){
-                let t = this;
-                    if(!t.selectedOne){
-                        t.$message.error('请选择您要审核的用户!');
-                    }else{
-                        if(step===0){
-                            t.centerDialogVisible = true;
-                        } else if(step===1){
-                            t.$message({
-                                message: t.selectedData.name+'审核已通过',
-                                type: 'success'
-                            });
-                            t.centerDialogVisible = false;
-                        }
-
-                    }
-
-
-            },
-            reset(){
-                let t = this;
-                t.pageSize = 10;
-                t.pageIndex = 1;
-                t.formInline = {
-                    customerId: '',
-                    customerName: '',
-                    customerSex: '',
-                    auditResult:'',
-                    auditType:'',
-                    getType:1,
-                    pageSize:10,
-                    pageIndex:1
-                };
-                t.getAuditList();
-            },
-            rejectAudit(step){
-              let t = this;
-                if(!t.selectedOne){
-                    t.$message.error('请选择您要审核的用户!');
-                }else{
-                    if(step===0){
-                        t.rejectDialogVisible = true;
-                    }else{
-                        axios({
-                            url: '/call/customer/rejectAudit',
-                            method: "POST",
-                            data: {
-                                auditId:t.selectedData.auditId,
-                                customerId:t.selectedData.customerId,
-                                adminId:localStorage.getItem('adminId'),
-                                updateState:3,
-                                adminName:localStorage.getItem('userName')
-                            },
-                            transformRequest: [function (data) {
-                                return "paramJson=" + JSON.stringify(data);
-                            }],
-                            headers: {
-                                'X-Requested-With': 'XMLHttpRequest'
-                            },
-                            timeout: 30000
-                        }).then(function(req){
-                            t.rejectDialogVisible = false;
-                            if(req.data.responseObject.responseCode===4){
-                                t.$message({
-                                    message: t.selectedData.customerName+'审核已驳回',
-                                    type: 'success'
-                                });
-                                t.getAuditList();
-                            }else{
-                                t.$message({
-                                    message:'激活失败',
-                                    type: 'warning'
-                                });
-                            }
-                        });
-                    }
-                }
-            },
-            handleEdit(index, row) {
-                console.log(index, row);
-            },
-            handleDelete(index, row) {
-                console.log(index, row);
-            },
-            tryClick(a,b){
-                console.log(a,b);
-            },
-            onSubmit() {
-                let t = this;
-                t.getAuditList();
-                console.log('submit!');
-            },
-            handleSizeChange(val) {
-                console.log(`每页 ${val} 条`);
-                let t = this;
-                t.pageSize = val;
-            },
-            handleCurrentChange(val) {
-                let t = this;
-                t.pageIndex = parseInt(val,10);
-            },
-            getAuditList(){
-                let t = this;
-                t.selectedOne = false;
-                t.selectedData = {};
-                axios.get('/call/customer/getAuditList', {
-                    params: t.formInline
-                })
-                    .then(function (response) {
-                        let reqData = response.data;
-                        console.log(reqData);
-                        if(reqData.responseObject.responseData['data_list']){
-                            t.tableData = reqData.responseObject.responseData['data_list'];
-
-                        }
-                        if(reqData.responseObject.responseData.totalCount){
-                            t.count = reqData.responseObject.responseData.totalCount;
-                        }
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
-            },
-            formatAttachmentList(data){
-              let t = this;
-              let jsonData = {};
-              let originalData = JSON.parse(JSON.stringify(data));
-              for(let num = 0;num<originalData.length;num++){
-                  if(jsonData[originalData[num]['attachmentType']]){
-                      jsonData[originalData[num]['attachmentType']].push(originalData[num]);
-                  }else{
-                      jsonData[originalData[num]['attachmentType']] = [];
-                      jsonData[originalData[num]['attachmentType']].push(originalData[num]);
-                  }
-              }
-              return jsonData;
-            },
-            awakenUserInfo(){
-                let t = this;
-                if(t.selectedOne){
-                    let arr =
-                        [
-                        'degreeAttachment',
-                        'identityAttachment',
-                        'otherAttachment',
-                        'professionAttachment',
-                        'schoolAttachment'
-                    ];
-                    let attachmentIdList = [];
-                    for(let num = 0;num<arr.length;num++){
-                        console.log(t.selectedData[arr[num]]);
-                        if(t.selectedData[arr[num]]&&t.selectedData[arr[num]].length){
-                            let arrInner = t.selectedData[arr[num]].split(',');
-                            for(let innerNum = 0;innerNum<arrInner.length;innerNum++){
-                                attachmentIdList.push(arrInner[innerNum]);
-                            }
-                        }
-                    }
-                    console.log(attachmentIdList);
-                    axios({
-                        url: '/call/customer/getAuditAttachmentList',
-                        method: "POST",
-                        data: {
-                            attachmentList:JSON.stringify(attachmentIdList),
-                            customerId:t.selectedData.customerId,
-                            isValid:1
-                        },
-                        transformRequest: [function (data) {
-                            return "paramJson=" + JSON.stringify(data);
-                        }],
-                        headers: {
-                            'X-Requested-With': 'XMLHttpRequest'
-                        },
-                        timeout: 30000
-                    }).then(function(req){
-                        console.log(req.data);
-                        if(req.data&&req.data.responseObject&&req.data.responseObject.responseData&&req.data.responseObject.responseData.data_list&&req.data.responseObject.responseData.data_list.length){
-                            t.attachmentDialogData=t.formatAttachmentList(req.data.responseObject.responseData.data_list);
-                            console.log(t.attachmentDialogData);
-                        }
-                    });
-                    t.attachmentDialog = true;
-                }else{
-                    t.$message.error('请选择您要审核的用户!');
-                }
-
-            }
-        },
-        computed:{
-            ...mapGetters(['tab2Data'])
-        },
-        components:{
-            AuditDialog
-        },
-        mounted(){
-          let t = this;
-          t.getAuditList();
-        }
+import Common from '../../../utils/common.js'
+import AuditDialog from '../../components/Dialog/auditDialog'
+import userData from '../../../virtualData/auditInformation'
+import axios from 'axios'
+import { mapGetters, mapActions } from 'vuex'
+export default {
+  data () {
+    return {
+      region: '0',
+      attachmentDialog: false,
+      formInline: {
+        customerId: '',
+        customerName: '',
+        customerSex: '',
+        auditResult: '',
+        auditType: '',
+        getType: 1,
+        pageSize: 10,
+        pageIndex: 1
+      },
+      attachmentDialogData: {
+        2: [],
+        3: [],
+        4: [],
+        6: [],
+        7: []
+      },
+      formDes: {
+        num: 12545789878
+      },
+      pageSize: 10,
+      pageIndex: 1,
+      count: 0,
+      selectedOne: false,
+      selectedData: {},
+      dialogInfo: {
+        title: '审核信息',
+        degreeImg: '',
+        degreeNum: '',
+        professionImg: '',
+        professionNum: '',
+        otherImg: '',
+        otherNum: ''
+      },
+      rejectAuditReason: '',
+      rejectDialogVisible: false,
+      centerDialogVisible: false,
+      tableData: []
     }
+  },
+  watch: {
+    pageIndex (newVal) {
+      const t = this
+      t.formInline.pageIndex = newVal
+      t.getAuditList()
+    },
+    pageSize (newVal) {
+      const t = this
+      t.formInline.pageSize = newVal
+      t.getAuditList()
+    }
+  },
+  methods: {
+    ...mapActions(['tab2ShowDialog']),
+    checkList () {
+      const t = this
+      t.pageIndex === 1 ? t.getAuditList() : t.pageIndex = 1
+    },
+    tableCurrentChange (val) {
+      const t = this
+      if (val) {
+        console.log(val)
+        t.selectedOne = true
+        t.selectedData = val
+      }
+    },
+    auditResult (row, column) {
+      const t = this
+      const type = row.auditResult
+      return Common.auditResult(type)
+    },
+    auditType (row, column) {
+      const t = this
+      const type = row.auditType
+      return Common.auditType(type)
+    },
+    customerDegree (row, column) {
+      const t = this
+      const type = row.customerDegree
+      return Common.customerDegree(type)
+    },
+    jsGetAge (row, column) {
+      const t = this
+      const birthDay = row.customerBirthday
+      return Common.jsGetAge(birthDay)
+    },
+    sexFormat (row, column) {
+      const t = this
+      const type = row.customerSex
+      return Common.sexFormat(type)
+    },
+    passAudit (step) {
+      const t = this
+      if (!t.selectedOne) {
+        t.$message.error('请选择您要审核的用户!')
+      } else {
+        if (step === 0) {
+          t.centerDialogVisible = true
+        } else if (step === 1) {
+          t.$message({
+            message: t.selectedData.name + '审核已通过',
+            type: 'success'
+          })
+          t.centerDialogVisible = false
+        }
+      }
+    },
+    reset () {
+      const t = this
+      t.pageSize = 10
+      t.pageIndex = 1
+      t.formInline = {
+        customerId: '',
+        customerName: '',
+        customerSex: '',
+        auditResult: '',
+        auditType: '',
+        getType: 1,
+        pageSize: 10,
+        pageIndex: 1
+      }
+      t.getAuditList()
+    },
+    rejectAudit (step) {
+      const t = this
+      if (!t.selectedOne) {
+        t.$message.error('请选择您要审核的用户!')
+      } else {
+        if (step === 0) {
+          t.rejectDialogVisible = true
+        } else {
+          axios({
+            url: '/call/customer/rejectAudit',
+            method: 'POST',
+            data: {
+              auditId: t.selectedData.auditId,
+              customerId: t.selectedData.customerId,
+              adminId: localStorage.getItem('adminId'),
+              updateState: 3,
+              adminName: localStorage.getItem('userName')
+            },
+            transformRequest: [function (data) {
+              return 'paramJson=' + JSON.stringify(data)
+            }],
+            headers: {
+              'X-Requested-With': 'XMLHttpRequest'
+            },
+            timeout: 30000
+          }).then(function (req) {
+            t.rejectDialogVisible = false
+            if (req.data.responseObject.responseCode === 4) {
+              t.$message({
+                message: t.selectedData.customerName + '审核已驳回',
+                type: 'success'
+              })
+              t.getAuditList()
+            } else {
+              t.$message({
+                message: '激活失败',
+                type: 'warning'
+              })
+            }
+          })
+        }
+      }
+    },
+    handleEdit (index, row) {
+      console.log(index, row)
+    },
+    handleDelete (index, row) {
+      console.log(index, row)
+    },
+    tryClick (a, b) {
+      console.log(a, b)
+    },
+    onSubmit () {
+      const t = this
+      t.getAuditList()
+      console.log('submit!')
+    },
+    handleSizeChange (val) {
+      console.log(`每页 ${val} 条`)
+      const t = this
+      t.pageSize = val
+    },
+    handleCurrentChange (val) {
+      const t = this
+      t.pageIndex = parseInt(val, 10)
+    },
+    getAuditList () {
+      const t = this
+      t.selectedOne = false
+      t.selectedData = {}
+      axios.get('/call/customer/getAuditList', {
+        params: t.formInline
+      })
+        .then(function (response) {
+          const reqData = response.data
+          console.log(reqData)
+          if (reqData.responseObject.responseData.data_list) {
+            t.tableData = reqData.responseObject.responseData.data_list
+          }
+          if (reqData.responseObject.responseData.totalCount) {
+            t.count = reqData.responseObject.responseData.totalCount
+          }
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
+    },
+    formatAttachmentList (data) {
+      const t = this
+      const jsonData = {}
+      const originalData = JSON.parse(JSON.stringify(data))
+      for (let num = 0; num < originalData.length; num++) {
+        if (jsonData[originalData[num].attachmentType]) {
+          jsonData[originalData[num].attachmentType].push(originalData[num])
+        } else {
+          jsonData[originalData[num].attachmentType] = []
+          jsonData[originalData[num].attachmentType].push(originalData[num])
+        }
+      }
+      return jsonData
+    },
+    awakenUserInfo () {
+      const t = this
+      if (t.selectedOne) {
+        const arr =
+                        [
+                          'degreeAttachment',
+                          'identityAttachment',
+                          'otherAttachment',
+                          'professionAttachment',
+                          'schoolAttachment'
+                        ]
+        const attachmentIdList = []
+        for (let num = 0; num < arr.length; num++) {
+          console.log(t.selectedData[arr[num]])
+          if (t.selectedData[arr[num]] && t.selectedData[arr[num]].length) {
+            const arrInner = t.selectedData[arr[num]].split(',')
+            for (let innerNum = 0; innerNum < arrInner.length; innerNum++) {
+              attachmentIdList.push(arrInner[innerNum])
+            }
+          }
+        }
+        console.log(attachmentIdList)
+        axios({
+          url: '/call/customer/getAuditAttachmentList',
+          method: 'POST',
+          data: {
+            attachmentList: JSON.stringify(attachmentIdList),
+            customerId: t.selectedData.customerId,
+            isValid: 1
+          },
+          transformRequest: [function (data) {
+            return 'paramJson=' + JSON.stringify(data)
+          }],
+          headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+          },
+          timeout: 30000
+        }).then(function (req) {
+          console.log(req.data)
+          if (req.data && req.data.responseObject && req.data.responseObject.responseData && req.data.responseObject.responseData.data_list && req.data.responseObject.responseData.data_list.length) {
+            t.attachmentDialogData = t.formatAttachmentList(req.data.responseObject.responseData.data_list)
+            console.log(t.attachmentDialogData)
+          }
+        })
+        t.attachmentDialog = true
+      } else {
+        t.$message.error('请选择您要审核的用户!')
+      }
+    }
+  },
+  computed: {
+    ...mapGetters(['tab2Data'])
+  },
+  components: {
+    AuditDialog
+  },
+  mounted () {
+    const t = this
+    t.getAuditList()
+  }
+}
 </script>
 <style lang="scss" scoped>
 

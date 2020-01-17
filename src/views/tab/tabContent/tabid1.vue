@@ -211,93 +211,92 @@
    }
 </style>
 <script>
-    import Common from '../../../utils/common.js';
-    import axios from 'axios';
-    export default {
-        data() {
-            return {
-                activateOnOff:false,
-                innerVisible:false,
-                rejectDialogVisible:false,
-                count:0,
-                blacklist:{
-                    region:1,
-                    textarea2:''
-                },
-                formInline: {
-                    customerId: '',
-                    customerDegree:'',
-                    customerName: '',
-                    customerSex: '',
-                    customerAccountStatus: '',
-                    customerEmail: '',
-                    customerPhoneNum: '',
-                    getType:0,
-                    pageSize:10,
-                    pageIndex:1
-                },
-                pageSize:10,
-                pageIndex:1,
-                selectedData:{},
-                selectedOne:false,
-                value2:"",
-                tableData:[]
-            }
-        },
-        computed: {
-          blackReason(){
-              return Common.blackReason();
-          }
-        },
-        watch:{
-            pageIndex(newVal){
-                let t = this;
-                t.formInline.pageIndex = newVal;
-                t.getUserList();
-            },
-            pageSize(newVal){
-                let t = this;
-                t.formInline.pageSize = newVal;
-                t.getUserList();
-            }
-        },
-        mounted(){
-            let t = this;
-            t.getUserList();
-        },
-        methods:{
-            checkList() {
-                let t = this;
-                t.pageIndex === 1 ? t.getUserList() : t.pageIndex = 1;
-            },
-            resetList(){
-                let t = this;
-                t.pageSize = 10;
-                t.pageIndex = 1;
-                t.formInline={
-                    customerId: '',
-                    customerDegree:'',
-                    customerName: '',
-                    customerSex: '',
-                    customerAccountStatus: '',
-                    customerEmail: '',
-                    customerPhoneNum: '',
-                    getType:0,
-                    pageSize:10,
-                    pageIndex:1
-                };
-                t.getUserList();
-            },
-            tableCurrentChange(val){
-                let t = this;
-                if(val){
-                 console.log(val);
-                 t.selectedOne = true;
-                 t.selectedData = val;
-                }
-
-            },
-            /*activate(type){
+import Common from '../../../utils/common.js'
+import axios from 'axios'
+export default {
+  data () {
+    return {
+      activateOnOff: false,
+      innerVisible: false,
+      rejectDialogVisible: false,
+      count: 0,
+      blacklist: {
+        region: 1,
+        textarea2: ''
+      },
+      formInline: {
+        customerId: '',
+        customerDegree: '',
+        customerName: '',
+        customerSex: '',
+        customerAccountStatus: '',
+        customerEmail: '',
+        customerPhoneNum: '',
+        getType: 0,
+        pageSize: 10,
+        pageIndex: 1
+      },
+      pageSize: 10,
+      pageIndex: 1,
+      selectedData: {},
+      selectedOne: false,
+      value2: '',
+      tableData: []
+    }
+  },
+  computed: {
+    blackReason () {
+      return Common.blackReason()
+    }
+  },
+  watch: {
+    pageIndex (newVal) {
+      const t = this
+      t.formInline.pageIndex = newVal
+      t.getUserList()
+    },
+    pageSize (newVal) {
+      const t = this
+      t.formInline.pageSize = newVal
+      t.getUserList()
+    }
+  },
+  mounted () {
+    const t = this
+    t.getUserList()
+  },
+  methods: {
+    checkList () {
+      const t = this
+      t.pageIndex === 1 ? t.getUserList() : t.pageIndex = 1
+    },
+    resetList () {
+      const t = this
+      t.pageSize = 10
+      t.pageIndex = 1
+      t.formInline = {
+        customerId: '',
+        customerDegree: '',
+        customerName: '',
+        customerSex: '',
+        customerAccountStatus: '',
+        customerEmail: '',
+        customerPhoneNum: '',
+        getType: 0,
+        pageSize: 10,
+        pageIndex: 1
+      }
+      t.getUserList()
+    },
+    tableCurrentChange (val) {
+      const t = this
+      if (val) {
+        console.log(val)
+        t.selectedOne = true
+        t.selectedData = val
+      }
+    },
+    /* activate(type){
                 let t = this;
                 if(!t.selectedOne){
                     t.$message.error('请选择您要激活的会员!');
@@ -315,106 +314,105 @@
                     }
 
                 }
-            },*/
-            getUserList(){
-                let t = this;
-                t.selectedData = {};
-                axios.get('/call/customer/getCustomerList', {
-                    params: t.formInline
-                })
-                    .then(function (response) {
-                        let reqData = response.data;
-                        if(reqData.responseObject.responseData['data_list']){
-                            t.tableData = reqData.responseObject.responseData['data_list'];
-                        }
-                        if(reqData.responseObject.responseData.totalCount){
-                            t.count = reqData.responseObject.responseData.totalCount;
-                        }
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
+            }, */
+    getUserList () {
+      const t = this
+      t.selectedData = {}
+      axios.get('/call/customer/getCustomerList', {
+        params: t.formInline
+      })
+        .then(function (response) {
+          const reqData = response.data
+          if (reqData.responseObject.responseData.data_list) {
+            t.tableData = reqData.responseObject.responseData.data_list
+          }
+          if (reqData.responseObject.responseData.totalCount) {
+            t.count = reqData.responseObject.responseData.totalCount
+          }
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
+    },
+    blackCustomer (step) {
+      const t = this
+      if (!t.selectedOne) {
+        t.$message.error('请选择您要拉黑的用户!')
+      } else {
+        if (step === 0) {
+          console.log('拉黑')
+          t.rejectDialogVisible = true
+        } else {
+          axios({
+            url: '/call/customer/activate',
+            method: 'POST',
+            data: {
+              customerId: t.selectedData.customerId,
+              blackReason: t.blacklist.region,
+              reportCustomerId: 0,
+              reportCustomerName: 0,
+              adminId: localStorage.getItem('adminId'),
+              adminName: localStorage.getItem('userName'),
+              updateState: 4
             },
-            blackCustomer(step){
-                let t = this;
-                if(!t.selectedOne){
-                    t.$message.error('请选择您要拉黑的用户!');
-                }else{
-                    if(step===0){
-                        console.log('拉黑');
-                        t.rejectDialogVisible = true;
-                    }else{
-                        axios({
-                            url: '/call/customer/activate',
-                            method: "POST",
-                            data: {
-                                customerId:t.selectedData.customerId,
-                                blackReason:t.blacklist.region,
-                                reportCustomerId:0,
-                                reportCustomerName:0,
-                                adminId:localStorage.getItem('adminId'),
-                                adminName:localStorage.getItem('userName'),
-                                updateState:4
-                            },
-                            transformRequest: [function (data) {
-                                return "paramJson=" + JSON.stringify(data);
-                            }],
-                            headers: {
-                                'X-Requested-With': 'XMLHttpRequest'
-                            },
-                            timeout: 30000
-                        }).then(function(req){
-                            console.log(req.data);
-                            if(req.data.responseObject.responseCode===4){
-                                t.$message({
-                                    message: t.selectedData.customerName+'已拉黑',
-                                    type: 'success'
-                                });
-                                t.getUserList();
-                            }else{
-                                t.$message({
-                                    message: t.selectedData.customerName+'拉黑失败',
-                                    type: 'warning'
-                                });
-                            }
-                            t.rejectDialogVisible = false;
-                        });
-                    }
-                }
+            transformRequest: [function (data) {
+              return 'paramJson=' + JSON.stringify(data)
+            }],
+            headers: {
+              'X-Requested-With': 'XMLHttpRequest'
             },
-            handleSelectionChange(val) {
-                let t = this;
-                this.multipleSelection = val;
-
-            },
-            handleSizeChange(val) {
-                let t = this;
-                t.pageSize = parseInt(val,10);
-            },
-            handleCurrentChange(val) {
-                let t = this;
-                t.pageIndex = parseInt(val,10);
-            },
-            jsGetAge(row,column){
-               let t = this;
-               let birthDay = row['customerBirthday'];
-               return Common.jsGetAge(birthDay);
-            },
-            sexFormat(row, column){
-                let t = this;
-                let type = row['customerSex'];
-                return Common.sexFormat(type);
-            },
-            customerDegree(row,column){
-                let t = this;
-                let type = row['customerDegree'];
-                return Common.customerDegree(type);
-            },
-            accountState(row,column){
-                let t = this;
-                let type = row['customerAccountStatus'];
-                return Common.accountState(type);
+            timeout: 30000
+          }).then(function (req) {
+            console.log(req.data)
+            if (req.data.responseObject.responseCode === 4) {
+              t.$message({
+                message: t.selectedData.customerName + '已拉黑',
+                type: 'success'
+              })
+              t.getUserList()
+            } else {
+              t.$message({
+                message: t.selectedData.customerName + '拉黑失败',
+                type: 'warning'
+              })
             }
+            t.rejectDialogVisible = false
+          })
         }
+      }
+    },
+    handleSelectionChange (val) {
+      const t = this
+      this.multipleSelection = val
+    },
+    handleSizeChange (val) {
+      const t = this
+      t.pageSize = parseInt(val, 10)
+    },
+    handleCurrentChange (val) {
+      const t = this
+      t.pageIndex = parseInt(val, 10)
+    },
+    jsGetAge (row, column) {
+      const t = this
+      const birthDay = row.customerBirthday
+      return Common.jsGetAge(birthDay)
+    },
+    sexFormat (row, column) {
+      const t = this
+      const type = row.customerSex
+      return Common.sexFormat(type)
+    },
+    customerDegree (row, column) {
+      const t = this
+      const type = row.customerDegree
+      return Common.customerDegree(type)
+    },
+    accountState (row, column) {
+      const t = this
+      const type = row.customerAccountStatus
+      return Common.accountState(type)
     }
+  }
+}
 </script>

@@ -94,59 +94,59 @@
 </style>
 
 <script>
-    import AV from 'leancloud-storage';
-    import {mapGetters,mapActions} from 'vuex';
-    import axios from 'axios';
-    export default {
-        data() {
-            return {
-                tabList:[]
-            };
-        },
-        computed:{
-            ...mapGetters(['toggleOnOff'])
-        },
-        mounted(){
-            let t = this;
-            t.getSideData();
-        },
-        methods: {
-            ...mapActions(['addTab','outLoginOne']),
-            getSideData(){
-                let t = this;
-                axios.get('/api/columns/query', {
-                    params: {}
-                })
-                    .then(function (response) {
-                        let reqData = response.data;
-                        console.log(reqData.result);
-                        if(reqData.result){
-                            console.log('获取导数据');
-                            console.log(reqData.result);
-                            console.log('获取导数据');
-                            t.tabList = reqData.result;
-                            t.saveColumnList(reqData.result);
-                        }
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
-            },
-            runFn(v){
-                let t = this;
-                t[v.eventFn]&&t[v.eventFn]();
-            },
-            routerDirec(v){
-                let t = this;
-                t.addTab(v);
-                t.$router.push({ path: "/"+v.routerName });
-            },
-            handleOpen(key, keyPath) {
-                console.log(key, keyPath);
-            },
-            handleClose(key, keyPath) {
-                console.log(key, keyPath);
-            }
-        }
+import AV from 'leancloud-storage'
+import { mapGetters, mapActions } from 'vuex'
+import axios from 'axios'
+export default {
+  data () {
+    return {
+      tabList: []
     }
+  },
+  computed: {
+    ...mapGetters(['toggleOnOff'])
+  },
+  mounted () {
+    const t = this
+    t.getSideData()
+  },
+  methods: {
+    ...mapActions(['addTab', 'outLoginOne']),
+    getSideData () {
+      const t = this
+      axios.get('/api/columns/query', {
+        params: {}
+      })
+        .then(function (response) {
+          const reqData = response.data
+          console.log(reqData.result)
+          if (reqData.result) {
+            console.log('获取导数据')
+            console.log(reqData.result)
+            console.log('获取导数据')
+            t.tabList = reqData.result
+            t.saveColumnList(reqData.result)
+          }
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
+    },
+    runFn (v) {
+      const t = this
+      t[v.eventFn] && t[v.eventFn]()
+    },
+    routerDirec (v) {
+      const t = this
+      t.addTab(v)
+      t.$router.push({ path: '/' + v.routerName })
+    },
+    handleOpen (key, keyPath) {
+      console.log(key, keyPath)
+    },
+    handleClose (key, keyPath) {
+      console.log(key, keyPath)
+    }
+  }
+}
 </script>

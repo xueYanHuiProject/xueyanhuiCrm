@@ -134,165 +134,164 @@
     </section>
 </template>
 <script>
-    import Common from '../../../utils/common.js';
-    import axios from 'axios';
-    import userData from '../../../virtualData/feedback';
-    export default {
-        data(){
-            return {
-                formInline: {
-                    informId:'',
-                    customerId: '',
-                    customerName: '',
-                    informCustomerName:'',
-                    informState:'',
-                    getType:3,
-                    pageSize:10,
-                    pageIndex:1
-                },
-                count:0,
-                pageSize:10,
-                pageIndex:1,
-                pickerOptions1: {
-                    disabledDate(time) {
-                        return time.getTime() > Date.now();
-                    },
-                    shortcuts: [{
-                        text: '今天',
-                        onClick(picker) {
-                            picker.$emit('pick', new Date());
-                        }
-                    }, {
-                        text: '昨天',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() - 3600 * 1000 * 24);
-                            picker.$emit('pick', date);
-                        }
-                    }, {
-                        text: '一周前',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-                            picker.$emit('pick', date);
-                        }
-                    }]
-                },
-                value2:"",
-                rejectAuditReason:"",
-                selectedData:{},
-                centerDialogVisible:false,
-                selectedOne:false,
-                msg:"",
-                currentPage4:4,
-                tableData:userData.data.dataList
-            }
+import Common from '../../../utils/common.js'
+import axios from 'axios'
+import userData from '../../../virtualData/feedback'
+export default {
+  data () {
+    return {
+      formInline: {
+        informId: '',
+        customerId: '',
+        customerName: '',
+        informCustomerName: '',
+        informState: '',
+        getType: 3,
+        pageSize: 10,
+        pageIndex: 1
+      },
+      count: 0,
+      pageSize: 10,
+      pageIndex: 1,
+      pickerOptions1: {
+        disabledDate (time) {
+          return time.getTime() > Date.now()
         },
-        watch:{
-            pageIndex(newVal){
-                let t = this;
-                t.formInline.pageIndex = newVal;
-                t.getInformList();
-            },
-            pageSize(newVal){
-                let t = this;
-                t.formInline.pageSize = newVal;
-                t.getInformList();
-            }
-        },
-        methods:{
-            checkList(){
-                let t = this;
-                t.pageIndex === 1 ? t.getInformList() : t.pageIndex = 1;
-            },
-            informState(row,column){
-                let t = this;
-                let type = row['informState'];
-                return Common.auditType(type);
-            },
-            tableCurrentChange(val){
-                let t = this;
-                if(val){
-                    console.log(val);
-                    t.selectedOne = true;
-                    t.selectedData = val;
-                }
-
-            },
-            reset(){
-              let t = this;
-                t.pageSize = 10;
-                t.pageIndex = 1;
-              t.formInline = {
-                  informId:'',
-                  customerId: '',
-                  customerName: '',
-                  informCustomerName:'',
-                  informState:'',
-                  getType:3,
-                  pageSize:10,
-                  pageIndex:1
-              };
-              t.getInformList();
-            },
-            feedBackContent(){
-                let t = this;
-                t.centerDialogVisible = false;
-                t.$message({
-                    message: t.selectedData.name+'举报信息已回复',
-                    type: 'success'
-                });
-            },
-            handleSelectionChange(val) {
-                this.multipleSelection = val;
-            },
-            detailInfo(){
-                let t = this;
-                if(!t.selectedOne){
-                    t.$message.error('请选择您要回复的用户!');
-                }else{
-                    t.centerDialogVisible = true;
-                }
-            },
-            onSubmit() {
-                let t = this;
-                t.getInformList();
-                console.log('submit!');
-            },
-            handleSizeChange(val) {
-                let t = this;
-                t.pageSize = val;
-                console.log(`每页 ${val} 条`);
-            },
-            getInformList(){
-                let t = this;
-                t.selectedData = {};
-                axios.get('/call/customer/getInformList', {
-                    params: t.formInline
-                })
-                    .then(function (response) {
-                        let reqData = response.data;
-                        if(reqData.responseObject.responseData['data_list']){
-                            t.tableData = reqData.responseObject.responseData['data_list'];
-                        }
-                        if(reqData.responseObject.responseData.totalCount){
-                            t.count = reqData.responseObject.responseData.totalCount;
-                        }
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
-            },
-            handleCurrentChange(val) {
-                let t = this;
-                t.pageIndex = val;
-            }
-        },
-        mounted(){
-            let t = this;
-            t.getInformList();
-        }
+        shortcuts: [{
+          text: '今天',
+          onClick (picker) {
+            picker.$emit('pick', new Date())
+          }
+        }, {
+          text: '昨天',
+          onClick (picker) {
+            const date = new Date()
+            date.setTime(date.getTime() - 3600 * 1000 * 24)
+            picker.$emit('pick', date)
+          }
+        }, {
+          text: '一周前',
+          onClick (picker) {
+            const date = new Date()
+            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7)
+            picker.$emit('pick', date)
+          }
+        }]
+      },
+      value2: '',
+      rejectAuditReason: '',
+      selectedData: {},
+      centerDialogVisible: false,
+      selectedOne: false,
+      msg: '',
+      currentPage4: 4,
+      tableData: userData.data.dataList
     }
+  },
+  watch: {
+    pageIndex (newVal) {
+      const t = this
+      t.formInline.pageIndex = newVal
+      t.getInformList()
+    },
+    pageSize (newVal) {
+      const t = this
+      t.formInline.pageSize = newVal
+      t.getInformList()
+    }
+  },
+  methods: {
+    checkList () {
+      const t = this
+      t.pageIndex === 1 ? t.getInformList() : t.pageIndex = 1
+    },
+    informState (row, column) {
+      const t = this
+      const type = row.informState
+      return Common.auditType(type)
+    },
+    tableCurrentChange (val) {
+      const t = this
+      if (val) {
+        console.log(val)
+        t.selectedOne = true
+        t.selectedData = val
+      }
+    },
+    reset () {
+      const t = this
+      t.pageSize = 10
+      t.pageIndex = 1
+      t.formInline = {
+        informId: '',
+        customerId: '',
+        customerName: '',
+        informCustomerName: '',
+        informState: '',
+        getType: 3,
+        pageSize: 10,
+        pageIndex: 1
+      }
+      t.getInformList()
+    },
+    feedBackContent () {
+      const t = this
+      t.centerDialogVisible = false
+      t.$message({
+        message: t.selectedData.name + '举报信息已回复',
+        type: 'success'
+      })
+    },
+    handleSelectionChange (val) {
+      this.multipleSelection = val
+    },
+    detailInfo () {
+      const t = this
+      if (!t.selectedOne) {
+        t.$message.error('请选择您要回复的用户!')
+      } else {
+        t.centerDialogVisible = true
+      }
+    },
+    onSubmit () {
+      const t = this
+      t.getInformList()
+      console.log('submit!')
+    },
+    handleSizeChange (val) {
+      const t = this
+      t.pageSize = val
+      console.log(`每页 ${val} 条`)
+    },
+    getInformList () {
+      const t = this
+      t.selectedData = {}
+      axios.get('/call/customer/getInformList', {
+        params: t.formInline
+      })
+        .then(function (response) {
+          const reqData = response.data
+          if (reqData.responseObject.responseData.data_list) {
+            t.tableData = reqData.responseObject.responseData.data_list
+          }
+          if (reqData.responseObject.responseData.totalCount) {
+            t.count = reqData.responseObject.responseData.totalCount
+          }
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
+    },
+    handleCurrentChange (val) {
+      const t = this
+      t.pageIndex = val
+    }
+  },
+  mounted () {
+    const t = this
+    t.getInformList()
+  }
+}
 </script>
 <style lang="scss" scoped>
     @import "../../../static/scss/common";
@@ -333,7 +332,6 @@
             }
         }
     }
-
 
     .rejectAuditInline,.feedBackArea{
         width: 100%;

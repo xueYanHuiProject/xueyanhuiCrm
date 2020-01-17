@@ -286,124 +286,120 @@
     }
 </style>
 <script>
-    import userData from '../../../virtualData/changeUserInfo';
-    export default {
-        data(){
-            return{
-                formInline: {
-                    user: '',
-                    region:''
-                },
-                pickerOptions1: {
-                    disabledDate(time) {
-                        return time.getTime() > Date.now();
-                    },
-                    shortcuts: [{
-                        text: '今天',
-                        onClick(picker) {
-                            picker.$emit('pick', new Date());
-                        }
-                    }, {
-                        text: '昨天',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() - 3600 * 1000 * 24);
-                            picker.$emit('pick', date);
-                        }
-                    }, {
-                        text: '一周前',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-                            picker.$emit('pick', date);
-                        }
-                    }]
-                },
-                value2:"",
-                selectedData:{},
-                rejectAuditReason:'',
-                rejectDialogVisible:false,
-                centerDialogVisible:false,
-                DialogInfo:{},
-                toggleSlide:false,
-                selectedOne:false,
-                currentPage4:4,
-                tableData:userData.data.dataList
-            }
+import userData from '../../../virtualData/changeUserInfo'
+export default {
+  data () {
+    return {
+      formInline: {
+        user: '',
+        region: ''
+      },
+      pickerOptions1: {
+        disabledDate (time) {
+          return time.getTime() > Date.now()
         },
-        methods:{
-            handleClose(){
-              let t = this;
-              t.toggleSlide = false;
-            },
-            detailInfo(){
-                let t = this;
-                if(!t.selectedOne){
-                    t.$message.error('请选择您要变更的用户!');
-                }else{
-                    t.toggleSlide = true;
-                }
-            },
-            handleSelectionChange(val) {
-                this.multipleSelection = val;
-            },
-            onSubmit() {
-                console.log('submit!');
-            },
-            handleSizeChange(val) {
-                console.log(`每页 ${val} 条`);
-            },
-            passAudit(step){
-                let t = this;
-                if(!t.selectedOne){
-                    t.$message.error('请选择您要变更的用户!');
-                }else{
-                    if(step===0){
-                        t.centerDialogVisible = true;
-                    } else if(step===1){
-                        t.$message({
-                            message: t.selectedData.name+'变更已通过',
-                            type: 'success'
-                        });
-                        t.centerDialogVisible = false;
-                    }
-
-                }
-
-
-            },
-            rejectAudit(step){
-                let t = this;
-                if(!t.selectedOne){
-                    t.$message.error('请选择您要变更的用户!');
-                }else{
-                    if(step===0){
-                        t.rejectDialogVisible = true;
-                    }else{
-                        t.$message({
-                            message: t.selectedData.name+'变更已驳回',
-                            type: 'success'
-                        });
-                        t.rejectDialogVisible = false;
-                    }
-                }
-            },
-            handleCurrentChange(val) {
-                let t = this;
-                t.selectedOne = true;
-                t.selectedData = val;
-                t.DialogInfo ={
-                    title:t.selectedData.name+"变更信息",
-                    degreeImg:t.selectedData.jobPhoto,
-                    degreeNum:t.selectedData.jobNum,
-                    professionImg:t.selectedData.studyPhoto,
-                    professionNum:t.selectedData.studyNum,
-                    otherImg:t.selectedData.otherPhoto,
-                    otherNum:t.selectedData.otherNum
-                };
-                console.log(t.DialogInfo)
-            }
-        }
+        shortcuts: [{
+          text: '今天',
+          onClick (picker) {
+            picker.$emit('pick', new Date())
+          }
+        }, {
+          text: '昨天',
+          onClick (picker) {
+            const date = new Date()
+            date.setTime(date.getTime() - 3600 * 1000 * 24)
+            picker.$emit('pick', date)
+          }
+        }, {
+          text: '一周前',
+          onClick (picker) {
+            const date = new Date()
+            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7)
+            picker.$emit('pick', date)
+          }
+        }]
+      },
+      value2: '',
+      selectedData: {},
+      rejectAuditReason: '',
+      rejectDialogVisible: false,
+      centerDialogVisible: false,
+      DialogInfo: {},
+      toggleSlide: false,
+      selectedOne: false,
+      currentPage4: 4,
+      tableData: userData.data.dataList
     }
+  },
+  methods: {
+    handleClose () {
+      const t = this
+      t.toggleSlide = false
+    },
+    detailInfo () {
+      const t = this
+      if (!t.selectedOne) {
+        t.$message.error('请选择您要变更的用户!')
+      } else {
+        t.toggleSlide = true
+      }
+    },
+    handleSelectionChange (val) {
+      this.multipleSelection = val
+    },
+    onSubmit () {
+      console.log('submit!')
+    },
+    handleSizeChange (val) {
+      console.log(`每页 ${val} 条`)
+    },
+    passAudit (step) {
+      const t = this
+      if (!t.selectedOne) {
+        t.$message.error('请选择您要变更的用户!')
+      } else {
+        if (step === 0) {
+          t.centerDialogVisible = true
+        } else if (step === 1) {
+          t.$message({
+            message: t.selectedData.name + '变更已通过',
+            type: 'success'
+          })
+          t.centerDialogVisible = false
+        }
+      }
+    },
+    rejectAudit (step) {
+      const t = this
+      if (!t.selectedOne) {
+        t.$message.error('请选择您要变更的用户!')
+      } else {
+        if (step === 0) {
+          t.rejectDialogVisible = true
+        } else {
+          t.$message({
+            message: t.selectedData.name + '变更已驳回',
+            type: 'success'
+          })
+          t.rejectDialogVisible = false
+        }
+      }
+    },
+    handleCurrentChange (val) {
+      const t = this
+      t.selectedOne = true
+      t.selectedData = val
+      t.DialogInfo = {
+        title: t.selectedData.name + '变更信息',
+        degreeImg: t.selectedData.jobPhoto,
+        degreeNum: t.selectedData.jobNum,
+        professionImg: t.selectedData.studyPhoto,
+        professionNum: t.selectedData.studyNum,
+        otherImg: t.selectedData.otherPhoto,
+        otherNum: t.selectedData.otherNum
+      }
+      console.log(t.DialogInfo)
+    }
+  }
+}
 </script>
-

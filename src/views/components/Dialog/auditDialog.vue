@@ -116,49 +116,49 @@
     }
 </style>
 <script>
-    import {mapGetters,mapActions} from 'vuex';
-    export default {
-        data(){
-            return {
-                msg:"",
-                dialogTableVisible: false,
-                gridData: [{
-                    date: '2016-05-02',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }, {
-                    date: '2016-05-04',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }, {
-                    date: '2016-05-01',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }, {
-                    date: '2016-05-03',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }]
-            }
-        },
-        watch:{
-            tab2Data(){
-                console.log(this.tab2Data)
-            }
-        },
-        methods:{
-            ...mapActions(['tab2HideDialog']),
-            handleClose(){
-                let t = this;
-                t.tab2HideDialog();
-            }
-        },
-        computed:{
-            ...mapGetters(['tab2Data'])
-        },
-        mounted(){
-          console.log(this.DialogInfo)
-        },
-        props:['DialogInfo']
+import { mapGetters, mapActions } from 'vuex'
+export default {
+  data () {
+    return {
+      msg: '',
+      dialogTableVisible: false,
+      gridData: [{
+        date: '2016-05-02',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1518 弄'
+      }, {
+        date: '2016-05-04',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1518 弄'
+      }, {
+        date: '2016-05-01',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1518 弄'
+      }, {
+        date: '2016-05-03',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1518 弄'
+      }]
     }
+  },
+  watch: {
+    tab2Data () {
+      console.log(this.tab2Data)
+    }
+  },
+  methods: {
+    ...mapActions(['tab2HideDialog']),
+    handleClose () {
+      const t = this
+      t.tab2HideDialog()
+    }
+  },
+  computed: {
+    ...mapGetters(['tab2Data'])
+  },
+  mounted () {
+    console.log(this.DialogInfo)
+  },
+  props: ['DialogInfo']
+}
 </script>

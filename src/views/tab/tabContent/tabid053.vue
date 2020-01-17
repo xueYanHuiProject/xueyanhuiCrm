@@ -50,20 +50,20 @@
     }
 </style>
 <script>
-    import userData from '../../../virtualData/UserStatistics'
-    export default {
-        data() {
-            return {
-                labelPosition: 'right',
-                formLabelAlign: {
-                    oldpassword: '',
-                    newpassword: '',
-                    renewpassword: ''
-                }
-            }
-        },
-        methods:{
-
-        }
+import userData from '../../../virtualData/UserStatistics'
+export default {
+  data () {
+    return {
+      labelPosition: 'right',
+      formLabelAlign: {
+        oldpassword: '',
+        newpassword: '',
+        renewpassword: ''
+      }
     }
+  },
+  methods: {
+
+  }
+}
 </script>

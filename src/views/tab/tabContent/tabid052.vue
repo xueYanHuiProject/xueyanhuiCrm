@@ -98,411 +98,411 @@
     }
 </style>
 <script>
-    import axios from 'axios';
-    import userData from '../../../virtualData/UserStatistics'
-    export default {
-        data() {
-            return {
-                currentPage4: 4,
-                formInline: {
-                    user: ''
-                },
-                jurisdiction:[],
-                pickerOptions1: {
-                    disabledDate(time) {
-                        return time.getTime() > Date.now();
-                    },
-                    shortcuts: [{
-                        text: '今天',
-                        onClick(picker) {
-                            picker.$emit('pick', new Date());
-                        }
-                    }, {
-                        text: '昨天',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() - 3600 * 1000 * 24);
-                            picker.$emit('pick', date);
-                        }
-                    }, {
-                        text: '一周前',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-                            picker.$emit('pick', date);
-                        }
-                    }]
-                },
-                value2:"",
-                tableData:userData.data.dataList
-            }
+import axios from 'axios'
+import userData from '../../../virtualData/UserStatistics'
+export default {
+  data () {
+    return {
+      currentPage4: 4,
+      formInline: {
+        user: ''
+      },
+      jurisdiction: [],
+      pickerOptions1: {
+        disabledDate (time) {
+          return time.getTime() > Date.now()
         },
-        mounted(){
-            let t = this;
-            t.jurisdiction = [
-                {
-                    "title":"浏览一级页面",
-                    "operation":"001",
-                    "level0":{
-                        "onOff":1
-                    },
-                    "level1":{
-                        "onOff":1
-                    },
-                    "level2":{
-                        "onOff":1
-                    },
-                    "level3":{
-                        "onOff":1
-                    }
-                },{
-                    "title":"浏览终端页",
-                    "operation":"002",
-                    "level0":{
-                        "onOff":1
-                    },
-                    "level1":{
-                        "onOff":1
-                    },
-                    "level2":{
-                        "onOff":1
-                    },
-                    "level3":{
-                        "onOff":1
-                    }
-                },{
-                    "title":"浏览他的个人中心",
-                    "operation":"003",
-                    "level0":{
-                        "onOff":0
-                    },
-                    "level1":{
-                        "onOff":1
-                    },
-                    "level2":{
-                        "onOff":1
-                    },
-                    "level3":{
-                        "onOff":1
-                    }
-                },{
-                    "title":"获取对方联系方式",
-                    "operation":"004",
-                    "level0":{
-                        "onOff":0
-                    },
-                    "level1":{
-                        "onOff":0
-                    },
-                    "level2":{
-                        "onOff":1,
-                        "val":-3
-                    },
-                    "level3":{
-                        "onOff":1,
-                        "val":-3
-                    }
-                },{
-                    "title":"留言",
-                    "operation":"005",
-                    "level0":{
-                        "onOff":0
-                    },
-                    "level1":{
-                        "onOff":1,
-                        "val":1
-                    },
-                    "level2":{
-                        "onOff":1,
-                        "val":-1
-                    },
-                    "level3":{
-                        "onOff":1,
-                        "val":-1
-                    }
-                },{
-                    "title":"点赞",
-                    "operation":"006",
-                    "level0":{
-                        "onOff":1
-                    },
-                    "level1":{
-                        "onOff":1
-                    },
-                    "level2":{
-                        "onOff":1
-                    },
-                    "level3":{
-                        "onOff":1
-                    }
-                },{
-                    "title":"被赞",
-                    "operation":"007",
-                    "level0":{
-                        "onOff":1
-                    },
-                    "level1":{
-                        "onOff":1
-                    },
-                    "level2":{
-                        "onOff":1,
-                        "val":1
-                    },
-                    "level3":{
-                        "onOff":1,
-                        "val":1
-                    }
-                },{
-                    "title":"评论动态",
-                    "operation":"008",
-                    "level0":{
-                        "onOff":0
-                    },
-                    "level1":{
-                        "onOff":1,
-                        "val":2
-                    },
-                    "level2":{
-                        "onOff":1
-                    },
-                    "level3":{
-                        "onOff":1
-                    }
-                },
-                {
-                    "title":"欢迎",
-                    "operation":"009",
-                    "level0":{
-                        "onOff":0
-                    },
-                    "level1":{
-                        "onOff":1,
-                        "val":2
-                    },
-                    "level2":{
-                        "onOff":1
-                    },
-                    "level3":{
-                        "onOff":1
-                    }
-                },
-                {
-                    "title":"被欢迎",
-                    "operation":"010",
-                    "level0":{
-                        "onOff":0
-                    },
-                    "level1":{
-                        "onOff":1,
-                        "val":2
-                    },
-                    "level2":{
-                        "onOff":1
-                    },
-                    "level3":{
-                        "onOff":1
-                    }
-                },
-                {
-                    "title":"被评论",
-                    "operation":"011",
-                    "level0":{
-                        "onOff":0
-                    },
-                    "level1":{
-                        "onOff":1,
-                        "val":1
-                    },
-                    "level2":{
-                        "onOff":1,
-                        "val":1
-                    },
-                    "level3":{
-                        "onOff":1,
-                        "val":1
-                    }
-                },{
-                    "title":"收藏话题",
-                    "operation":"012",
-                    "level0":{
-                        "onOff":0
-                    },
-                    "level1":{
-                        "onOff":1
-                    },
-                    "level2":{
-                        "onOff":1
-                    },
-                    "level3":{
-                        "onOff":1
-                    }
-                },{
-                    "title":"收藏文章",
-                    "operation":"013",
-                    "level0":{
-                        "onOff":0
-                    },
-                    "level1":{
-                        "onOff":1
-                    },
-                    "level2":{
-                        "onOff":1
-                    },
-                    "level3":{
-                        "onOff":1
-                    }
-                },{
-                    "title":"自定义封面",
-                    "operation":"014",
-                    "level0":{
-                        "onOff":0
-                    },
-                    "level1":{
-                        "onOff":0
-                    },
-                    "level2":{
-                        "onOff":1
-                    },
-                    "level3":{
-                        "onOff":1
-                    }
-                },{
-                    "title":"发表普通动态",
-                    "operation":"015",
-                    "level0":{
-                        "onOff":0
-                    },
-                    "level1":{
-                        "onOff":1,
-                        "val":1
-                    },
-                    "level2":{
-                        "onOff":1
-                    },
-                    "level3":{
-                        "onOff":1
-                    }
-                },{
-                    "title":"发表脱单动态",
-                    "operation":"016",
-                    "level0":{
-                        "onOff":0
-                    },
-                    "level1":{
-                        "onOff":1,
-                        "val":1
-                    },
-                    "level2":{
-                        "onOff":1,
-                        "val":2
-                    },
-                    "level3":{
-                        "onOff":1
-                    }
-                },{
-                    "title":"发表文章",
-                    "operation":"017",
-                    "level0":{
-                        "onOff":0
-                    },
-                    "level1":{
-                        "onOff":0
-                    },
-                    "level2":{
-                        "onOff":1,
-                        "val":2
-                    },
-                    "level3":{
-                        "onOff":1,
-                        "val":2
-                    }
-                },{
-                    "title":"发表话题",
-                    "operation":"018",
-                    "level0":{
-                        "onOff":0
-                    },
-                    "level1":{
-                        "onOff":0
-                    },
-                    "level2":{
-                        "onOff":1,
-                        "val":2
-                    },
-                    "level3":{
-                        "onOff":1,
-                        "val":2
-                    }
-                },{
-                    "title":"分享",
-                    "operation":"019",
-                    "level0":{
-                        "onOff":1
-                    },
-                    "level1":{
-                        "onOff":1
-                    },
-                    "level2":{
-                        "onOff":1,
-                        "val":1
-                    },
-                    "level3":{
-                        "onOff":1,
-                        "val":1
-                    }
-                },{
-                    "title":"自动生成脱单动态",
-                    "operation":"020",
-                    "level0":{
-                        "onOff":0
-                    },
-                    "level1":{
-                        "onOff":0
-                    },
-                    "level2":{
-                        "onOff":1,
-                        "val":1
-                    },
-                    "level3":{
-                        "onOff":1,
-                        "val":1
-                    }
-                },{
-                    "title":"修改个人资料",
-                    "operation":"021",
-                    "level0":{
-                        "onOff":0
-                    },
-                    "level1":{
-                        "onOff":1,
-                        "val":1
-                    },
-                    "level2":{
-                        "onOff":1,
-                        "val":1
-                    },
-                    "level3":{
-                        "onOff":1,
-                        "val":1
-                    }
-                },{
-                    "title":"修改认证资料",
-                    "operation":"022",
-                    "level0":{
-                        "onOff":0
-                    },
-                    "level1":{
-                        "onOff":0
-                    },
-                    "level2":{
-                        "onOff":1
-                    },
-                    "level3":{
-                        "onOff":0
-                    }
-                }
-            ];
-            /*axios({
+        shortcuts: [{
+          text: '今天',
+          onClick (picker) {
+            picker.$emit('pick', new Date())
+          }
+        }, {
+          text: '昨天',
+          onClick (picker) {
+            const date = new Date()
+            date.setTime(date.getTime() - 3600 * 1000 * 24)
+            picker.$emit('pick', date)
+          }
+        }, {
+          text: '一周前',
+          onClick (picker) {
+            const date = new Date()
+            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7)
+            picker.$emit('pick', date)
+          }
+        }]
+      },
+      value2: '',
+      tableData: userData.data.dataList
+    }
+  },
+  mounted () {
+    const t = this
+    t.jurisdiction = [
+      {
+        title: '浏览一级页面',
+        operation: '001',
+        level0: {
+          onOff: 1
+        },
+        level1: {
+          onOff: 1
+        },
+        level2: {
+          onOff: 1
+        },
+        level3: {
+          onOff: 1
+        }
+      }, {
+        title: '浏览终端页',
+        operation: '002',
+        level0: {
+          onOff: 1
+        },
+        level1: {
+          onOff: 1
+        },
+        level2: {
+          onOff: 1
+        },
+        level3: {
+          onOff: 1
+        }
+      }, {
+        title: '浏览他的个人中心',
+        operation: '003',
+        level0: {
+          onOff: 0
+        },
+        level1: {
+          onOff: 1
+        },
+        level2: {
+          onOff: 1
+        },
+        level3: {
+          onOff: 1
+        }
+      }, {
+        title: '获取对方联系方式',
+        operation: '004',
+        level0: {
+          onOff: 0
+        },
+        level1: {
+          onOff: 0
+        },
+        level2: {
+          onOff: 1,
+          val: -3
+        },
+        level3: {
+          onOff: 1,
+          val: -3
+        }
+      }, {
+        title: '留言',
+        operation: '005',
+        level0: {
+          onOff: 0
+        },
+        level1: {
+          onOff: 1,
+          val: 1
+        },
+        level2: {
+          onOff: 1,
+          val: -1
+        },
+        level3: {
+          onOff: 1,
+          val: -1
+        }
+      }, {
+        title: '点赞',
+        operation: '006',
+        level0: {
+          onOff: 1
+        },
+        level1: {
+          onOff: 1
+        },
+        level2: {
+          onOff: 1
+        },
+        level3: {
+          onOff: 1
+        }
+      }, {
+        title: '被赞',
+        operation: '007',
+        level0: {
+          onOff: 1
+        },
+        level1: {
+          onOff: 1
+        },
+        level2: {
+          onOff: 1,
+          val: 1
+        },
+        level3: {
+          onOff: 1,
+          val: 1
+        }
+      }, {
+        title: '评论动态',
+        operation: '008',
+        level0: {
+          onOff: 0
+        },
+        level1: {
+          onOff: 1,
+          val: 2
+        },
+        level2: {
+          onOff: 1
+        },
+        level3: {
+          onOff: 1
+        }
+      },
+      {
+        title: '欢迎',
+        operation: '009',
+        level0: {
+          onOff: 0
+        },
+        level1: {
+          onOff: 1,
+          val: 2
+        },
+        level2: {
+          onOff: 1
+        },
+        level3: {
+          onOff: 1
+        }
+      },
+      {
+        title: '被欢迎',
+        operation: '010',
+        level0: {
+          onOff: 0
+        },
+        level1: {
+          onOff: 1,
+          val: 2
+        },
+        level2: {
+          onOff: 1
+        },
+        level3: {
+          onOff: 1
+        }
+      },
+      {
+        title: '被评论',
+        operation: '011',
+        level0: {
+          onOff: 0
+        },
+        level1: {
+          onOff: 1,
+          val: 1
+        },
+        level2: {
+          onOff: 1,
+          val: 1
+        },
+        level3: {
+          onOff: 1,
+          val: 1
+        }
+      }, {
+        title: '收藏话题',
+        operation: '012',
+        level0: {
+          onOff: 0
+        },
+        level1: {
+          onOff: 1
+        },
+        level2: {
+          onOff: 1
+        },
+        level3: {
+          onOff: 1
+        }
+      }, {
+        title: '收藏文章',
+        operation: '013',
+        level0: {
+          onOff: 0
+        },
+        level1: {
+          onOff: 1
+        },
+        level2: {
+          onOff: 1
+        },
+        level3: {
+          onOff: 1
+        }
+      }, {
+        title: '自定义封面',
+        operation: '014',
+        level0: {
+          onOff: 0
+        },
+        level1: {
+          onOff: 0
+        },
+        level2: {
+          onOff: 1
+        },
+        level3: {
+          onOff: 1
+        }
+      }, {
+        title: '发表普通动态',
+        operation: '015',
+        level0: {
+          onOff: 0
+        },
+        level1: {
+          onOff: 1,
+          val: 1
+        },
+        level2: {
+          onOff: 1
+        },
+        level3: {
+          onOff: 1
+        }
+      }, {
+        title: '发表脱单动态',
+        operation: '016',
+        level0: {
+          onOff: 0
+        },
+        level1: {
+          onOff: 1,
+          val: 1
+        },
+        level2: {
+          onOff: 1,
+          val: 2
+        },
+        level3: {
+          onOff: 1
+        }
+      }, {
+        title: '发表文章',
+        operation: '017',
+        level0: {
+          onOff: 0
+        },
+        level1: {
+          onOff: 0
+        },
+        level2: {
+          onOff: 1,
+          val: 2
+        },
+        level3: {
+          onOff: 1,
+          val: 2
+        }
+      }, {
+        title: '发表话题',
+        operation: '018',
+        level0: {
+          onOff: 0
+        },
+        level1: {
+          onOff: 0
+        },
+        level2: {
+          onOff: 1,
+          val: 2
+        },
+        level3: {
+          onOff: 1,
+          val: 2
+        }
+      }, {
+        title: '分享',
+        operation: '019',
+        level0: {
+          onOff: 1
+        },
+        level1: {
+          onOff: 1
+        },
+        level2: {
+          onOff: 1,
+          val: 1
+        },
+        level3: {
+          onOff: 1,
+          val: 1
+        }
+      }, {
+        title: '自动生成脱单动态',
+        operation: '020',
+        level0: {
+          onOff: 0
+        },
+        level1: {
+          onOff: 0
+        },
+        level2: {
+          onOff: 1,
+          val: 1
+        },
+        level3: {
+          onOff: 1,
+          val: 1
+        }
+      }, {
+        title: '修改个人资料',
+        operation: '021',
+        level0: {
+          onOff: 0
+        },
+        level1: {
+          onOff: 1,
+          val: 1
+        },
+        level2: {
+          onOff: 1,
+          val: 1
+        },
+        level3: {
+          onOff: 1,
+          val: 1
+        }
+      }, {
+        title: '修改认证资料',
+        operation: '022',
+        level0: {
+          onOff: 0
+        },
+        level1: {
+          onOff: 0
+        },
+        level2: {
+          onOff: 1
+        },
+        level3: {
+          onOff: 0
+        }
+      }
+    ]
+    /* axios({
                 url: '/src/tabData/jurisdiction.json',
                 method: "GET",
                 headers: {
@@ -513,21 +513,21 @@
                 t.jurisdiction = res.data.dataList;
                 console.log(t.jurisdiction);
             }).catch(function (err) {
-            });*/
-        },
-        methods:{
-            handleSelectionChange(val) {
-                this.multipleSelection = val;
-            },
-            onSubmit() {
-                console.log('submit!');
-            },
-            handleSizeChange(val) {
-                console.log(`每页 ${val} 条`);
-            },
-            handleCurrentChange(val) {
-                console.log(`当前页: ${val}`);
-            }
-        }
+            }); */
+  },
+  methods: {
+    handleSelectionChange (val) {
+      this.multipleSelection = val
+    },
+    onSubmit () {
+      console.log('submit!')
+    },
+    handleSizeChange (val) {
+      console.log(`每页 ${val} 条`)
+    },
+    handleCurrentChange (val) {
+      console.log(`当前页: ${val}`)
     }
+  }
+}
 </script>

@@ -234,259 +234,258 @@
     </section>
 </template>
 <script>
-    import userData from '../../../virtualData/dynamicData';
-    import Common from '../../../utils/common.js';
-    import axios from 'axios';
-    export default {
-        data() {
-            return {
-                formInline: {
-                    dynamicId:'',//该动态的唯一标识
-                    'dynamicType':'',//0脱单动态，1话题动态，2普通动态
-                    customerId:'',//该动态的作者id,
-                    customerName:'',//该动态的作者name,
-                    'isValid':'',//，0无效,1有效
-                    'pageIndex':1,
-                    'pageSize':10
-                },
-                count:0,
-                'pageIndex':1,
-                'pageSize':10,
-                pushOnOff:false,
-                handleIsValid:false,
-                isNotValid:false,
-                pickerOptions1: {
-                    disabledDate(time) {
-                        return time.getTime() > Date.now();
-                    },
-                    shortcuts: [{
-                        text: '今天',
-                        onClick(picker) {
-                            picker.$emit('pick', new Date());
-                        }
-                    }, {
-                        text: '昨天',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() - 3600 * 1000 * 24);
-                            picker.$emit('pick', date);
-                        }
-                    }, {
-                        text: '一周前',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-                            picker.$emit('pick', date);
-                        }
-                    }]
-                },
-                value2: '',
-                innerVisible:false,
-                centerDialogVisible:false,
-                selectedOne:false,
-                selectedData:{},
-                currentPage4:4,
-                tableData:[]
-            }
+import userData from '../../../virtualData/dynamicData'
+import Common from '../../../utils/common.js'
+import axios from 'axios'
+export default {
+  data () {
+    return {
+      formInline: {
+        dynamicId: '', // 该动态的唯一标识
+        dynamicType: '', // 0脱单动态，1话题动态，2普通动态
+        customerId: '', // 该动态的作者id,
+        customerName: '', // 该动态的作者name,
+        isValid: '', // ，0无效,1有效
+        pageIndex: 1,
+        pageSize: 10
+      },
+      count: 0,
+      pageIndex: 1,
+      pageSize: 10,
+      pushOnOff: false,
+      handleIsValid: false,
+      isNotValid: false,
+      pickerOptions1: {
+        disabledDate (time) {
+          return time.getTime() > Date.now()
         },
-        mounted(){
-          let t = this;
-          t.getDynamicList();
-        },
-        watch:{
-            pageIndex(newVal){
-                let t = this;
-                t.formInline.pageIndex = newVal;
-                t.getDynamicList();
+        shortcuts: [{
+          text: '今天',
+          onClick (picker) {
+            picker.$emit('pick', new Date())
+          }
+        }, {
+          text: '昨天',
+          onClick (picker) {
+            const date = new Date()
+            date.setTime(date.getTime() - 3600 * 1000 * 24)
+            picker.$emit('pick', date)
+          }
+        }, {
+          text: '一周前',
+          onClick (picker) {
+            const date = new Date()
+            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7)
+            picker.$emit('pick', date)
+          }
+        }]
+      },
+      value2: '',
+      innerVisible: false,
+      centerDialogVisible: false,
+      selectedOne: false,
+      selectedData: {},
+      currentPage4: 4,
+      tableData: []
+    }
+  },
+  mounted () {
+    const t = this
+    t.getDynamicList()
+  },
+  watch: {
+    pageIndex (newVal) {
+      const t = this
+      t.formInline.pageIndex = newVal
+      t.getDynamicList()
+    },
+    pageSize (newVal) {
+      const t = this
+      t.formInline.pageSize = newVal
+      t.getDynamicList()
+    }
+  },
+  methods: {
+    checkList () {
+      const t = this
+      t.pageIndex === 1 ? t.getDynamicList() : t.pageIndex = 1
+    },
+    resetList () {
+      const t = this
+      t.pageSize = 10
+      t.pageIndex = 1
+      t.formInline = {
+        dynamicId: '', // 该动态的唯一标识
+        dynamicType: '', // 0脱单动态，1话题动态，2普通动态
+        customerId: '', // 该动态的作者id,
+        customerName: '', // 该动态的作者name,
+        isValid: '', // ，0无效,1有效
+        pageIndex: 1,
+        pageSize: 10
+      }
+      t.getDynamicList()
+    },
+    tableCurrentChange (val) {
+      const t = this
+      if (val) {
+        console.log(val)
+        t.selectedOne = true
+        t.selectedData = val
+      }
+    },
+    formatterValid (row, column) {
+      const t = this
+      const type = row.isValid
+      return Common.formatterValid(type)
+    },
+    formatterDynamicType (row, column) {
+      const t = this
+      const type = row.dynamicType
+      return Common.dynamicType(type)
+    },
+    attachmentIdListNum (row, column) {
+      const t = this
+      const type = row.dynamicAttachmentIdList
+      // console.log(type);
+      return parseInt(Common.listNum(type), 10) === 0 ? '无图' : '有图'
+    },
+    getDynamicList () {
+      const t = this
+      axios.get('/call/dynamic/getDynamicList', {
+        params: t.formInline
+      })
+        .then(function (response) {
+          const reqData = response.data
+          console.log(reqData)
+          if (reqData.responseObject.responseData.data_list) {
+            t.tableData = reqData.responseObject.responseData.data_list
+          }
+          if (reqData.responseObject.responseData.totalCount) {
+            t.count = reqData.responseObject.responseData.totalCount
+          }
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
+    },
+    commentIdListNum (row, column) {
+      const t = this
+      const type = row.commentIdList
+      // console.log(type);
+      return parseInt(Common.listNum(type), 10)
+    },
+    detailInfo () {
+      const t = this
+      if (!t.selectedOne) {
+        t.$message.error('请选择您要变更的用户!')
+      } else {
+        t.centerDialogVisible = true
+      }
+    },
+    handleSelectionChange (val) {
+      this.multipleSelection = val
+    },
+    onSubmit () {
+      const t = this
+      t.getDynamicList()
+    },
+    handleSizeChange (val) {
+      console.log(`每页 ${val} 条`)
+      const t = this
+      t.pageSize = val
+    },
+    handleCurrentChange (val) {
+      const t = this
+      t.pageIndex = val
+    },
+    isValidDynamic (type, update) {
+      const t = this
+      if (!t.selectedOne) {
+        t.$message.error('请选择您要更新状态的动态!')
+      } else {
+        if (type === 0) {
+          t.handleIsValid = true
+        } else if (type === 1) {
+          let port = ''
+          if (update === 0) {
+            port = '/call/dynamic/invalid'
+          } else {
+            port = '/call/dynamic/active'
+          }
+          axios({
+            url: port,
+            method: 'POST',
+            data: {
+              dynamicId: t.selectedData.dynamicId,
+              updateState: update
             },
-            pageSize(newVal){
-                let t = this;
-                t.formInline.pageSize = newVal;
-                t.getDynamicList();
-            }
-        },
-        methods:{
-            checkList(){
-                let t = this;
-                t.pageIndex === 1 ? t.getDynamicList() : t.pageIndex = 1;
+            transformRequest: [function (data) {
+              return 'paramJson=' + JSON.stringify(data)
+            }],
+            headers: {
+              'X-Requested-With': 'XMLHttpRequest'
             },
-            resetList(){
-              let t = this;
-                t.pageSize = 10;
-                t.pageIndex = 1;
-              t.formInline = {
-                  dynamicId:'',//该动态的唯一标识
-                  'dynamicType':'',//0脱单动态，1话题动态，2普通动态
-                  customerId:'',//该动态的作者id,
-                  customerName:'',//该动态的作者name,
-                  'isValid':'',//，0无效,1有效
-                  'pageIndex':1,
-                  'pageSize':10
-              };
-              t.getDynamicList();
-            },
-            tableCurrentChange(val){
-                let t = this;
-                if(val){
-                    console.log(val);
-                    t.selectedOne = true;
-                    t.selectedData = val;
-                }
-            },
-            formatterValid(row,column){
-                let t = this;
-                let type = row['isValid'];
-                return Common.formatterValid(type);
-            },
-            formatterDynamicType(row,column){
-                let t = this;
-                let type = row['dynamicType'];
-                return Common.dynamicType(type);
-            },
-            attachmentIdListNum(row,column){
-                let t = this;
-                let type = row['dynamicAttachmentIdList'];
-                //console.log(type);
-                return parseInt(Common.listNum(type),10)===0?'无图':'有图';
-            },
-            getDynamicList(){
-              let t = this;
-                axios.get('/call/dynamic/getDynamicList', {
-                    params: t.formInline
+            timeout: 30000
+          }).then(function (req) {
+            t.handleIsValid = false
+            t.isNotValid = false
+            if (req.data.responseObject.responseCode === 3) {
+              if (parseInt(update, 10) == 0) {
+                t.$message({
+                  message: '动态已被无效',
+                  type: 'success'
                 })
-                    .then(function (response) {
-                        let reqData = response.data;
-                        console.log(reqData);
-                        if(reqData.responseObject.responseData['data_list']){
-                            t.tableData = reqData.responseObject.responseData['data_list'];
-                        }
-                        if(reqData.responseObject.responseData.totalCount){
-                            t.count = reqData.responseObject.responseData.totalCount;
-                        }
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
-            },
-            commentIdListNum(row,column){
-                let t = this;
-                let type = row['commentIdList'];
-                //console.log(type);
-                return parseInt(Common.listNum(type),10);
-            },
-            detailInfo(){
-                let t = this;
-                if(!t.selectedOne){
-                    t.$message.error('请选择您要变更的用户!');
-                }else{
-                    t.centerDialogVisible = true;
-                }
-            },
-            handleSelectionChange(val) {
-                this.multipleSelection = val;
-            },
-            onSubmit() {
-                let t = this;
-                t.getDynamicList();
-            },
-            handleSizeChange(val) {
-                console.log(`每页 ${val} 条`);
-                let t = this;
-                t.pageSize = val;
-            },
-            handleCurrentChange(val) {
-                let t = this;
-                t.pageIndex = val;
-            },
-            isValidDynamic(type,update){
-                let t = this;
-                if(!t.selectedOne){
-                    t.$message.error('请选择您要更新状态的动态!');
-                }else{
-                    if(type===0){
-                        t.handleIsValid = true;
-                    }else if(type===1) {
-                        let port = '';
-                        if(update===0){
-                            port = '/call/dynamic/invalid';
-                        }else{
-                            port = '/call/dynamic/active';
-                        }
-                        axios({
-                            url: port,
-                            method: "POST",
-                            data: {
-                                dynamicId:t.selectedData.dynamicId,
-                                updateState:update
-                            },
-                            transformRequest: [function (data) {
-                                return "paramJson=" + JSON.stringify(data);
-                            }],
-                            headers: {
-                                'X-Requested-With': 'XMLHttpRequest'
-                            },
-                            timeout: 30000
-                        }).then(function(req){
-                            t.handleIsValid = false;
-                            t.isNotValid = false;
-                            if(req.data.responseObject.responseCode===3){
-                                if(parseInt(update,10)==0){
-                                    t.$message({
-                                        message: '动态已被无效',
-                                        type: 'success'
-                                    });
-                                }else{
-                                    t.$message({
-                                        message: '动态已被激活',
-                                        type: 'success'
-                                    });
-                                }
-                                t.getDynamicList();
-                            }else{
-                                t.$message({
-                                    message:'更新状态失败',
-                                    type: 'warning'
-                                });
-                            }
-                        });
-                    }
-                }
-            },
-            isNotValidDynamic(type){
-                let t = this;
-                if(!t.selectedOne){
-                    t.$message.error('请选择您要无效的动态!');
-                }else{
-                    if(type===0){
-                        t.isNotValid = true;
-                    }/*else if(type===1) {
+              } else {
+                t.$message({
+                  message: '动态已被激活',
+                  type: 'success'
+                })
+              }
+              t.getDynamicList()
+            } else {
+              t.$message({
+                message: '更新状态失败',
+                type: 'warning'
+              })
+            }
+          })
+        }
+      }
+    },
+    isNotValidDynamic (type) {
+      const t = this
+      if (!t.selectedOne) {
+        t.$message.error('请选择您要无效的动态!')
+      } else {
+        if (type === 0) {
+          t.isNotValid = true
+        }/* else if(type===1) {
                         t.isNotValid = false;
                         t.$message({
                             message: '动态已被无效',
                             type: 'success'
                         });
-                    }*/
-                }
-            },
-            validDynamic(type){
-                let t = this;
-                if(!t.selectedOne){
-                    t.$message.error('请选择您要无效的动态!');
-                }else{
-                    if(type===0){
-                        t.innerVisible = true;
-                    }else if(type===1) {
-                        t.innerVisible = false;
-                        t.$message({
-                            message: '动态已被无效',
-                            type: 'success'
-                        });
-                    }
-                }
-
-            }
+                    } */
+      }
+    },
+    validDynamic (type) {
+      const t = this
+      if (!t.selectedOne) {
+        t.$message.error('请选择您要无效的动态!')
+      } else {
+        if (type === 0) {
+          t.innerVisible = true
+        } else if (type === 1) {
+          t.innerVisible = false
+          t.$message({
+            message: '动态已被无效',
+            type: 'success'
+          })
         }
+      }
     }
+  }
+}
 </script>
 <style lang="scss" scoped>
     @import "../../../static/scss/common";

@@ -254,306 +254,304 @@
     }
 </style>
 <script>
-    import Common from '../../../utils/common.js';
-    import axios from 'axios';
-    export default {
-        data() {
-            return {
-                currentDate: new Date(),
-                dialogVisible:false,
-                addOnOff:false,
-                activateOnOff:false,
-                rejectDialogVisible:false,
-                count:0,
-                blacklist:{
-                    region:1,
-                    textarea2:''
-                },
-                addInline:{
-                    sideTitle:'',
-                    sideClassName: '',
-                    zIndex: '-1',
-                    routerModule: '',
-                    parentSiteId:'',
-                    adminId:localStorage.getItem('adminId'),
-                    adminName:localStorage.getItem('userName')
-                },
-                formInline: {
-                    sideId: '',
-                    sideTitle:'',
-                    sideClassName: '',
-                    zIndex: '',
-                    routerModule: '',
-                    adminName: '',
-                    adminId: '',
-                    isValid:'',
-                    pageSize:10,
-                    pageIndex:1
-                },
-                pageSize:10,
-                pageIndex:1,
-                selectedData:{},
-                selectedOne:false,
-                tableData:[],
-                creationTimePickerOptions: {
-                    shortcuts: [{
-                        text: '最近一周',
-                        onClick(picker) {
-                            const end = new Date();
-                            const start = new Date();
-                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-                            picker.$emit('pick', [start, end]);
-                        }
-                    }, {
-                        text: '最近一个月',
-                        onClick(picker) {
-                            const end = new Date();
-                            const start = new Date();
-                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-                            picker.$emit('pick', [start, end]);
-                        }
-                    }, {
-                        text: '最近三个月',
-                        onClick(picker) {
-                            const end = new Date();
-                            const start = new Date();
-                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-                            picker.$emit('pick', [start, end]);
-                        }
-                    }]
-                },
-                updateTimePickerOptions: {
-                    shortcuts: [{
-                        text: '最近一周',
-                        onClick(picker) {
-                            const end = new Date();
-                            const start = new Date();
-                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-                            picker.$emit('pick', [start, end]);
-                        }
-                    }, {
-                        text: '最近一个月',
-                        onClick(picker) {
-                            const end = new Date();
-                            const start = new Date();
-                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-                            picker.$emit('pick', [start, end]);
-                        }
-                    }, {
-                        text: '最近三个月',
-                        onClick(picker) {
-                            const end = new Date();
-                            const start = new Date();
-                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-                            picker.$emit('pick', [start, end]);
-                        }
-                    }]
-                },
-                creationTime:'',
-                updateTime:''
-            }
-        },
-        computed: {
-            blackReason(){
-                return Common.blackReason();
-            }
-        },
-        watch:{
-            'addInline.zIndex'(n){
-                let t = this;
-                if(Number(n)===1){
-                    t.addInline.parentSiteId = '';
-                }
-            },
-            pageIndex(newVal){
-                let t = this;
-                t.formInline.pageIndex = newVal;
-                t.getUserList();
-            },
-            pageSize(newVal){
-                let t = this;
-                t.formInline.pageSize = newVal;
-                t.getUserList();
-            },
-            creationTime(newVal){
-                console.log(newVal);
-            },
-            updateTime(newVal){
-                console.log(newVal);
-            }
-        },
-        mounted(){
-            let t = this;
-            t.getUserList();
-        },
-        methods:{
-            addSiteSide(type){
-              let t = this;
-              let typeNum = parseInt(type,10);
-              if(typeNum===0){
-                  t.addOnOff = true;
-              }else{
-                  axios({
-                      url: '/call/aside/createSide',
-                      method: "POST",
-                      data: t.addInline,
-                      transformRequest: [function (data) {
-                          return "paramJson=" + JSON.stringify(data);
-                      }],
-                      headers: {
-                          'X-Requested-With': 'XMLHttpRequest'
-                      },
-                      timeout: 30000
-                  }).then(function(req){
-                      console.log(req.data);
-                      if(req.data.responseObject.responseCode===4){
-                          t.$message({
-                              message: t.addInline.sideTitle+'已创建',
-                              type: 'success'
-                          });
-                          t.getUserList();
-                      }else{
-                          t.$message({
-                              message: t.addInline.sideTitle+'创建失败',
-                              type: 'warning'
-                          });
-                      }
-                      t.addOnOff = false;
-                      t.addInline = {
-                          sideTitle:'',
-                          sideClassName: '',
-                          zIndex: '-1',
-                          routerModule: '',
-                          parentSiteId:'',
-                          adminId:localStorage.getItem('adminId'),
-                          adminName:localStorage.getItem('userName')
-                      };
-                  });
-              }
-            },
-            checkList() {
-                let t = this;
-                t.pageIndex === 1 ? t.getUserList() : t.pageIndex = 1;
-            },
-            checkPermission(){
-                let t = this;
-                if(!t.selectedOne){
-                    t.$message.error('请选择您要查看的会员!');
-                }else{
-                    t.activateOnOff = true;
-                }
-            },
-            resetList(){
-                let t = this;
-                t.pageSize = 10;
-                t.pageIndex = 1;
-                t.formInline={
-                    sideId: '',
-                    sideTitle:'',
-                    sideClassName: '',
-                    zIndex: '',
-                    routerModule: '',
-                    adminName: '',
-                    adminId: '',
-                    isValid:0,
-                    pageSize:10,
-                    pageIndex:1
-                };
-                t.getUserList();
-            },
-            tableCurrentChange(val){
-                let t = this;
-                if(val){
-                    console.log(val);
-                    t.selectedOne = true;
-                    t.selectedData = val;
-                }
-
-            },
-            getUserList(){
-                let t = this;
-                t.selectedData = {};
-                axios.get('/call/aside/getList', {
-                    params: t.formInline
-                })
-                    .then(function (response) {
-                        let reqData = response.data;
-                        if(reqData.responseObject.responseData['data_list']){
-                            t.tableData = reqData.responseObject.responseData['data_list'];
-                        }
-                        if(reqData.responseObject.responseData.totalCount){
-                            t.count = reqData.responseObject.responseData.totalCount;
-                        }
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
-            },
-            blackCustomer(step){
-                let t = this;
-                if(!t.selectedOne){
-                    t.$message.error('请选择您要拉黑的用户!');
-                }else{
-                    if(step===0){
-                        console.log('拉黑');
-                        t.rejectDialogVisible = true;
-                    }else{
-                        axios({
-                            url: '/call/customer/activate',
-                            method: "POST",
-                            data: {
-                                customerId:t.selectedData.customerId,
-                                blackReason:t.blacklist.region,
-                                reportCustomerId:0,
-                                reportCustomerName:0,
-                                adminId:localStorage.getItem('adminId'),
-                                adminName:localStorage.getItem('userName'),
-                                updateState:4
-                            },
-                            transformRequest: [function (data) {
-                                return "paramJson=" + JSON.stringify(data);
-                            }],
-                            headers: {
-                                'X-Requested-With': 'XMLHttpRequest'
-                            },
-                            timeout: 30000
-                        }).then(function(req){
-                            console.log(req.data);
-                            if(req.data.responseObject.responseCode===4){
-                                t.$message({
-                                    message: t.selectedData.customerName+'已拉黑',
-                                    type: 'success'
-                                });
-                                t.getUserList();
-                            }else{
-                                t.$message({
-                                    message: t.selectedData.customerName+'拉黑失败',
-                                    type: 'warning'
-                                });
-                            }
-                            t.rejectDialogVisible = false;
-                        });
-                    }
-                }
-            },
-            handleSelectionChange(val) {
-                let t = this;
-                this.multipleSelection = val;
-
-            },
-            handleSizeChange(val) {
-                let t = this;
-                t.pageSize = parseInt(val,10);
-            },
-            handleCurrentChange(val) {
-                let t = this;
-                t.pageIndex = parseInt(val,10);
-            },
-            formatterValid(row,column){
-                let t = this;
-                let type = row['isValid'];
-                return Common.formatterValid(type);
-            }
-        }
+import Common from '../../../utils/common.js'
+import axios from 'axios'
+export default {
+  data () {
+    return {
+      currentDate: new Date(),
+      dialogVisible: false,
+      addOnOff: false,
+      activateOnOff: false,
+      rejectDialogVisible: false,
+      count: 0,
+      blacklist: {
+        region: 1,
+        textarea2: ''
+      },
+      addInline: {
+        sideTitle: '',
+        sideClassName: '',
+        zIndex: '-1',
+        routerModule: '',
+        parentSiteId: '',
+        adminId: localStorage.getItem('adminId'),
+        adminName: localStorage.getItem('userName')
+      },
+      formInline: {
+        sideId: '',
+        sideTitle: '',
+        sideClassName: '',
+        zIndex: '',
+        routerModule: '',
+        adminName: '',
+        adminId: '',
+        isValid: '',
+        pageSize: 10,
+        pageIndex: 1
+      },
+      pageSize: 10,
+      pageIndex: 1,
+      selectedData: {},
+      selectedOne: false,
+      tableData: [],
+      creationTimePickerOptions: {
+        shortcuts: [{
+          text: '最近一周',
+          onClick (picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+            picker.$emit('pick', [start, end])
+          }
+        }, {
+          text: '最近一个月',
+          onClick (picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+            picker.$emit('pick', [start, end])
+          }
+        }, {
+          text: '最近三个月',
+          onClick (picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+            picker.$emit('pick', [start, end])
+          }
+        }]
+      },
+      updateTimePickerOptions: {
+        shortcuts: [{
+          text: '最近一周',
+          onClick (picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+            picker.$emit('pick', [start, end])
+          }
+        }, {
+          text: '最近一个月',
+          onClick (picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+            picker.$emit('pick', [start, end])
+          }
+        }, {
+          text: '最近三个月',
+          onClick (picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+            picker.$emit('pick', [start, end])
+          }
+        }]
+      },
+      creationTime: '',
+      updateTime: ''
     }
+  },
+  computed: {
+    blackReason () {
+      return Common.blackReason()
+    }
+  },
+  watch: {
+    'addInline.zIndex' (n) {
+      const t = this
+      if (Number(n) === 1) {
+        t.addInline.parentSiteId = ''
+      }
+    },
+    pageIndex (newVal) {
+      const t = this
+      t.formInline.pageIndex = newVal
+      t.getUserList()
+    },
+    pageSize (newVal) {
+      const t = this
+      t.formInline.pageSize = newVal
+      t.getUserList()
+    },
+    creationTime (newVal) {
+      console.log(newVal)
+    },
+    updateTime (newVal) {
+      console.log(newVal)
+    }
+  },
+  mounted () {
+    const t = this
+    t.getUserList()
+  },
+  methods: {
+    addSiteSide (type) {
+      const t = this
+      const typeNum = parseInt(type, 10)
+      if (typeNum === 0) {
+        t.addOnOff = true
+      } else {
+        axios({
+          url: '/call/aside/createSide',
+          method: 'POST',
+          data: t.addInline,
+          transformRequest: [function (data) {
+            return 'paramJson=' + JSON.stringify(data)
+          }],
+          headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+          },
+          timeout: 30000
+        }).then(function (req) {
+          console.log(req.data)
+          if (req.data.responseObject.responseCode === 4) {
+            t.$message({
+              message: t.addInline.sideTitle + '已创建',
+              type: 'success'
+            })
+            t.getUserList()
+          } else {
+            t.$message({
+              message: t.addInline.sideTitle + '创建失败',
+              type: 'warning'
+            })
+          }
+          t.addOnOff = false
+          t.addInline = {
+            sideTitle: '',
+            sideClassName: '',
+            zIndex: '-1',
+            routerModule: '',
+            parentSiteId: '',
+            adminId: localStorage.getItem('adminId'),
+            adminName: localStorage.getItem('userName')
+          }
+        })
+      }
+    },
+    checkList () {
+      const t = this
+      t.pageIndex === 1 ? t.getUserList() : t.pageIndex = 1
+    },
+    checkPermission () {
+      const t = this
+      if (!t.selectedOne) {
+        t.$message.error('请选择您要查看的会员!')
+      } else {
+        t.activateOnOff = true
+      }
+    },
+    resetList () {
+      const t = this
+      t.pageSize = 10
+      t.pageIndex = 1
+      t.formInline = {
+        sideId: '',
+        sideTitle: '',
+        sideClassName: '',
+        zIndex: '',
+        routerModule: '',
+        adminName: '',
+        adminId: '',
+        isValid: 0,
+        pageSize: 10,
+        pageIndex: 1
+      }
+      t.getUserList()
+    },
+    tableCurrentChange (val) {
+      const t = this
+      if (val) {
+        console.log(val)
+        t.selectedOne = true
+        t.selectedData = val
+      }
+    },
+    getUserList () {
+      const t = this
+      t.selectedData = {}
+      axios.get('/call/aside/getList', {
+        params: t.formInline
+      })
+        .then(function (response) {
+          const reqData = response.data
+          if (reqData.responseObject.responseData.data_list) {
+            t.tableData = reqData.responseObject.responseData.data_list
+          }
+          if (reqData.responseObject.responseData.totalCount) {
+            t.count = reqData.responseObject.responseData.totalCount
+          }
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
+    },
+    blackCustomer (step) {
+      const t = this
+      if (!t.selectedOne) {
+        t.$message.error('请选择您要拉黑的用户!')
+      } else {
+        if (step === 0) {
+          console.log('拉黑')
+          t.rejectDialogVisible = true
+        } else {
+          axios({
+            url: '/call/customer/activate',
+            method: 'POST',
+            data: {
+              customerId: t.selectedData.customerId,
+              blackReason: t.blacklist.region,
+              reportCustomerId: 0,
+              reportCustomerName: 0,
+              adminId: localStorage.getItem('adminId'),
+              adminName: localStorage.getItem('userName'),
+              updateState: 4
+            },
+            transformRequest: [function (data) {
+              return 'paramJson=' + JSON.stringify(data)
+            }],
+            headers: {
+              'X-Requested-With': 'XMLHttpRequest'
+            },
+            timeout: 30000
+          }).then(function (req) {
+            console.log(req.data)
+            if (req.data.responseObject.responseCode === 4) {
+              t.$message({
+                message: t.selectedData.customerName + '已拉黑',
+                type: 'success'
+              })
+              t.getUserList()
+            } else {
+              t.$message({
+                message: t.selectedData.customerName + '拉黑失败',
+                type: 'warning'
+              })
+            }
+            t.rejectDialogVisible = false
+          })
+        }
+      }
+    },
+    handleSelectionChange (val) {
+      const t = this
+      this.multipleSelection = val
+    },
+    handleSizeChange (val) {
+      const t = this
+      t.pageSize = parseInt(val, 10)
+    },
+    handleCurrentChange (val) {
+      const t = this
+      t.pageIndex = parseInt(val, 10)
+    },
+    formatterValid (row, column) {
+      const t = this
+      const type = row.isValid
+      return Common.formatterValid(type)
+    }
+  }
+}
 </script>
