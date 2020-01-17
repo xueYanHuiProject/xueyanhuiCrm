@@ -24,19 +24,57 @@
 
     </section>
 </template>
-    <style lang="scss" scoped>
-        .adminWelcome{
-            line-height: 50px;
-            font-family: Helvetica Neue,Helvetica,PingFang SC,Hiragino Sans GB,Microsoft YaHei,微软雅黑,Arial,sans-serif;
-            font-size: 28px;
-            display: inline-block;
-            width: 800px;
-            position: absolute;
-            left: 50%;
-            color:#304156;
-            margin-left: -400px;
-            text-align: center;
-        }
+<script>
+import Tab from '../tab/index'
+import { isEmptyObject } from '../../../utils/common'
+import Hamburger from '../Hamburger/index'
+import { mapGetters, mapActions } from 'vuex'
+export default {
+  data () {
+    return {
+      list: {}
+    }
+  },
+  computed: {
+    ...mapGetters(['toggleOnOff', 'nowTabData']),
+    marTop () {
+      const t = this
+      console.log(isEmptyObject(t.nowTabData))
+      return !isEmptyObject(t.nowTabData)
+    }
+  },
+  watch: {
+    nowTabData (n) {
+      const t = this
+      console.log(isEmptyObject(t.nowTabData))
+      console.log(n)
+    }
+  },
+  methods: {
+    ...mapActions(['toggleSide'])
+  },
+  components: {
+    Hamburger, Tab
+  },
+  mounted () {
+    const t = this
+    console.log(isEmptyObject(t.nowTabData))
+  }
+}
+</script>
+<style lang="scss" scoped>
+    .adminWelcome{
+        line-height: 50px;
+        font-family: Helvetica Neue,Helvetica,PingFang SC,Hiragino Sans GB,Microsoft YaHei,微软雅黑,Arial,sans-serif;
+        font-size: 28px;
+        display: inline-block;
+        width: 800px;
+        position: absolute;
+        left: 50%;
+        color:#304156;
+        margin-left: -400px;
+        text-align: center;
+    }
     .adminTab{
         background: #fff;
         height: 34px;
@@ -79,10 +117,10 @@
             width: 100%;
 
             /*.el-menu--horizontal{*/
-                /*display: flex;*/
-                /*flex-direction: row;*/
-                /*justify-content: flex-start;*/
-                /*width: 100%;*/
+            /*display: flex;*/
+            /*flex-direction: row;*/
+            /*justify-content: flex-start;*/
+            /*width: 100%;*/
             /*}*/
             .adminNav{
                 height: 50px;
@@ -155,41 +193,3 @@
         }
     }
 </style>
-<script>
-import Tab from '../../tab/index'
-import { isEmptyObject } from '../../../utils/common'
-import Hamburger from '../Hamburger/index'
-import { mapGetters, mapActions } from 'vuex'
-export default {
-  data () {
-    return {
-      list: {}
-    }
-  },
-  computed: {
-    ...mapGetters(['toggleOnOff', 'nowTabData']),
-    marTop () {
-      const t = this
-      console.log(isEmptyObject(t.nowTabData))
-      return !isEmptyObject(t.nowTabData)
-    }
-  },
-  watch: {
-    nowTabData (n) {
-      const t = this
-      console.log(isEmptyObject(t.nowTabData))
-      console.log(n)
-    }
-  },
-  methods: {
-    ...mapActions(['toggleSide'])
-  },
-  components: {
-    Hamburger, Tab
-  },
-  mounted () {
-    const t = this
-    console.log(isEmptyObject(t.nowTabData))
-  }
-}
-</script>

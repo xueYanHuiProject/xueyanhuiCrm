@@ -54,31 +54,6 @@
         </el-form>
     </section>
 </template>
-<style lang="scss">
-    @import "../../../static/scss/common";
-    .adminLogin{
-        @include maskBg();
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-        .el-form{
-            width: 356px;
-            padding: 30px 60px 30px 0;
-            background: #ffffff;
-            position: relative;
-            border-radius: 10px;
-            .el-icon-close{
-                position: absolute;
-                right:0;
-                top:0;
-                font-size: 24px;
-                padding: 5px;
-
-            }
-        }
-    }
-</style>
 <script>
 import { mapActions } from 'vuex'
 import { testName, testEmail, testID, testPhoneNum } from '../../../utils/regularTest'
@@ -356,3 +331,28 @@ export default {
   }
 }
 </script>
+<style lang="scss">
+    @import "../../../static/scss/common";
+    .adminLogin{
+        @include maskBg();
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        .el-form{
+            width: 356px;
+            padding: 30px 60px 30px 0;
+            background: #ffffff;
+            position: relative;
+            border-radius: 10px;
+            .el-icon-close{
+                position: absolute;
+                right:0;
+                top:0;
+                font-size: 24px;
+                padding: 5px;
+
+            }
+        }
+    }
+</style>

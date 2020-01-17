@@ -9,7 +9,7 @@
     </section>
 </template>
 <script>
-import ContextCom from '../components/contextmenu/Contextmenu'
+import ContextCom from '../contextmenu/Contextmenu'
 import { mapGetters, mapActions } from 'vuex'
 export default {
   data () {

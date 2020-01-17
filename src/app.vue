@@ -5,19 +5,6 @@
         <LoginBar v-show="!(loginOnOff.length>0)"></LoginBar>
     </el-container>
 </template>
-<style lang="scss" scoped >
-    .adminContainer{
-        position: relative;
-        top: 0;
-        /* bottom: 0; */
-        left: 0;
-        right: 0;
-        height: 100vh; // 或 100%
-        /*height: auto;*/
-        overflow: auto;
-        background: #fdfdfd;
-    }
-</style>
 <script>
 import LoginBar from './views/components/login/Login.vue'
 import SideBar from './views/components/sideBar/sideBar'
@@ -57,3 +44,16 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped >
+    .adminContainer{
+        position: relative;
+        top: 0;
+        /* bottom: 0; */
+        left: 0;
+        right: 0;
+        height: 100vh; // 或 100%
+        /*height: auto;*/
+        overflow: auto;
+        background: #fdfdfd;
+    }
+</style>

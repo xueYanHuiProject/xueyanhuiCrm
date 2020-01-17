@@ -4,19 +4,6 @@
     </section>
 
 </template>
-<style lang="scss" scoped>
-    .date{
-        padding-top: 80px;
-    }
-    .today{
-        background: rgba(140,20,151,.5);
-        .day-number{
-            font-size: 30px;
-            color: #333;
-            font-weight: 800;
-        }
-    }
-</style>
 <script>
 import FullCalendar from 'vue-fullcalendar'
 const demoEvents = [
@@ -38,3 +25,16 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+    .date{
+        padding-top: 80px;
+    }
+    .today{
+        background: rgba(140,20,151,.5);
+        .day-number{
+            font-size: 30px;
+            color: #333;
+            font-weight: 800;
+        }
+    }
+</style>
