@@ -49,4 +49,21 @@ s,i,em{font-style:normal;text-decoration:none;}
 .adminPage,.adminAuditControl{
     padding: 20px 0;
 }
+.admin-title{
+    font-size: 20px;
+    color: #222222;
+    font-weight: bold;
+    //display: inline-block;
+    padding-top: 30px;
+    margin: 30px auto 30px auto;
+    width: 1140px;
+}
+.admin-main-inner{
+    width: 1110px;
+    margin: 30px auto;
+    min-height:600px;
+    border-radius: 3px;
+    background: #fff;
+    padding: 15px;
+}
 

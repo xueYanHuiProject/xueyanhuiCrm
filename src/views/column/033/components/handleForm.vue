@@ -1,43 +1,18 @@
 <template>
     <el-form :inline="true" :model="formInline" class="demo-form-inline" label-width="80px" label-position="left">
-        <el-form-item label="会员ID">
-            <el-input v-model="formInline.columnId" placeholder="栏目ID" class="adminInputEl"></el-input>
+        <el-form-item label="栏目ID">
+            <el-input v-model="formInline.columnId" placeholder="请输入栏目ID" class="adminInputEl"></el-input>
         </el-form-item>
-        <el-form-item label="姓名">
-            <el-input v-model="formInline.columnId" placeholder="栏目ID" class="adminInputEl"></el-input>
+        <el-form-item label="栏目名称">
+            <el-input v-model="formInline.names" placeholder="请输入栏目名称" class="adminInputEl"></el-input>
         </el-form-item>
-        <el-form-item label="导师">
-            <el-input v-model="formInline.columnId" placeholder="栏目ID" class="adminInputEl"></el-input>
-        </el-form-item>
-        <el-form-item label="邮箱">
-            <el-input v-model="formInline.columnId" placeholder="栏目ID" class="adminInputEl"></el-input>
-        </el-form-item>
-        <el-form-item label="研究方向">
-            <el-input v-model="formInline.columnId" placeholder="栏目ID" class="adminInputEl"></el-input>
-        </el-form-item>
-        <el-form-item label="职业">
-            <el-input v-model="formInline.columnId" placeholder="栏目ID" class="adminInputEl"></el-input>
-        </el-form-item>
-        <el-form-item label="电话">
-            <el-input v-model="formInline.columnId" placeholder="栏目ID" class="adminInputEl"></el-input>
-        </el-form-item>
-        <el-form-item label="单位/学校">
-            <el-input v-model="formInline.columnId" placeholder="栏目ID" class="adminInputEl"></el-input>
-        </el-form-item>
-        <el-form-item label="身份证号">
-            <el-input v-model="formInline.columnId" placeholder="栏目ID" class="adminInputEl"></el-input>
-        </el-form-item>
-        <el-form-item label="所在地">
-            <el-select v-model="formInline.grade" placeholder="省" class="adminInputEl">
-                <el-option label="一级栏目" value="0"></el-option>
-                <el-option label="二级栏目" value="1"></el-option>
-            </el-select>
-            <el-select v-model="formInline.grade" placeholder="市" class="adminInputEl">
-                <el-option label="一级栏目" value="0"></el-option>
-                <el-option label="二级栏目" value="1"></el-option>
+        <el-form-item label="栏目状态">
+            <el-select v-model="formInline.status" placeholder="栏目状态" class="adminInputEl">
+                <el-option label="下架" value="0"></el-option>
+                <el-option label="上架" value="1"></el-option>
             </el-select>
         </el-form-item>
-        <el-form-item label="创建时间">
+        <el-form-item label="提交时间">
             <el-date-picker
                 v-model="formInline.createDuringTime"
                 type="datetimerange"
@@ -61,7 +36,7 @@
         </el-form-item>
         <div class="block">
             <el-form-item>
-                <el-button type="primary" @click.native="triggerTable">查询</el-button>
+                <el-button type="primary" @click.native="onSubmit">查询</el-button>
             </el-form-item>
             <el-form-item>
                 <el-button type="default" @click.native="resetList">重置</el-button>
@@ -70,26 +45,23 @@
     </el-form>
 </template>
 <script>
-import { createNamespacedHelpers } from 'vuex'
-const { mapActions } = createNamespacedHelpers('module001')
 export default {
   data () {
+    const adminId = localStorage.getItem('adminId')
     return {
       formInline: {
-        columnIndex: '',
-        isValid: '',
-        columnId: '',
-        columnTitle: '',
-        columnIcon: '',
+        updateUser: adminId,
+        status: '',
+        id: '',
+        names: '',
         createDuringTime: [],
         updateDuringTime: []
       },
       originalForm: {
-        columnIndex: '',
-        isValid: '',
-        columnId: '',
-        columnTitle: '',
-        columnIcon: '',
+        updateUser: adminId,
+        status: '',
+        id: '',
+        names: '',
         createDuringTime: [],
         updateDuringTime: []
       },
@@ -149,31 +121,15 @@ export default {
       }
     }
   },
-  watch: {
-    formInline: {
-      handler (n) {
-        const t = this
-        console.log(n)
-        t.changeFormInline(n)
-      },
-      deep: true
-    }
-  },
   methods: {
-    ...mapActions(['changeFormInline', 'triggerTable']),
     onSubmit () {
-      console.log('初始化')
+      const _this = this
+      _this.$emit('getTableList', _this.formInline)
     },
     resetList () {
       const t = this
       t.formInline = JSON.parse(JSON.stringify(t.originalForm))
-      t.changeFormInline({})
     }
-  },
-  mounted () {
-    const t = this
-    // t.getList();
-    console.log(t.formInline)
   }
 }
 </script>

@@ -54,6 +54,6 @@ export default {
         height: 100vh; // 或 100%
         /*height: auto;*/
         overflow: auto;
-        background: #fdfdfd;
+        background: #f6f6f6;
     }
 </style>

@@ -48,6 +48,7 @@ export default {
       const t = this
       console.log(isEmptyObject(t.nowTabData))
       console.log(n)
+      localStorage.setItem('nowTabData', JSON.stringify(n))
     }
   },
   methods: {

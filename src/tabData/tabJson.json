@@ -71,9 +71,15 @@
                 "tabList":[
                     {
                         "index":"3-1",
-                        "title":"模板创建",
+                        "title":"首页轮播",
                         "icon":"el-icon-ump-template-o",
                         "routerName":"032"
+                    },
+                    {
+                        "index":"3-2",
+                        "title":"栏目管理",
+                        "icon":"el-icon-s-promotion",
+                        "routerName":"033"
                     }
                 ]
             },
