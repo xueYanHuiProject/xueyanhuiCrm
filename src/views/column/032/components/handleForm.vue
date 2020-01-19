@@ -1,7 +1,7 @@
 <template>
     <el-form :inline="true" :model="formInline" class="demo-form-inline" label-width="80px" label-position="left">
         <el-form-item label="栏目ID">
-            <el-input v-model="formInline.columnId" placeholder="请输入栏目ID" class="adminInputEl"></el-input>
+            <el-input v-model="formInline.id" placeholder="请输入栏目ID" class="adminInputEl"></el-input>
         </el-form-item>
         <el-form-item label="栏目名称">
             <el-input v-model="formInline.names" placeholder="请输入栏目名称" class="adminInputEl"></el-input>

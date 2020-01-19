@@ -1,19 +1,19 @@
 <template>
 <section class="admin-main">
-    <h1 class="admin-title">添加栏目</h1>
+    <h1 class="admin-title">添加轮播</h1>
     <section class="admin-main-inner">
         <el-form   :model="formInline" class="demo-form-inline" label-width="80px" label-position="left">
-            <el-form-item label="栏目名称" class="block">
-                <el-input v-model="formInline.names" placeholder="请输入栏目名称" class="adminInputEl"></el-input>
+            <el-form-item label="轮播名称" class="block">
+                <el-input v-model="formInline.names" placeholder="请输入轮播名称" class="adminInputEl"></el-input>
             </el-form-item>
-            <el-form-item label="栏目链接">
-                <el-input v-model="formInline.link" placeholder="请输入栏目链接" class="adminInputEl"></el-input>
+            <el-form-item label="轮播链接">
+                <el-input v-model="formInline.link" placeholder="请输入轮播链接" class="adminInputEl"></el-input>
             </el-form-item>
-            <el-form-item label="栏目排序">
-                <el-input v-model="formInline.orderBy" placeholder="请输入栏目排序" class="adminInputEl"></el-input>
+            <el-form-item label="轮播排序">
+                <el-input v-model="formInline.orderBy" placeholder="请输入轮播排序" class="adminInputEl"></el-input>
             </el-form-item>
-            <el-form-item label="栏目描述">
-                <el-input v-model="formInline.describes" placeholder="请输入栏目描述" class="adminInputEl"></el-input>
+            <el-form-item label="轮播描述">
+                <el-input v-model="formInline.describes" placeholder="请输入轮播描述" class="adminInputEl"></el-input>
             </el-form-item>
             <div class="admin-handleBar demo-form-inline">
                 <el-form-item class="form-button">
@@ -31,8 +31,8 @@
 <script>
 import axios from 'axios'
 const xhrUrl = {
-  addTab: '/api/sysColumn/insert',
-  getTableList: '/api/sysColumn/query'
+  addBanner: '/api/sysBanner/insert',
+  getTableList: '/api/sysBanner/query'
 }
 export default {
   name: 'addTab',
@@ -46,14 +46,12 @@ export default {
       id: id,
       editType: editType,
       formInline: {
-        names: '',
         link: '',
         orderBy: '',
         status: '0',
         describes: ''
       },
       originalForm: {
-        names: '',
         link: '',
         orderBy: '',
         status: '0',
@@ -96,7 +94,7 @@ export default {
       const _this = this
       axios({
         method: 'post',
-        url: xhrUrl.addTab,
+        url: xhrUrl.addBanner,
         headers: {
           'X-Requested-With': 'XMLHttpRequest'
         },
@@ -126,16 +124,5 @@ export default {
 <style lang="scss" scoped>
     .adminInputEl{
         width: 300px;
-    }
-    .admin-handleBar{
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: flex-start;
-        .form-button{
-            button{
-                width: 100px;
-            }
-        }
     }
 </style>

@@ -72,13 +72,19 @@
                     {
                         "index":"3-1",
                         "title":"首页轮播",
-                        "icon":"el-icon-ump-template-o",
-                        "routerName":"032"
+                        "icon":"el-icon-picture",
+                        "routerName":"031"
                     },
                     {
                         "index":"3-2",
                         "title":"栏目管理",
                         "icon":"el-icon-s-promotion",
+                        "routerName":"032"
+                    },
+                    {
+                        "index":"3-3",
+                        "title":"企业简介",
+                        "icon":"el-icon-reading",
                         "routerName":"033"
                     }
                 ]

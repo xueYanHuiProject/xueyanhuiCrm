@@ -1,105 +1,69 @@
 <template>
     <section class="adminContentContainer">
         <section class="adminContentInner">
-            <HandleForm @getTableList="getTableList"></HandleForm>
-            <TableList :tableList="tableList" @setSelect="setSelect" @setSelectData="setSelectData"></TableList>
-            <Pagination :pageNum="pageNum" :pageSize="pageSize" :total="total" @handleSizeChange="handleSizeChange" @handleCurrentChange="handleCurrentChange"></Pagination>
-            <ControlModule :selectOnOff="selectOnOff" :selectData="selectData"  @getTableList="getTableList"></ControlModule>
+            <article class="admin-factory-produce" v-html="context"></article>
+            <div class="block adminAuditControl">
+                <el-form :inline="true" class="demo-form-inline">
+                    <el-form-item>
+                        <el-button type="default" @click.native="editProduce">修改</el-button>
+                    </el-form-item>
+                </el-form>
+            </div>
         </section>
-        <AddLayer></AddLayer>
-        <SortDialog></SortDialog>
     </section>
 </template>
 <script>
 import axios from 'axios'
-import { isEmptyObject } from '../../../utils/common'
-import HandleForm from './components/handleForm'
-import TableList from './components/tableList'
-import Pagination from './components/pagination'
-import ControlModule from './components/controlModule'
-import AddLayer from './components/layer'
-import SortDialog from './components/sortDialog'
 const xhrUrl = {
-  getTableList: '/api/sysColumn/query'
+  getHtml: '/api/sysEnterprise/select'
 }
 export default {
-  name: 'manageTab',
+  name: 'factoryProduce',
   data () {
     const adminId = localStorage.getItem('adminId')
     return {
       updateUser: adminId,
-      pageNum: 1,
-      pageSize: 20,
-      tableList: [],
-      selectData: {},
-      total: 0,
-      selectOnOff: false
+      context: ''
     }
   },
-  watch: {
-    selectOnOff (n) {
-      const _this = this
-      if (!n) {
-        _this.selectData = {}
-      }
-    }
+  mounted () {
+    const _this = this
+    _this.getInfo()
   },
   methods: {
-    handleSizeChange (num) {
+    editProduce () {
       const _this = this
-      _this.pageSize = num
+      _this.$router.push({
+        path: '/editProduce'
+      })
     },
-    handleCurrentChange (num) {
+    getInfo () {
       const _this = this
-      _this.pageNum = num
-    },
-    getTableList (data) {
-      const _this = this
-      console.log('--------------------')
-      console.log(_this.formInline)
-      axios.get(xhrUrl.getTableList, {
-        params: isEmptyObject(data) ? {
+      axios.get(xhrUrl.getHtml, {
+        params: {
           updateUser: _this.updateUser
-        } : data
+        }
       })
         .then(function (response) {
           console.log(response)
           if (response.data.code === 200) {
-            _this.selectOnOff = false
-            console.log('设置完账号' + _this.selectOnOff)
-            _this.tableList = response.data.result
-            console.log(_this.tableList)
+            _this.context = response.data.result.context
           }
         })
         .catch(function (error) {
           console.log(error)
         })
-    },
-    setSelect (onOff) {
-      const _this = this
-      _this.selectOnOff = onOff
-      console.log(_this.selectOnOff + '在这里设置了账号')
-    },
-    setSelectData (data) {
-      const _this = this
-      _this.selectData = data
-      console.log('设置数据', _this.selectData)
     }
-  },
-  mounted () {
-    const _this = this
-    _this.getTableList()
-  },
-  components: {
-    HandleForm,
-    TableList,
-    Pagination,
-    ControlModule,
-    AddLayer,
-    SortDialog
   }
 }
 </script>
 <style lang="scss" scoped>
     @import "../../../static/scss/column/column.scss";
+    .admin-factory-produce{
+        width: 1100px;
+        background: #fff;
+        height: 600px;
+        margin: 30px auto;
+        padding: 20px;
+    }
 </style>

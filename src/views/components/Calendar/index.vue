@@ -22,6 +22,12 @@ export default {
   },
   components: {
     FullCalendar
+  },
+  mounted () {
+    if (localStorage.getItem('nowTabData')) {
+      localStorage.removeItem('nowTabData')
+      location.reload()
+    }
   }
 }
 </script>

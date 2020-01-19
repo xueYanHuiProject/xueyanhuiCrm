@@ -65,5 +65,20 @@ s,i,em{font-style:normal;text-decoration:none;}
     border-radius: 3px;
     background: #fff;
     padding: 15px;
+    .w-e-text-container{
+        height: 500px !important;
+    }
+    .admin-handleBar{
+        display: flex;
+        flex-direction: row;
+        height: 100px;
+        align-items: center;
+        justify-content: flex-start;
+        .form-button{
+            button{
+                width: 100px;
+            }
+        }
+    }
 }
 
