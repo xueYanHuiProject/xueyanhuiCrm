@@ -1,20 +1,31 @@
 <template>
 <section class="admin-main">
-    <h1 class="admin-title">添加轮播</h1>
+    <h1 class="admin-title">添加高校</h1>
     <section class="admin-main-inner">
         <el-form   :model="formInline" class="demo-form-inline" label-width="80px" label-position="left">
-            <el-form-item label="轮播链接">
-                <el-input v-model="formInline.link" placeholder="请输入轮播链接" class="adminInputEl"></el-input>
+            <el-form-item label="高校名称">
+                <el-input v-model="formInline.names" placeholder="请输入高校名称" class="adminInputEl"></el-input>
             </el-form-item>
-            <el-form-item label="轮播排序">
-                <el-input v-model="formInline.orderBy" placeholder="请输入轮播排序" class="adminInputEl"></el-input>
+            <el-form-item label="合作方向">
+                <el-radio-group v-model="formInline.cooDirection">
+                    <el-radio label="1">实验测试</el-radio>
+                    <el-radio label="2">科研绘图</el-radio>
+                    <el-radio label="3">数据分析</el-radio>
+                    <el-radio label="4">实验耗材</el-radio>
+                </el-radio-group>
             </el-form-item>
-            <el-form-item label="轮播描述">
-                <el-input v-model="formInline.describes" placeholder="请输入轮播描述" class="adminInputEl"></el-input>
+            <el-form-item label="高校排序">
+                <el-input v-model="formInline.orderBy" placeholder="请输入高校排序" class="adminInputEl"></el-input>
+            </el-form-item>
+            <el-form-item label="高校联系人">
+                <el-input v-model="formInline.contactName" placeholder="请输入联系人姓名" class="adminInputEl"></el-input>
+            </el-form-item>
+            <el-form-item label="高校联系电话">
+                <el-input v-model="formInline.contactPhone" placeholder="请输入联系人电话" class="adminInputEl"></el-input>
             </el-form-item>
             <el-form-item label="上传图片">
                 <div class="upload-wrapper">
-                    <div class="upload-mask" v-if="formInline.imgUrl">
+                    <div class="upload-mask" v-if="formInline.schoolPicture">
                         <i class="handleItem previewImage el-icon-search" @click="handlePictureCardPreview"></i>
                         <i class="handleItem deleteImage el-icon-delete" @click="handlePictureCardDelete"></i>
                     </div>
@@ -24,7 +35,7 @@
                         :show-file-list="false"
                         :on-success="handleAvatarSuccess"
                         :before-upload="beforeAvatarUpload">
-                        <img v-if="formInline.imgUrl" :src="formInline.imgUrl" class="avatar">
+                        <img v-if="formInline.schoolPicture" :src="formInline.schoolPicture" class="avatar">
                         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                     </el-upload>
                 </div>
@@ -53,12 +64,12 @@
 <script>
 import axios from 'axios'
 const xhrUrl = {
-  addBanner: '/api/sysBanner/insert',
-  getTableList: '/api/sysBanner/query',
-  updateBanner: '/api/sysBanner/update'
+  addSchool: '/api/sysSchool/insert',
+  getTableList: '/api/sysSchool/query',
+  updateSchool: '/api/sysSchool/update'
 }
 export default {
-  name: 'addTab',
+  name: 'addSchool',
   data () {
     const _this = this
     const adminId = localStorage.getItem('adminId')
@@ -71,18 +82,22 @@ export default {
       id: id,
       editType: editType,
       formInline: {
-        link: '',
-        orderBy: '',
+        names: '',
+        contactName: '',
+        contactPhone: '',
         status: '0',
-        describes: '',
-        imgUrl: ''
+        cooDirection: '',
+        orderBy: '',
+        schoolPicture: ''
       },
       originalForm: {
-        link: '',
-        orderBy: '',
+        names: '',
+        contactName: '',
+        contactPhone: '',
         status: '0',
-        describes: '',
-        imgUrl: ''
+        cooDirection: '',
+        orderBy: '',
+        schoolPicture: ''
       }
     }
   },
@@ -100,16 +115,16 @@ export default {
       const _this = this
       console.log('触发======')
       console.log(res)
-      _this.formInline.imgUrl = res.result.url
+      _this.formInline.schoolPicture = res.result.url
     },
     handlePictureCardPreview () {
       const _this = this
-      _this.dialogImageUrl = _this.formInline.imgUrl
+      _this.dialogImageUrl = _this.formInline.schoolPicture
       _this.dialogVisible = true
     },
     handlePictureCardDelete () {
       const _this = this
-      _this.formInline.imgUrl = ''
+      _this.formInline.schoolPicture = ''
     },
     handleClose () {
       const _this = this
@@ -141,7 +156,7 @@ export default {
     },
     addColumn () {
       const _this = this
-      const path = parseInt(_this.editType, 10) === 0 ? xhrUrl.addBanner : xhrUrl.updateBanner
+      const path = parseInt(_this.editType, 10) === 0 ? xhrUrl.addSchool : xhrUrl.updateSchool
       axios({
         method: 'post',
         url: path,

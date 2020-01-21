@@ -3,9 +3,11 @@ import manage from './views/column/001/001.vue'// 管理全站栏目
 import tabManage from './views/column/032/index.vue'// 管理全站栏目
 import factoryProduce from './views/column/033/index.vue'// 管理企业简介
 import banner from './views/column/031/index.vue'// 管理企业简介
+import school from './views/column/024/index.vue'// 管理企业简介
 import editProduce from './views/column/033/components/editProduce.vue'// 管理全站栏目
 import addTab from './views/column/032/components/addTab'// 管理全站栏目
-import addBanner from './views/column/031/components/addBanner'// 管理全站栏目
+import addBanner from './views/column/031/components/addBanner'// 管理全站轮播
+import addSchool from './views/column/024/components/addSchool'// 管理全站栏目
 
 export default {
   linkActiveClass: 'active',
@@ -17,6 +19,10 @@ export default {
     {
       path: '*',
       component: index
+    },
+    {
+      path: '/024',
+      component: school
     },
     {
       path: '/032',
@@ -37,6 +43,10 @@ export default {
     {
       path: '/addBanner',
       component: addBanner
+    },
+    {
+      path: '/addSchool',
+      component: addSchool
     },
     {
       path: '/editProduce',

@@ -52,15 +52,9 @@
                     },
                     {
                         "index":"2-4",
-                        "title":"推荐",
-                        "icon":"el-icon-ump-recommend",
+                        "title":"合作高校",
+                        "icon":"el-icon-school",
                         "routerName":"024"
-                    },
-                    {
-                        "index":"2-5",
-                        "title":"话题",
-                        "icon":"el-icon-ump-ictopic",
-                        "routerName":"025"
                     }
                 ]
             },

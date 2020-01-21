@@ -32,6 +32,7 @@
 import axios from 'axios'
 const xhrUrl = {
   addTab: '/api/sysColumn/insert',
+  updateTab: '/api/sysColumn/update',
   getTableList: '/api/sysColumn/query'
 }
 export default {
@@ -94,9 +95,10 @@ export default {
     },
     addColumn () {
       const _this = this
+      const path = parseInt(_this.editType, 10) === 0 ? xhrUrl.addTab : xhrUrl.updateTab
       axios({
         method: 'post',
-        url: xhrUrl.addTab,
+        url: path,
         headers: {
           'X-Requested-With': 'XMLHttpRequest'
         },

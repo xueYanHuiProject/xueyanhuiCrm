@@ -43,7 +43,7 @@ export default {
     addColumn () {
       const _this = this
       _this.$router.push({
-        path: '/addBanner',
+        path: '/addSchool',
         query: {
           type: 0
         }
@@ -56,7 +56,7 @@ export default {
         _this.$message.error('请选择一条数据')
       } else {
         _this.$router.push({
-          path: '/addBanner',
+          path: '/addSchool',
           query: {
             type: 1,
             id: _this.selectData.id,
@@ -74,9 +74,9 @@ export default {
         console.log('逻辑')
         let des = ''
         if (parseInt(status, 10) === 0) {
-          des = '确定要下架该轮播图？'
+          des = '确定要下架该高校？'
         } else {
-          des = '确定要上架该轮播图？'
+          des = '确定要上架该高校？'
         }
         _this.$alert(des, '！提示信息', {
           confirmButtonText: '确定',
@@ -93,7 +93,7 @@ export default {
       console.log('操作')
       axios({
         method: 'post',
-        url: '/api/sysBanner/update',
+        url: '/api/sysSchool/update',
         headers: {
           'X-Requested-With': 'XMLHttpRequest'
         },
