@@ -1,27 +1,23 @@
 <template>
     <el-form :inline="true" :model="formInline" class="demo-form-inline" label-width="80px" label-position="left">
-        <el-form-item label="高校ID">
-            <el-input v-model="formInline.id" placeholder="请输入高校ID" class="adminInputEl"></el-input>
+        <el-form-item label="产品ID">
+            <el-input v-model="formInline.id" placeholder="请输入产品ID" class="adminInputEl"></el-input>
         </el-form-item>
-        <el-form-item label="高校名称">
-            <el-input v-model="formInline.names" placeholder="请输入高校ID" class="adminInputEl"></el-input>
+        <el-form-item label="产品名称">
+            <el-input v-model="formInline.names" placeholder="请输入产品ID" class="adminInputEl"></el-input>
         </el-form-item>
-        <el-form-item label="高校状态">
-            <el-select v-model="formInline.cooDirection" placeholder="合作方向" class="adminInputEl">
-                <el-option label="实验测试" value="1"></el-option>
-                <el-option label="科研绘图" value="2"></el-option>
-                <el-option label="数据分析" value="3"></el-option>
-                <el-option label="实验耗材" value="4"></el-option>
+        <el-form-item label="所属栏目">
+            <el-select v-model="formInline.columnId" placeholder="请选择所属栏目">
+                <el-option
+                    v-for="(item) in columnList"
+                    :key="item.id"
+                    :label="item.names"
+                    :value="item.id">
+                </el-option>
             </el-select>
         </el-form-item>
-        <el-form-item label="联系人">
-            <el-input v-model="formInline.contactName" placeholder="请输入联系人姓名" class="adminInputEl"></el-input>
-        </el-form-item>
-        <el-form-item label="联系人电话">
-            <el-input v-model="formInline.contactPhone" placeholder="请输入联系人电话" class="adminInputEl"></el-input>
-        </el-form-item>
-        <el-form-item label="高校状态">
-            <el-select v-model="formInline.status" placeholder="高校状态" class="adminInputEl">
+        <el-form-item label="产品状态">
+            <el-select v-model="formInline.status" placeholder="产品状态" class="adminInputEl">
                 <el-option label="下架" value="0"></el-option>
                 <el-option label="上架" value="1"></el-option>
             </el-select>
@@ -59,29 +55,31 @@
     </el-form>
 </template>
 <script>
+import axios from 'axios'
+const xhrUrl = {
+  getColumnList: '/api/sysColumn/query'
+}
 export default {
   data () {
     const adminId = localStorage.getItem('adminId')
     return {
+      columnList: [],
+      updateUser: adminId,
       formInline: {
         names: '',
         updateUser: adminId,
+        describes: '',
         status: '',
         id: '',
-        contactName: '',
-        contactPhone: '',
-        cooDirection: '',
         createDuringTime: [],
         updateDuringTime: []
       },
       originalForm: {
         names: '',
         updateUser: adminId,
+        describes: '',
         status: '',
         id: '',
-        contactName: '',
-        contactPhone: '',
-        cooDirection: '',
         createDuringTime: [],
         updateDuringTime: []
       },
@@ -142,6 +140,23 @@ export default {
     }
   },
   methods: {
+    getColumnList () {
+      const _this = this
+      axios.get(xhrUrl.getColumnList, {
+        params: {
+          updateUser: _this.updateUser
+        }
+      })
+        .then(function (response) {
+          console.log(response)
+          if (response.data.code === 200) {
+            _this.columnList = response.data.result
+          }
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
+    },
     onSubmit () {
       const _this = this
       _this.$emit('getTableList', _this.formInline)
@@ -150,6 +165,10 @@ export default {
       const t = this
       t.formInline = JSON.parse(JSON.stringify(t.originalForm))
     }
+  },
+  mounted () {
+    const _this = this
+    _this.getColumnList()
   }
 }
 </script>

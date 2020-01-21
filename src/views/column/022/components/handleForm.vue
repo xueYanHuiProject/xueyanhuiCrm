@@ -1,27 +1,13 @@
 <template>
     <el-form :inline="true" :model="formInline" class="demo-form-inline" label-width="80px" label-position="left">
-        <el-form-item label="高校ID">
-            <el-input v-model="formInline.id" placeholder="请输入高校ID" class="adminInputEl"></el-input>
+        <el-form-item label="模板ID">
+            <el-input v-model="formInline.id" placeholder="请输入模板ID" class="adminInputEl"></el-input>
         </el-form-item>
-        <el-form-item label="高校名称">
-            <el-input v-model="formInline.names" placeholder="请输入高校ID" class="adminInputEl"></el-input>
+        <el-form-item label="模板名称">
+            <el-input v-model="formInline.names" placeholder="请输入模板ID" class="adminInputEl"></el-input>
         </el-form-item>
-        <el-form-item label="高校状态">
-            <el-select v-model="formInline.cooDirection" placeholder="合作方向" class="adminInputEl">
-                <el-option label="实验测试" value="1"></el-option>
-                <el-option label="科研绘图" value="2"></el-option>
-                <el-option label="数据分析" value="3"></el-option>
-                <el-option label="实验耗材" value="4"></el-option>
-            </el-select>
-        </el-form-item>
-        <el-form-item label="联系人">
-            <el-input v-model="formInline.contactName" placeholder="请输入联系人姓名" class="adminInputEl"></el-input>
-        </el-form-item>
-        <el-form-item label="联系人电话">
-            <el-input v-model="formInline.contactPhone" placeholder="请输入联系人电话" class="adminInputEl"></el-input>
-        </el-form-item>
-        <el-form-item label="高校状态">
-            <el-select v-model="formInline.status" placeholder="高校状态" class="adminInputEl">
+        <el-form-item label="模板状态">
+            <el-select v-model="formInline.status" placeholder="模板状态" class="adminInputEl">
                 <el-option label="下架" value="0"></el-option>
                 <el-option label="上架" value="1"></el-option>
             </el-select>
@@ -63,25 +49,22 @@ export default {
   data () {
     const adminId = localStorage.getItem('adminId')
     return {
+      updateUser: adminId,
       formInline: {
         names: '',
         updateUser: adminId,
+        remark: '',
         status: '',
         id: '',
-        contactName: '',
-        contactPhone: '',
-        cooDirection: '',
         createDuringTime: [],
         updateDuringTime: []
       },
       originalForm: {
         names: '',
         updateUser: adminId,
+        remark: '',
         status: '',
         id: '',
-        contactName: '',
-        contactPhone: '',
-        cooDirection: '',
         createDuringTime: [],
         updateDuringTime: []
       },

@@ -23,6 +23,7 @@ export default {
     const adminId = localStorage.getItem('adminId')
     return {
       updateUser: adminId,
+      id: '',
       context: ''
     }
   },
@@ -34,7 +35,10 @@ export default {
     editProduce () {
       const _this = this
       _this.$router.push({
-        path: '/editProduce'
+        path: '/editProduce',
+        query: {
+          id: _this.id
+        }
       })
     },
     getInfo () {
@@ -48,6 +52,7 @@ export default {
           console.log(response)
           if (response.data.code === 200) {
             _this.context = response.data.result.context
+            _this.id = response.data.result.id
           }
         })
         .catch(function (error) {
@@ -65,5 +70,6 @@ export default {
         height: 600px;
         margin: 30px auto;
         padding: 20px;
+        overflow: scroll;
     }
 </style>

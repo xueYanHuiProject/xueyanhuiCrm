@@ -1,31 +1,27 @@
 <template>
 <section class="admin-main">
-    <h1 class="admin-title">添加高校</h1>
+    <h1 class="admin-title">添加产品</h1>
     <section class="admin-main-inner">
         <el-form   :model="formInline" class="demo-form-inline" label-width="80px" label-position="left">
-            <el-form-item label="高校名称">
-                <el-input v-model="formInline.names" placeholder="请输入高校名称" class="adminInputEl"></el-input>
+            <el-form-item label="产品名称">
+                <el-input v-model="formInline.names" placeholder="请输入产品名称" class="adminInputEl"></el-input>
             </el-form-item>
-            <el-form-item label="合作方向">
-                <el-radio-group v-model="formInline.cooDirection">
-                    <el-radio label="1">实验测试</el-radio>
-                    <el-radio label="2">科研绘图</el-radio>
-                    <el-radio label="3">数据分析</el-radio>
-                    <el-radio label="4">实验耗材</el-radio>
-                </el-radio-group>
+            <el-form-item label="产品描述">
+                <el-input v-model="formInline.describes" placeholder="请输入产品描述" class="adminInputEl"></el-input>
             </el-form-item>
-            <el-form-item label="高校排序">
-                <el-input v-model="formInline.orderBy" placeholder="请输入高校排序" class="adminInputEl"></el-input>
-            </el-form-item>
-            <el-form-item label="高校联系人">
-                <el-input v-model="formInline.contactName" placeholder="请输入联系人姓名" class="adminInputEl"></el-input>
-            </el-form-item>
-            <el-form-item label="高校联系电话">
-                <el-input v-model="formInline.contactPhone" placeholder="请输入联系人电话" class="adminInputEl"></el-input>
+            <el-form-item label="所属栏目">
+                <el-select v-model="formInline.columnId" placeholder="请选择所属栏目">
+                    <el-option
+                        v-for="(item) in columnList"
+                        :key="item.id"
+                        :label="item.names"
+                        :value="item.id">
+                    </el-option>
+                </el-select>
             </el-form-item>
             <el-form-item label="上传图片">
                 <div class="upload-wrapper">
-                    <div class="upload-mask" v-if="formInline.schoolPicture">
+                    <div class="upload-mask" v-if="formInline.imgUrl">
                         <i class="handleItem previewImage el-icon-search" @click="handlePictureCardPreview"></i>
                         <i class="handleItem deleteImage el-icon-delete" @click="handlePictureCardDelete"></i>
                     </div>
@@ -35,7 +31,7 @@
                         :show-file-list="false"
                         :on-success="handleAvatarSuccess"
                         :before-upload="beforeAvatarUpload">
-                        <img v-if="formInline.schoolPicture" :src="formInline.schoolPicture" class="avatar">
+                        <img v-if="formInline.imgUrl" :src="formInline.imgUrl" class="avatar">
                         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                     </el-upload>
                 </div>
@@ -64,12 +60,13 @@
 <script>
 import axios from 'axios'
 const xhrUrl = {
-  addSchool: '/api/sysSchool/insert',
-  getTableList: '/api/sysSchool/query',
-  updateSchool: '/api/sysSchool/update'
+  addProduct: '/api/proProduct/insert',
+  getTableList: '/api/proProduct/query',
+  updateProduct: '/api/proProduct/update',
+  getColumnList: '/api/sysColumn/query'
 }
 export default {
-  name: 'addSchool',
+  name: 'addProduct',
   data () {
     const _this = this
     const adminId = localStorage.getItem('adminId')
@@ -80,33 +77,50 @@ export default {
       updateUser: adminId,
       dialogImageUrl: '',
       id: id,
+      columnList: [],
       editType: editType,
       formInline: {
         names: '',
-        contactName: '',
-        contactPhone: '',
+        describes: '',
         status: '0',
-        cooDirection: '',
-        orderBy: '',
-        schoolPicture: ''
+        columnId: '',
+        imgUrl: ''
       },
       originalForm: {
         names: '',
-        contactName: '',
-        contactPhone: '',
+        describes: '',
         status: '0',
-        cooDirection: '',
-        orderBy: '',
-        schoolPicture: ''
+        columnId: '',
+        imgUrl: ''
       }
     }
   },
   mounted () {
     const _this = this
     console.log(_this.editType)
+    _this.getColumnList()
     _this.editType && _this.getData()
   },
   methods: {
+    getColumnList () {
+      const _this = this
+      axios.get(xhrUrl.getColumnList, {
+        params: {
+          updateUser: _this.updateUser
+        }
+      })
+        .then(function (response) {
+          console.log(response)
+          if (response.data.code === 200) {
+            _this.selectOnOff = false
+            console.log('设置完账号' + _this.selectOnOff)
+            _this.columnList = response.data.result
+          }
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
+    },
     resetList () {
       const t = this
       t.formInline = JSON.parse(JSON.stringify(t.originalForm))
@@ -115,16 +129,16 @@ export default {
       const _this = this
       console.log('触发======')
       console.log(res)
-      _this.formInline.schoolPicture = res.result.url
+      _this.formInline.imgUrl = res.result.url
     },
     handlePictureCardPreview () {
       const _this = this
-      _this.dialogImageUrl = _this.formInline.schoolPicture
+      _this.dialogImageUrl = _this.formInline.imgUrl
       _this.dialogVisible = true
     },
     handlePictureCardDelete () {
       const _this = this
-      _this.formInline.schoolPicture = ''
+      _this.formInline.imgUrl = ''
     },
     handleClose () {
       const _this = this
@@ -156,7 +170,7 @@ export default {
     },
     addColumn () {
       const _this = this
-      const path = parseInt(_this.editType, 10) === 0 ? xhrUrl.addSchool : xhrUrl.updateSchool
+      const path = parseInt(_this.editType, 10) === 0 ? xhrUrl.addProduct : xhrUrl.updateProduct
       const param = parseInt(_this.editType, 10) === 0 ? {
         ..._this.formInline,
         updateUser: _this.updateUser,

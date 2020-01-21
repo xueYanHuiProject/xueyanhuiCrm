@@ -34,20 +34,20 @@
                 "tabList":[
                     {
                         "index":"2-1",
-                        "title":"消息",
-                        "icon":"el-icon-ump-msg",
+                        "title":"仪器管理",
+                        "icon":"el-icon-video-camera-solid",
                         "routerName":"021"
                     },
                     {
                         "index":"2-2",
-                        "title":"动态",
-                        "icon":"el-icon-ump-talk",
+                        "title":"需求模板",
+                        "icon":"el-icon-notebook-2",
                         "routerName":"022"
                     },
                     {
                         "index":"2-3",
-                        "title":"文章",
-                        "icon":"el-icon-ump-article",
+                        "title":"产品统计",
+                        "icon":"el-icon-notebook-1",
                         "routerName":"023"
                     },
                     {

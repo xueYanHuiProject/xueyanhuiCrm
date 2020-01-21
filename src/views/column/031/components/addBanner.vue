@@ -142,16 +142,21 @@ export default {
     addColumn () {
       const _this = this
       const path = parseInt(_this.editType, 10) === 0 ? xhrUrl.addBanner : xhrUrl.updateBanner
+      const param = parseInt(_this.editType, 10) === 0 ? {
+        ..._this.formInline,
+        updateUser: _this.updateUser,
+        createUser: _this.updateUser
+      } : {
+        ..._this.formInline,
+        updateUser: _this.updateUser
+      }
       axios({
         method: 'post',
         url: path,
         headers: {
           'X-Requested-With': 'XMLHttpRequest'
         },
-        data: {
-          ..._this.formInline,
-          updateUser: _this.updateUser
-        }
+        data: param
       }).then(function (response) {
         console.log('进入成功')
         const reqData = response.data
