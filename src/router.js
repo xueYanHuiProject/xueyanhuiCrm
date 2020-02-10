@@ -15,6 +15,7 @@ import addSchool from './views/column/024/components/addSchool'// 管理全站�
 import addProduct from './views/column/023/components/addProduct'// 管理全站栏目
 import addProTemplate from './views/column/022/components/addProTemplate'// 管理全站栏目
 import addProInstr from './views/column/021/components/addProInstr'// 管理全站栏目
+import editSample from './views/column/021/components/editSample'// 管理全站栏目
 
 export default {
   linkActiveClass: 'active',
@@ -76,6 +77,10 @@ export default {
       component: addProInstr
     },
     {
+      path: '/editSample',
+      component: editSample
+    },
+    {
       path: '/addProTemplate',
       component: addProTemplate
     },
@@ -85,7 +90,7 @@ export default {
     },
     {
       path: '/editProlnstr',
-      component: editProduce
+      component: editProlnstr
     },
     {
       path: '/001',

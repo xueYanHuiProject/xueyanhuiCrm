@@ -16,13 +16,14 @@
                 label="仪器名称">
             </el-table-column>、
             <el-table-column
-                prop="remark"
-                label="仪器备注">
-            </el-table-column>
-            <el-table-column
-                label="仪器文件">
-                <template>
-                    <el-button>下载查看</el-button>
+                label="仪器封面">
+                <template slot-scope="scope">
+                    <el-popover trigger="hover" placement="top">
+                        <img :src="scope.row.imgUrl" alt="" style="max-width: 500px;max-height:500px;border:1px solid #e9e9e9;box-shadow:0px 10px 18px 0px rgba(197,206,214,0.8);">
+                        <div slot="reference" class="name-wrapper">
+                            <img :src="scope.row.imgUrl" alt="" style="width: 50px;height:50px;"/>
+                        </div>
+                    </el-popover>
                 </template>
             </el-table-column>
             <el-table-column

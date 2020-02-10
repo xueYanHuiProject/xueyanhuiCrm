@@ -17,6 +17,7 @@
     </section>
 </template>
 <script>
+import $ from 'jquery'
 import axios from 'axios'
 const xhrUrl = {
   update: '/api/sysEnterprise/update',
@@ -31,9 +32,24 @@ export default {
     return {
       editor: null,
       id: id,
+      editOnOff: false,
       updateUser: adminId
     }
   },
+  watch: {
+    editOnOff (n) {
+      const element = $('.html-mask')
+      const editElement = $('.w-e-text')
+      if (n) {
+        element.show()
+        editElement.hide()
+      } else {
+        element.hide()
+        editElement.show()
+      }
+    }
+  },
+
   mounted () {
     const _this = this
     _this.initEdit()
@@ -46,9 +62,45 @@ export default {
       _this.editor.customConfig.onchange = (html) => {
         // html 即变化之后的内容
         console.log(html)
+        const element = $('.html-mask')
+        element.text(html)
       }
+      _this.editor.customConfig.menus = [
+        'head', // 标题
+        'bold', // 粗体
+        'fontSize', // 字号
+        'fontName', // 字体
+        'italic', // 斜体
+        'underline', // 下划线
+        'strikeThrough', // 删除线
+        'foreColor', // 文字颜色
+        'backColor', // 背景颜色
+        'link', // 插入链接
+        'list', // 列表
+        'justify', // 对齐方式
+        'quote', // 引用
+        'emoticon', // 表情
+        'image', // 插入图片
+        'table', // 表格
+        'code', // 插入代码
+        'undo', // 撤销
+        'redo' // 重复
+      ]
       _this.editor.create()
-      _this.getInfo()
+      $('.w-e-menu').eq(1).before('<div class="w-e-menu" style="z-index:10001;"><i class="w-e-icon-html"></i></div>')
+      $('.w-e-text-container').append("<div class='html-mask' contenteditable=\"true\" style='z-index: 10001;display: none;'></div>")
+      $('.w-e-icon-html').click(function () {
+        const isThis = $(this)
+        console.log(isThis)
+        isThis.toggleClass('active')
+        _this.editOnOff = !_this.editOnOff
+      })
+      $('.html-mask').on('input', function () {
+        const isThis = $(this)
+        console.log('触发触发触发')
+        _this.editor.txt.html(isThis.text())
+        console.log('写入')
+      })
     },
     getInfo () {
       const _this = this
@@ -107,6 +159,27 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
-
+<style lang="scss">
+    .w-e-icon-html{
+        display: inline-block;
+        width: 14px;
+        height: 14px;
+        background: url("../../../../static/images/active-html.png") no-repeat center center/cover;
+        &:hover{
+            background: url("../../../../static/images/HTML.png") no-repeat center center/cover;
+        }
+        &.active{
+            background: url("../../../../static/images/HTML.png") no-repeat center center/cover;
+        }
+    }
+    .html-mask{
+        position: absolute;
+        top:0;
+        left: 0;
+        right:0;
+        height: 100%;
+        z-index: 10001;
+        padding: 0 10px;
+        overflow-y: scroll;
+    }
 </style>

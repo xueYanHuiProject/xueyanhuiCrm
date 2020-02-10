@@ -8,6 +8,9 @@
                 <el-button type="default" @click.native="editColumn">编辑</el-button>
             </el-form-item>
             <el-form-item>
+                <el-button type="default" @click.native="editSample">样品模板</el-button>
+            </el-form-item>
+            <el-form-item>
                 <el-button type="default" @click.native="changeStatus(1)">上架</el-button>
             </el-form-item>
             <el-form-item>
@@ -48,6 +51,20 @@ export default {
           type: 0
         }
       })
+    },
+    editSample () {
+      const _this = this
+      if (!_this.selectOnOff) {
+        _this.$message.error('请选择一条数据')
+      } else {
+        _this.$router.push({
+          path: '/editSample',
+          query: {
+            id: _this.selectData.id,
+            updateUser: _this.updateUser
+          }
+        })
+      }
     },
     editColumn () {
       const _this = this

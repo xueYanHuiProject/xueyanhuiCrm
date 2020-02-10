@@ -1,5 +1,5 @@
 <template>
-<section class="admin-main">
+<section class="admin-main admin-editProlnstr">
     <h1 class="admin-title">添加仪器</h1>
     <section class="admin-main-inner">
         <el-form   :model="formInline" class="demo-form-inline" label-width="80px" label-position="left">
@@ -25,17 +25,27 @@
             </el-form-item>
             <el-form-item label="测试项目">
                 <div class="proInstr-content">
-                    <section class="inner-content"></section>
+                    <section class="inner-content" v-html="formInline.testItems"></section>
                     <section class="edit-mask">
-                        <i class="el-icon-edit"></i>
+                        <i class="el-icon-edit" @click="showEditPanel(0)"></i>
                     </section>
                 </div>
             </el-form-item>
             <el-form-item label="样品要求">
-
+                <div class="proInstr-content">
+                    <section class="inner-content" v-html="formInline.sampleNeed"></section>
+                    <section class="edit-mask">
+                        <i class="el-icon-edit" @click="showEditPanel(1)"></i>
+                    </section>
+                </div>
             </el-form-item>
             <el-form-item label="常见问题">
-
+                <div class="proInstr-content">
+                    <section class="inner-content" v-html="formInline.question"></section>
+                    <section class="edit-mask">
+                        <i class="el-icon-edit" @click="showEditPanel(2)"></i>
+                    </section>
+                </div>
             </el-form-item>
             <div class="admin-handleBar demo-form-inline">
                 <el-form-item class="form-button">
@@ -50,16 +60,17 @@
     </section>
     <el-dialog
         title="图片预览"
-        width="60%"
+        width="1200px"
         center
-        :visible.sync="dialogVisible"
-        :before-close="handleClose">
-        <img :src="dialogImageUrl" alt="图片预览" style="width: 100%;height: 100%;border:1px solid #e9e9e9;box-shadow:0px 10px 18px 0px rgba(197,206,214,0.8);">
+        :visible.sync="editVisible"
+        :before-close="editClose">
+        <EditProlnstr @closePanel="editClose" @submitInfo="submitInfo"></EditProlnstr>
     </el-dialog>
 </section>
 </template>
 <script>
 import axios from 'axios'
+import EditProlnstr from './editProlnstr'
 const xhrUrl = {
   addProInstr: '/api/proInstr/insert',
   getTableList: '/api/proInstr/query',
@@ -74,21 +85,32 @@ export default {
     const id = _this.$route.query.id
     return {
       dialogVisible: false,
+      editVisible: false,
       updateUser: adminId,
       dialogImageUrl: '',
       id: id,
       editType: editType,
+      editHtmlType: 0,
       formInline: {
         names: '',
         status: '0',
-        imgUrl: ''
+        imgUrl: '',
+        testItems: '',
+        sampleNeed: '',
+        question: ''
       },
       originalForm: {
         names: '',
         status: '0',
-        imgUrl: ''
+        imgUrl: '',
+        testItems: '',
+        sampleNeed: '',
+        question: ''
       }
     }
+  },
+  components: {
+    EditProlnstr
   },
   mounted () {
     const _this = this
@@ -99,6 +121,11 @@ export default {
     resetList () {
       const t = this
       t.formInline = JSON.parse(JSON.stringify(t.originalForm))
+    },
+    showEditPanel (type) {
+      const _this = this
+      _this.editHtmlType = type
+      _this.editVisible = true
     },
     handleAvatarSuccess (res, file) {
       const _this = this
@@ -119,6 +146,28 @@ export default {
       const _this = this
       _this.dialogImageUrl = ''
       _this.dialogVisible = false
+    },
+    editClose () {
+      const _this = this
+      _this.editVisible = false
+    },
+    submitInfo (info) {
+      const _this = this
+      let updateName = ''
+      switch (parseInt(_this.editHtmlType, 10)) {
+        case 0:
+          updateName = 'testItems'
+          break
+        case 1:
+          updateName = 'sampleNeed'
+          break
+        case 2:
+          updateName = 'question'
+          break
+      }
+      _this.formInline[updateName] = info
+      console.log(_this.formInline)
+      _this.editClose()
     },
     beforeAvatarUpload (file) {
       console.log(file)
@@ -183,5 +232,10 @@ export default {
 <style lang="scss" scoped>
     .adminInputEl{
         width: 300px;
+    }
+</style>
+<style lang="scss">
+    .admin-editProlnstr{
+
     }
 </style>
