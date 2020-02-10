@@ -1,10 +1,11 @@
 import index from './views/components/Calendar/index.vue'
-import manage from './views/column/001/001.vue'// 管理全站栏目
+import manage from './views/column/001/index'// 管理全站栏目
 import tabManage from './views/column/032/index.vue'// 管理全站栏目
 import factoryProduce from './views/column/033/index.vue'// 管理企业简介
 import banner from './views/column/031/index.vue'// 管理企业简介
 import school from './views/column/024/index.vue'// 管理企业简介
 import product from './views/column/023/index.vue'// 管理企业简介
+import order from './views/column/011/index.vue'// 管理企业简介
 import proTemplate from './views/column/022/index.vue'// 管理企业简介
 import proInstr from './views/column/021/index.vue'// 管理企业简介
 import editProduce from './views/column/033/components/editProduce.vue'// 管理全站栏目
@@ -27,6 +28,10 @@ export default {
     {
       path: '*',
       component: index
+    },
+    {
+      path: '/011',
+      component: order
     },
     {
       path: '/021',

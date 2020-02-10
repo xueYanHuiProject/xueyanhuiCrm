@@ -68,9 +68,9 @@ export default {
         console.log('逻辑')
         let des = ''
         if (parseInt(status, 10) === 0) {
-          des = '确定要下架该会员？'
+          des = '确定要下架该模板？'
         } else {
-          des = '确定要上架该会员？'
+          des = '确定要上架该模板？'
         }
         _this.$alert(des, '！提示信息', {
           confirmButtonText: '确定',

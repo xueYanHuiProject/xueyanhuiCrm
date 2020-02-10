@@ -9,45 +9,33 @@
             style="width: 100%">
             <el-table-column
                 prop="id"
-                label="会员ID">
+                label="模板ID">
             </el-table-column>
             <el-table-column
-                prop="trueName"
-                label="会员名称">
+                prop="names"
+                label="模板名称">
             </el-table-column>、
             <el-table-column
-                prop="userTutor"
-                label="导师">
-            </el-table-column>
-            <el-table-column
-                prop="userEmail"
-                label="邮箱">
-            </el-table-column>
-            <el-table-column
-                prop="userIdCard"
-                label="身份证号">
-            </el-table-column>
-            <el-table-column
-                prop="userWork"
-                label="职业">
-            </el-table-column>
-            <el-table-column
-                prop="phoneNum"
-                label="电话">
-            </el-table-column>
-            <el-table-column
-                prop="business"
-                label="方向">
-            </el-table-column>
-            <el-table-column
                 prop="remark"
-                label="所在地">
+                label="模板备注">
+            </el-table-column>
+            <el-table-column
+                label="模板文件">
+                <template slot-scope="scope">
+                    <a :href="scope.row.temUrl" v-if="scope.row.temUrl"><el-button>下载查看</el-button></a>
+                    <el-button type="info" plain v-else @click="upLoadZip(scope.row.id)">上传模板</el-button>
+                </template>
+            </el-table-column>
+            <el-table-column
+                prop="status"
+                :formatter="formatStatus"
+                label="状态">
             </el-table-column>
             <el-table-column
                 prop="createTime"
                 sortable
                 :formatter="formatterCreateTime"
-                label="注册时间">
+                label="创建时间">
             </el-table-column>
             <el-table-column
                 prop="updateTime"

@@ -1,13 +1,13 @@
 <template>
     <el-form :inline="true" :model="formInline" class="demo-form-inline" label-width="80px" label-position="left">
-        <el-form-item label="会员ID">
-            <el-input v-model="formInline.id" placeholder="请输入会员ID" class="adminInputEl"></el-input>
+        <el-form-item label="模板ID">
+            <el-input v-model="formInline.id" placeholder="请输入模板ID" class="adminInputEl"></el-input>
         </el-form-item>
-        <el-form-item label="会员名称">
-            <el-input v-model="formInline.names" placeholder="请输入会员ID" class="adminInputEl"></el-input>
+        <el-form-item label="模板名称">
+            <el-input v-model="formInline.names" placeholder="请输入模板ID" class="adminInputEl"></el-input>
         </el-form-item>
-        <el-form-item label="会员状态">
-            <el-select v-model="formInline.status" placeholder="会员状态" class="adminInputEl">
+        <el-form-item label="模板状态">
+            <el-select v-model="formInline.status" placeholder="模板状态" class="adminInputEl">
                 <el-option label="下架" value="0"></el-option>
                 <el-option label="上架" value="1"></el-option>
             </el-select>
