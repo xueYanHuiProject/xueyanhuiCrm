@@ -20,6 +20,11 @@
                 label="所属栏目">
             </el-table-column>
             <el-table-column
+                prop="proConRelaList"
+                :formatter="formatterCoupon"
+                label="优惠券">
+            </el-table-column>
+            <el-table-column
                 label="产品图片">
                 <template slot-scope="scope">
                     <el-popover trigger="hover" placement="top">
@@ -75,6 +80,19 @@ export default {
     formatterCreateTime (row, column) {
       const time = row.createTime
       return formatDate(time)
+    },
+    formatterCoupon (row, column) {
+      const list = row.proConRelaList
+      let str = ''
+      for (let num = 0; num < list.length; num++) {
+        const item = list[num]
+        if (num === 0) {
+          str += `${item.conTitle}`
+        } else {
+          str += ',' + `${item.conTitle}`
+        }
+      }
+      return str || '暂无优惠券'
     },
     formatterUpdateTime (row, column) {
       const time = row.updateTime || row.createTime

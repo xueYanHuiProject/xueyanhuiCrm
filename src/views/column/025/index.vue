@@ -16,10 +16,10 @@ import TableList from './components/tableList'
 import Pagination from './components/pagination'
 import ControlModule from './components/controlModule'
 const xhrUrl = {
-  getTableList: '/api/proProduct/query'
+  getTableList: '/api/graRule/query'
 }
 export default {
-  name: 'manageBanner',
+  name: 'manageIntegral',
   data () {
     const adminId = localStorage.getItem('adminId')
     return {
@@ -94,7 +94,4 @@ export default {
 </script>
 <style lang="scss" scoped>
     @import "../../../static/scss/column/column.scss";
-    .adminContentInner{
-        position: inherit;
-    }
 </style>

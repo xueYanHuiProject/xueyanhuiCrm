@@ -9,49 +9,30 @@
             style="width: 100%">
             <el-table-column
                 prop="id"
-                label="会员ID">
+                label="积分ID">
             </el-table-column>
             <el-table-column
-                prop="trueName"
-                label="会员名称">
-            </el-table-column>、
-            <el-table-column
-                prop="userTutor"
-                label="导师">
+                prop="scene"
+                label="积分场景">
             </el-table-column>
             <el-table-column
-                prop="userEmail"
-                label="邮箱">
+                prop="explains"
+                label="积分说明">
             </el-table-column>
             <el-table-column
-                prop="userIdCard"
-                label="身份证号">
+                prop="graNum"
+                label="积分值">
             </el-table-column>
             <el-table-column
-                prop="userWork"
-                label="职业">
-            </el-table-column>
-            <el-table-column
-                prop="phoneNum"
-                label="电话">
-            </el-table-column>
-            <el-table-column
-                prop="business"
-                label="方向">
-            </el-table-column>
-            <el-table-column
-                prop="city"
-                label="所在地">
-            </el-table-column>
-            <el-table-column
-                prop="userSchool"
-                label="学校/单位">
+                prop="status"
+                :formatter="formatStatus"
+                label="状态">
             </el-table-column>
             <el-table-column
                 prop="createTime"
                 sortable
                 :formatter="formatterCreateTime"
-                label="注册时间">
+                label="创建时间">
             </el-table-column>
             <el-table-column
                 prop="updateTime"
@@ -75,17 +56,6 @@ export default {
     }
   },
   methods: {
-    upLoadZip (id) {
-      const _this = this
-      _this.$router.push({
-        path: '/addProTemplate',
-        query: {
-          type: 1,
-          id: id,
-          updateUser: _this.updateUser
-        }
-      })
-    },
     selectionChange (data) {
       const _this = this
       _this.$emit('setSelect', !!data)

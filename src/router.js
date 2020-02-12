@@ -5,6 +5,10 @@ import factoryProduce from './views/column/033/index.vue'// 管理企业简介
 import banner from './views/column/031/index.vue'// 管理企业简介
 import school from './views/column/024/index.vue'// 管理企业简介
 import product from './views/column/023/index.vue'// 管理企业简介
+import integral from './views/column/025/index.vue'// 管理企业简介
+import coupon from './views/column/026/index.vue'// 管理企业简介
+import addIntegral from './views/column/025/components/addIntegral'// 管理企业简介
+import addCoupon from './views/column/026/components/addCoupon'// 管理企业简介
 import order from './views/column/011/index.vue'// 管理企业简介
 import proTemplate from './views/column/022/index.vue'// 管理企业简介
 import proInstr from './views/column/021/index.vue'// 管理企业简介
@@ -50,6 +54,18 @@ export default {
       component: school
     },
     {
+      path: '/addCoupon',
+      component: addCoupon
+    },
+    {
+      path: '/026',
+      component: coupon
+    },
+    {
+      path: '/025',
+      component: integral
+    },
+    {
       path: '/032',
       component: tabManage
     },
@@ -72,6 +88,10 @@ export default {
     {
       path: '/addSchool',
       component: addSchool
+    },
+    {
+      path: '/addIntegral',
+      component: addIntegral
     },
     {
       path: '/addProduct',

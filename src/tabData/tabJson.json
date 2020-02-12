@@ -76,6 +76,18 @@
                         "routerName":"023"
                     },
                     {
+                        "index":"2-5",
+                        "title":"积分规则",
+                        "icon":"el-icon-document-copy",
+                        "routerName":"025"
+                    },
+                    {
+                        "index":"2-6",
+                        "title":"优惠券",
+                        "icon":"el-icon-s-ticket",
+                        "routerName":"026"
+                    },
+                    {
                         "index":"2-4",
                         "title":"合作高校",
                         "icon":"el-icon-school",
