@@ -29,6 +29,11 @@
                 label="栏目状态">
             </el-table-column>
             <el-table-column
+                prop="orderBy"
+                sortable
+                label="排序">
+            </el-table-column>
+            <el-table-column
                 prop="createTime"
                 sortable
                 :formatter="formatterTime"

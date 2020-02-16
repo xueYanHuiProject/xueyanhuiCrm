@@ -52,7 +52,7 @@
                     <el-button type="primary" :inline="true" @click.native="addColumn">提交</el-button>
                 </el-form-item>
                 <el-form-item class="form-button">
-                    <el-button type="default" @click.native="editColumn">返回</el-button>
+                    <el-button type="default" @click.native="returnBack">返回</el-button>
                 </el-form-item>
             </div>
 
@@ -191,6 +191,10 @@ export default {
         .catch(function (error) {
           console.log(error)
         })
+    },
+    returnBack () {
+      const _this = this
+      _this.$router.push({ path: '/021' })
     },
     addColumn () {
       const _this = this

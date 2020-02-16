@@ -99,6 +99,7 @@ export default {
         },
         data: {
           id: _this.selectData.id,
+          updateUser: _this.updateUser,
           status: status
         }
       }).then(function (response) {

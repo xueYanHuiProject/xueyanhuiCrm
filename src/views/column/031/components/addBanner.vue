@@ -34,7 +34,7 @@
                     <el-button type="primary" :inline="true" @click.native="addColumn">提交</el-button>
                 </el-form-item>
                 <el-form-item class="form-button">
-                    <el-button type="default" @click.native="editColumn">返回</el-button>
+                    <el-button type="default" @click.native="returnBack">返回</el-button>
                 </el-form-item>
             </div>
 
@@ -95,6 +95,10 @@ export default {
     resetList () {
       const t = this
       t.formInline = JSON.parse(JSON.stringify(t.originalForm))
+    },
+    returnBack () {
+      const _this = this
+      _this.$router.push({ path: '/031' })
     },
     handleAvatarSuccess (res, file) {
       const _this = this

@@ -41,7 +41,7 @@
                     <el-button type="primary" :inline="true" @click.native="addColumn">提交</el-button>
                 </el-form-item>
                 <el-form-item class="form-button">
-                    <el-button type="default" @click.native="editColumn">返回</el-button>
+                    <el-button type="default" @click.native="returnBack">返回</el-button>
                 </el-form-item>
             </div>
 
@@ -130,6 +130,10 @@ export default {
       console.log('触发======')
       console.log(res)
       _this.formInline.imgUrl = res.result.url
+    },
+    returnBack () {
+      const _this = this
+      _this.$router.push({ path: '/023' })
     },
     handlePictureCardPreview () {
       const _this = this

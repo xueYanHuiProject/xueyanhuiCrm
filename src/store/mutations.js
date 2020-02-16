@@ -7,7 +7,7 @@ const mutations = {
   },
   outLogin (state) {
     state.outLoginDialogOnOff = false
-    localStorage.removeItem('userName')
+    localStorage.clear()
     state.loginOnOff = ''
   },
   cancelOutLogin (state) {

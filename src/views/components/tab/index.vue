@@ -1,7 +1,7 @@
 <template>
-    <section class="el-tabs__header">
+    <section class="el-tabs__header" v-show="routeOnOff">
         <ul class="adminTabList">
-            <router-link tag="li" active-class="is-active" v-for="(item,i) in nowTabData" :key="i" class="el-tabs__item" :to="'/'+item.routerName" @contextmenu.native.prevent="rightClose($event,item)">
+            <router-link tag="li" active-class="is-active" v-for="(item,i) in nowTabData" :key="i" class="el-tabs__item" :to="'/'+item.routerName" @contextmenu.native.prevent="rightClose($event,item)" @mouseup.native.stop="runFn(item)">
                 {{item.title}}<span class="el-icon-close" @click.stop="closeTab(item)"></span>
             </router-link>
             <ContextCom :style="styleJson"  v-show="Context" @deleteAll="closeAll" @deleteIt="closeIt" @deleteOthers="closeOthers"></ContextCom>
@@ -17,6 +17,7 @@ export default {
       list: {},
       editableTabsValue: '2',
       tabIndex: 2,
+      routeOnOff: true,
       editOnOff: true,
       contextData: null,
       styleJson: {
@@ -39,10 +40,35 @@ export default {
       if (n.length === 0) {
         t.closeAll()
       }
+    },
+    '$route' (n) {
+      console.log(n)
+      const _this = this
+      const pathName = n.path.split('/')
+      function isRealNum (val) {
+        // isNaN()函数 把空串 空格 以及NUll 按照0来处理 所以先去除，
+
+        if (val === '' || val == null) {
+          return false
+        }
+        if (!isNaN(val)) {
+          // 对于空数组和只有一个数值成员的数组或全是数字组成的字符串，isNaN返回false，例如：'123'、[]、[2]、['123'],isNaN返回false,
+          // 所以如果不需要val包含这些特殊情况，则这个判断改写为if(!isNaN(val) && typeof val === 'number' )
+          return true
+        } else {
+          return false
+        }
+      }
+      console.log(pathName)
+      if (isRealNum(pathName[1])) {
+        _this.routeOnOff = true
+      } else {
+        _this.routeOnOff = false
+      }
     }
   },
   methods: {
-    ...mapActions(['deleteTab', 'ContextOff', 'ContextOn']),
+    ...mapActions(['deleteTab', 'ContextOff', 'ContextOn', 'outLogin']),
     closeAll () {
       const t = this
       for (const key in t.nowTabData) {
@@ -67,6 +93,10 @@ export default {
       t.styleJson.left = (e.clientX) + 'px'
       t.styleJson.top = e.offsetY + 'px'
       t.ContextOn()
+    },
+    runFn (v) {
+      const t = this
+      t[v.eventFn] && t[v.eventFn]()
     },
     closeTab (v) {
       const t = this
