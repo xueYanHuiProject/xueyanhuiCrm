@@ -128,10 +128,11 @@
                 "index":"5",
                 "title":"系统管理",
                 "icon":"el-icon-setting",
+                'auth':0,
                 "tabList":[
                     {
                         "index":"5-1",
-                        "title":"权限",
+                        "title":"管理员统计",
                         "icon":"el-icon-ump-password",
                         "routerName":"052"
                     },

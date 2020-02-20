@@ -32,11 +32,28 @@ export default {
       console.log(t.loginOnOff)
     }, 2000)
   },
+  watch: {
+    outLoginDialogOnOff (n) {
+      const _this = this
+      if (n) {
+        _this.$alert('您确定要退出登录？', '退出登录', {
+          confirmButtonText: '确定',
+          callback: action => {
+            _this.$message({
+              type: 'success',
+              message: '已退出登录'
+            })
+            _this.outLogin()
+          }
+        })
+      }
+    }
+  },
   computed: {
-    ...mapGetters(['nowTabData', 'loginOnOff'])
+    ...mapGetters(['nowTabData', 'loginOnOff', 'outLoginDialogOnOff'])
   },
   methods: {
-    ...mapActions(['ContextOff']),
+    ...mapActions(['ContextOff', 'outLogin']),
     closeMask (e) {
       const t = this
       t.ContextOff()

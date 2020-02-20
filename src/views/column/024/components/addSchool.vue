@@ -150,7 +150,10 @@ export default {
           console.log(response)
           if (response.data.code === 200) {
             _this.selectOnOff = false
-            _this.formInline = response.data.result[0]
+            const formInline = response.data.result[0]
+            for (const key in _this.formInline) {
+              _this.formInline[key] = formInline[key]
+            }
             console.log(_this.tableList)
           }
         })
@@ -167,6 +170,7 @@ export default {
         createUser: _this.updateUser
       } : {
         ..._this.formInline,
+        id: _this.id,
         updateUser: _this.updateUser
       }
       axios({

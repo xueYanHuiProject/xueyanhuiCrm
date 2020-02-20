@@ -41,12 +41,37 @@ export default {
           const reqData = response.data
           console.log(reqData.result)
           if (reqData.result) {
-            console.log('获取导数据')
-            console.log(reqData.result)
-            console.log('获取导数据')
             t.tabList = reqData.result
-            console.log(reqData.result.tabList)
-            t.saveColumnList(reqData.result.tabList)
+            const result = []
+            for (let num = 0; num < reqData.result.tabList.length; num++) {
+              const item = reqData.result
+              const innerResult = []
+              for (let innerNum = 0; innerNum < item.tabList.length; innerNum++) {
+                const grade = parseInt(localStorage.getItem('grade'), 10)
+                const innerItem = item.tabList[innerNum]
+                if (grade === 0) {
+                  // 超级管理员
+                  innerResult.push(innerItem)
+                } else if (grade === 1) {
+                  // 普通管理员
+                  if (parseInt(innerItem.auth, 10) === 0) {
+                    continue
+                  } else {
+                    innerResult.push(innerItem)
+                  }
+                } else if (grade === 2) {
+                  // 运营人员
+                  if (parseInt(innerItem.auth, 10) === 0) {
+                    continue
+                  } else {
+                    innerResult.push(innerItem)
+                  }
+                }
+              }
+              item.tabList = innerResult
+              result.push(item)
+            }
+            t.saveColumnList(result)
           }
         })
         .catch(function (error) {

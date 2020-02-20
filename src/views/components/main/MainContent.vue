@@ -36,7 +36,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['toggleOnOff', 'nowTabData']),
+    ...mapGetters(['toggleOnOff', 'nowTabData', 'loginOnOff']),
     marTop () {
       const t = this
       console.log(isEmptyObject(t.nowTabData))
@@ -48,7 +48,11 @@ export default {
       const t = this
       console.log(isEmptyObject(t.nowTabData))
       console.log(n)
-      localStorage.setItem('nowTabData', JSON.stringify(n))
+      if (t.loginOnOff) {
+        localStorage.setItem('nowTabData', JSON.stringify(n))
+      } else {
+        localStorage.clear()
+      }
     }
   },
   methods: {

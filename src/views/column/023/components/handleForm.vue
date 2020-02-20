@@ -24,7 +24,7 @@
         </el-form-item>
         <el-form-item label="提交时间">
             <el-date-picker
-                v-model="formInline.createDuringTime"
+                v-model="duringTime"
                 type="datetimerange"
                 :picker-options="createPickerOptions"
                 range-separator="至"
@@ -35,7 +35,7 @@
          </el-form-item>
         <el-form-item label="更新时间">
             <el-date-picker
-                v-model="formInline.updateDuringTime"
+                v-model="updateDuringTime"
                 type="datetimerange"
                 :picker-options="updatePickerOptions"
                 range-separator="至"
@@ -55,6 +55,7 @@
     </el-form>
 </template>
 <script>
+import { createTime } from '../../../../utils/common'
 import axios from 'axios'
 const xhrUrl = {
   getColumnList: '/api/sysColumn/query'
@@ -70,19 +71,17 @@ export default {
         updateUser: adminId,
         describes: '',
         status: '',
-        id: '',
-        createDuringTime: [],
-        updateDuringTime: []
+        id: ''
       },
       originalForm: {
         names: '',
         updateUser: adminId,
         describes: '',
         status: '',
-        id: '',
-        createDuringTime: [],
-        updateDuringTime: []
+        id: ''
       },
+      duringTime: [],
+      updateDuringTime: [],
       createPickerOptions: {
         shortcuts: [{
           text: '最近一周',
@@ -159,11 +158,18 @@ export default {
     },
     onSubmit () {
       const _this = this
-      _this.$emit('getTableList', _this.formInline)
+      console.log(_this.duringTime)
+      const beginTime = _this.duringTime.length ? createTime(_this.duringTime[0]) : ''
+      const endTime = _this.duringTime.length ? createTime(_this.duringTime[1]) : ''
+      const updateBeginTime = _this.updateDuringTime.length ? createTime(_this.updateDuringTime[1]) : ''
+      const updateEndTime = _this.updateDuringTime.length ? createTime(_this.updateDuringTime[1]) : ''
+      _this.$emit('getTableList', { ..._this.formInline, beginTime, endTime, updateBeginTime, updateEndTime })
     },
     resetList () {
       const t = this
       t.formInline = JSON.parse(JSON.stringify(t.originalForm))
+      t.duringTime = []
+      t.updateDuringTime = []
     }
   },
   mounted () {

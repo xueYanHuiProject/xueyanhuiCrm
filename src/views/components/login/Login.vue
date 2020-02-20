@@ -294,6 +294,7 @@ export default {
             t.login(reqData.result.id)
             localStorage.setItem('userName', reqData.result.realName)
             localStorage.setItem('adminId', reqData.result.id)
+            localStorage.setItem('grade', reqData.result.grade)
           } else {
             t.$message.error('登录失败！')
           }

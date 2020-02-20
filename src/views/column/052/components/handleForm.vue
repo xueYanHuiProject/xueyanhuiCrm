@@ -1,13 +1,13 @@
 <template>
     <el-form :inline="true" :model="formInline" class="demo-form-inline" label-width="80px" label-position="left">
-        <el-form-item label="会员ID">
-            <el-input v-model="formInline.id" placeholder="请输入会员ID" class="adminInputEl"></el-input>
+        <el-form-item label="管理员ID">
+            <el-input v-model="formInline.id" placeholder="请输入管理员ID" class="adminInputEl"></el-input>
         </el-form-item>
-        <el-form-item label="会员名称">
-            <el-input v-model="formInline.names" placeholder="请输入会员ID" class="adminInputEl"></el-input>
+        <el-form-item label="管理员名称">
+            <el-input v-model="formInline.names" placeholder="请输入管理员名称" class="adminInputEl"></el-input>
         </el-form-item>
-        <el-form-item label="会员状态">
-            <el-select v-model="formInline.status" placeholder="会员状态" class="adminInputEl">
+        <el-form-item label="管理员状态">
+            <el-select v-model="formInline.status" placeholder="管理员状态" class="adminInputEl">
                 <el-option label="下架" value="0"></el-option>
                 <el-option label="上架" value="1"></el-option>
             </el-select>
@@ -45,28 +45,24 @@
     </el-form>
 </template>
 <script>
-import { createTime } from '../../../../utils/common'
 export default {
   data () {
     const adminId = localStorage.getItem('adminId')
     return {
-      updateUser: adminId,
       formInline: {
-        names: '',
         updateUser: adminId,
-        remark: '',
         status: '',
-        id: ''
-      },
-      originalForm: {
-        names: '',
-        updateUser: adminId,
-        remark: '',
-        status: '',
-        id: ''
+        id: '',
+        names: ''
       },
       duringTime: [],
       updateDuringTime: [],
+      originalForm: {
+        updateUser: adminId,
+        status: '',
+        id: '',
+        names: ''
+      },
       createPickerOptions: {
         shortcuts: [{
           text: '最近一周',
@@ -127,17 +123,14 @@ export default {
     onSubmit () {
       const _this = this
       console.log(_this.duringTime)
-      const beginTime = _this.duringTime.length ? createTime(_this.duringTime[0]) : ''
-      const endTime = _this.duringTime.length ? createTime(_this.duringTime[1]) : ''
-      const updateBeginTime = _this.updateDuringTime.length ? createTime(_this.updateDuringTime[1]) : ''
-      const updateEndTime = _this.updateDuringTime.length ? createTime(_this.updateDuringTime[1]) : ''
-      _this.$emit('getTableList', { ..._this.formInline, beginTime, endTime, updateBeginTime, updateEndTime })
+      const beginTime = _this.duringTime.length ? _this.duringTime[0].getTime() : ''
+      const endTime = _this.duringTime.length ? _this.duringTime[1].getTime() : ''
+      _this.$emit('getTableList', { ..._this.formInline, beginTime, endTime })
     },
     resetList () {
       const t = this
       t.formInline = JSON.parse(JSON.stringify(t.originalForm))
       t.duringTime = []
-      t.updateDuringTime = []
     }
   }
 }
