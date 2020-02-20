@@ -44,10 +44,12 @@ export default {
     handleSizeChange (num) {
       const _this = this
       _this.pageSize = num
+      _this.getTableList()
     },
     handleCurrentChange (num) {
       const _this = this
       _this.pageNum = num
+      _this.getTableList()
     },
     getTableList (data) {
       const _this = this
@@ -55,15 +57,22 @@ export default {
       console.log(_this.formInline)
       axios.get(xhrUrl.getTableList, {
         params: isEmptyObject(data) ? {
-          updateUser: _this.updateUser
-        } : data
+          updateUser: _this.updateUser,
+          pageSize: _this.pageSize,
+          pageNum: _this.pageNum
+        } : {
+          pageSize: _this.pageSize,
+          pageNum: _this.pageNum,
+          ...data
+        }
       })
         .then(function (response) {
           console.log(response)
           if (response.data.code === 200) {
             _this.selectOnOff = false
             console.log('设置完账号' + _this.selectOnOff)
-            _this.tableList = response.data.result
+            _this.tableList = response.data.result.list
+            _this.total = response.data.result.total
             console.log(_this.tableList)
           }
         })
