@@ -39,14 +39,17 @@ export default {
       })
         .then(function (response) {
           const reqData = response.data
+          console.log('=================')
           console.log(reqData.result)
           if (reqData.result) {
             t.tabList = reqData.result
             const result = []
+            console.log(reqData.result)
             for (let num = 0; num < reqData.result.tabList.length; num++) {
-              const item = reqData.result
+              const item = reqData.result.tabList[num]
               const innerResult = []
               for (let innerNum = 0; innerNum < item.tabList.length; innerNum++) {
+                console.log('内部循环')
                 const grade = parseInt(localStorage.getItem('grade'), 10)
                 const innerItem = item.tabList[innerNum]
                 if (grade === 0) {
@@ -68,9 +71,11 @@ export default {
                   }
                 }
               }
+              console.log(innerResult)
               item.tabList = innerResult
               result.push(item)
             }
+            console.log(result)
             t.saveColumnList(result)
           }
         })

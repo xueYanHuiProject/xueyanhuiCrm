@@ -21,16 +21,16 @@ import addProduct from './views/column/023/components/addProduct'// 管理全站
 import addProTemplate from './views/column/022/components/addProTemplate'// 管理全站栏目
 import addProInstr from './views/column/021/components/addProInstr'// 管理全站栏目
 import editSample from './views/column/021/components/editSample'// 管理全站栏目
-
+import admin from './views/column/052/index'// 管理全站栏目
 export default {
   linkActiveClass: 'active',
   routes: [
     {
-      path: '/',
-      component: index
+      path: '*',
+      redirect: '/index'
     },
     {
-      path: '*',
+      path: '/index',
       component: index
     },
     {
@@ -40,6 +40,10 @@ export default {
     {
       path: '/021',
       component: proInstr
+    },
+    {
+      path: '/052',
+      component: admin
     },
     {
       path: '/022',

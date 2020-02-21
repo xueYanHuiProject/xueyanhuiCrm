@@ -4,10 +4,10 @@
             <el-input v-model="formInline.id" placeholder="请输入管理员ID" class="adminInputEl"></el-input>
         </el-form-item>
         <el-form-item label="管理员名称">
-            <el-input v-model="formInline.names" placeholder="请输入管理员名称" class="adminInputEl"></el-input>
+            <el-input v-model="formInline.deleteFlag" placeholder="请输入管理员名称" class="adminInputEl"></el-input>
         </el-form-item>
         <el-form-item label="管理员状态">
-            <el-select v-model="formInline.status" placeholder="管理员状态" class="adminInputEl">
+            <el-select v-model="formInline.deleteFlag" placeholder="管理员状态" class="adminInputEl">
                 <el-option label="下架" value="0"></el-option>
                 <el-option label="上架" value="1"></el-option>
             </el-select>
@@ -45,6 +45,7 @@
     </el-form>
 </template>
 <script>
+import { createTime } from '../../../../utils/common'
 export default {
   data () {
     const adminId = localStorage.getItem('adminId')
@@ -123,14 +124,17 @@ export default {
     onSubmit () {
       const _this = this
       console.log(_this.duringTime)
-      const beginTime = _this.duringTime.length ? _this.duringTime[0].getTime() : ''
-      const endTime = _this.duringTime.length ? _this.duringTime[1].getTime() : ''
-      _this.$emit('getTableList', { ..._this.formInline, beginTime, endTime })
+      const beginTime = _this.duringTime.length ? createTime(_this.duringTime[0]) : ''
+      const endTime = _this.duringTime.length ? createTime(_this.duringTime[1]) : ''
+      const updateBeginTime = _this.updateDuringTime.length ? createTime(_this.updateDuringTime[0]) : ''
+      const updateEndTime = _this.updateDuringTime.length ? createTime(_this.updateDuringTime[1]) : ''
+      _this.$emit('getTableList', { ..._this.formInline, beginTime, endTime, updateBeginTime, updateEndTime })
     },
     resetList () {
       const t = this
       t.formInline = JSON.parse(JSON.stringify(t.originalForm))
       t.duringTime = []
+      t.updateDuringTime = []
     }
   }
 }

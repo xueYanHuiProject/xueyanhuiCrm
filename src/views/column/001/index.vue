@@ -14,7 +14,6 @@ import { isEmptyObject } from '../../../utils/common'
 import HandleForm from './components/handleForm'
 import TableList from './components/tableList'
 import Pagination from './components/pagination'
-import ControlModule from './components/controlModule'
 const xhrUrl = {
   getTableList: '/api/usrUser/query'
 }
@@ -96,8 +95,7 @@ export default {
   components: {
     HandleForm,
     TableList,
-    Pagination,
-    ControlModule
+    Pagination
   }
 }
 </script>

@@ -26,7 +26,7 @@ export default {
   mounted () {
     const t = this
     if (isEmptyObject(t.nowTabData)) {
-      t.$router.push({ path: '/' })
+      t.$router.push({ path: '/index' })
     }
     setTimeout(() => {
       console.log(t.loginOnOff)

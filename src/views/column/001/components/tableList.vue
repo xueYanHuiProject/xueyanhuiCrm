@@ -29,6 +29,7 @@
             </el-table-column>
             <el-table-column
                 prop="userWork"
+                :formatter="formatterWork"
                 label="职业">
             </el-table-column>
             <el-table-column
@@ -102,6 +103,31 @@ export default {
     formatterUpdateTime (row, column) {
       const time = row.updateTime || row.createTime
       return formatDate(time)
+    },
+    formatterWork (row, column) {
+      const grade = parseInt(row.userWork, 10)
+      let userWork = ''
+      switch (grade) {
+        case 1:
+          userWork = '学生'
+          break
+        case 2:
+          userWork = '教职工'
+          break
+        case 3:
+          userWork = '企业'
+          break
+        case 4:
+          userWork = '医院'
+          break
+        case 5:
+          userWork = '个人'
+          break
+        case 6:
+          userWork = row.profession
+          break
+      }
+      return userWork
     }
   }
 }

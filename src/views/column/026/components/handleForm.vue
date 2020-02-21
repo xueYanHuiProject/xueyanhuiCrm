@@ -139,7 +139,7 @@ export default {
       console.log(_this.duringTime)
       const beginTime = _this.duringTime.length ? createTime(_this.duringTime[0]) : ''
       const endTime = _this.duringTime.length ? createTime(_this.duringTime[1]) : ''
-      const updateBeginTime = _this.updateDuringTime.length ? createTime(_this.updateDuringTime[1]) : ''
+      const updateBeginTime = _this.updateDuringTime.length ? createTime(_this.updateDuringTime[0]) : ''
       const updateEndTime = _this.updateDuringTime.length ? createTime(_this.updateDuringTime[1]) : ''
       _this.$emit('getTableList', { ..._this.formInline, beginTime, endTime, updateBeginTime, updateEndTime })
     },

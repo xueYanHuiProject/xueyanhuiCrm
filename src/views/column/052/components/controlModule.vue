@@ -2,16 +2,10 @@
     <div class="block adminAuditControl">
         <el-form :inline="true" class="demo-form-inline">
             <el-form-item>
-                <el-button type="default" @click.native="addColumn">添加</el-button>
+                <el-button type="default" @click.native="changeStatus(1)">激活</el-button>
             </el-form-item>
             <el-form-item>
-                <el-button type="default" @click.native="editColumn">编辑</el-button>
-            </el-form-item>
-            <el-form-item>
-                <el-button type="default" @click.native="changeStatus(1)">上架</el-button>
-            </el-form-item>
-            <el-form-item>
-                <el-button type="default" @click.native="changeStatus(0)">下架</el-button>
+                <el-button type="default" @click.native="changeStatus(0)">无效</el-button>
             </el-form-item>
         </el-form>
     </div>
@@ -40,31 +34,6 @@ export default {
     }
   },
   methods: {
-    addColumn () {
-      const _this = this
-      _this.$router.push({
-        path: '/addTab',
-        query: {
-          type: 0
-        }
-      })
-    },
-    editColumn () {
-      const _this = this
-      console.log(_this.selectOnOff + '开关状态')
-      if (!_this.selectOnOff) {
-        _this.$message.error('请选择一条数据')
-      } else {
-        _this.$router.push({
-          path: '/addTab',
-          query: {
-            type: 1,
-            id: _this.selectData.id,
-            updateUser: _this.updateUser
-          }
-        })
-      }
-    },
     changeStatus (status) {
       const _this = this
       console.log(_this.selectOnOff)
@@ -74,9 +43,9 @@ export default {
         console.log('逻辑')
         let des = ''
         if (parseInt(status, 10) === 0) {
-          des = '确定要下架该管理员？'
+          des = '确定要拉黑该管理员？'
         } else {
-          des = '确定要上架该管理员？'
+          des = '确定要激活该管理员？'
         }
         _this.$alert(des, '！提示信息', {
           confirmButtonText: '确定',
@@ -91,16 +60,21 @@ export default {
     valid (status, callback) {
       const _this = this
       console.log('操作')
+      const grade = parseInt(localStorage.getItem('grade'), 10)
+      if ((_this.selectData.id === _this.updateUser) && (grade === 0)) {
+        // 如果是超级管理员且是自己是不能操作数据得
+        _this.$message.error('超级管理员自己不能操作自己')
+      }
       axios({
         method: 'post',
-        url: '/api/sysColumn/update',
+        url: '/api/sysUser/update',
         headers: {
           'X-Requested-With': 'XMLHttpRequest'
         },
         data: {
           id: _this.selectData.id,
           updateUser: _this.updateUser,
-          status: status
+          deleteFlag: status
         }
       }).then(function (response) {
         console.log('进入成功')

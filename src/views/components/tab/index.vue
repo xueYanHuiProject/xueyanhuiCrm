@@ -110,7 +110,7 @@ export default {
         if (lastKey.length) {
           t.$router.push({ path: t.nowTabData[lastKey].routerName })
         } else {
-          t.$router.push({ path: '/' })
+          t.$router.push({ path: '/index' })
         }
       }
       t.ContextOff()
