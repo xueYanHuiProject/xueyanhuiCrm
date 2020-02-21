@@ -56,7 +56,7 @@
 </template>
 <script>
 import { mapActions } from 'vuex'
-import { testName, testEmail, testID, testPhoneNum } from '../../../utils/regularTest'
+import { testName, testEmail, testID, testPhoneNum, testPassword } from '../../../utils/regularTest'
 import axios from 'axios'
 import md5 from 'blueimp-md5'
 export default {
@@ -140,6 +140,10 @@ export default {
       if (value === '') {
         callBack(new Error('请输入密码'))
       } else {
+        if (testPassword(value)) {
+        } else {
+          callBack(new Error('密码中必须包含字母（不区分大小写）、数字，至少8个字符，最多30个字符'))
+        }
         callBack()
       }
     }
@@ -295,6 +299,8 @@ export default {
             localStorage.setItem('userName', reqData.result.realName)
             localStorage.setItem('adminId', reqData.result.id)
             localStorage.setItem('grade', reqData.result.grade)
+            localStorage.setItem('phoneNum', reqData.result.phoneNum)
+            localStorage.setItem('password', reqData.result.password)
           } else {
             t.$message.error('登录失败！')
           }

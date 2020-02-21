@@ -20,6 +20,18 @@
                 label="所属栏目">
             </el-table-column>
             <el-table-column
+                prop="proTemplate"
+                :formatter="proTemplateLink"
+                label="模板名称">
+            </el-table-column>
+            <el-table-column
+                label="需求模板">
+                <template slot-scope="scope">
+                    <a :href="scope.row.proTemplate.temUrl" v-if="scope.row.proTemplate&&scope.row.proTemplate.temUrl"><el-button>下载查看</el-button></a>
+                    <span v-else>无模板</span>
+                </template>
+            </el-table-column>
+            <el-table-column
                 prop="proConRelaList"
                 :formatter="formatterCoupon"
                 label="优惠券">
@@ -80,6 +92,9 @@ export default {
     formatterCreateTime (row, column) {
       const time = row.createTime
       return formatDate(time)
+    },
+    proTemplateLink (row, column) {
+      return row.proTemplate && row.proTemplate.names ? row.proTemplate.names : '暂无需求模板'
     },
     formatterCoupon (row, column) {
       const list = row.proConRelaList

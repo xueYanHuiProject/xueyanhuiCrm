@@ -3,6 +3,7 @@ import manage from './views/column/001/index'// 管理全站栏目
 import tabManage from './views/column/032/index.vue'// 管理全站栏目
 import factoryProduce from './views/column/033/index.vue'// 管理企业简介
 import banner from './views/column/031/index.vue'// 管理企业简介
+import password from './views/column/053/index.vue'// 管理企业简介
 import school from './views/column/024/index.vue'// 管理企业简介
 import product from './views/column/023/index.vue'// 管理企业简介
 import integral from './views/column/025/index.vue'// 管理企业简介
@@ -56,6 +57,10 @@ export default {
     {
       path: '/024',
       component: school
+    },
+    {
+      path: '/053',
+      component: password
     },
     {
       path: '/addCoupon',

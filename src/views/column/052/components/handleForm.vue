@@ -1,16 +1,29 @@
 <template>
-    <el-form :inline="true" :model="formInline" class="demo-form-inline" label-width="80px" label-position="left">
+    <el-form :inline="true" :model="formInline" class="demo-form-inline" label-width="100px" label-position="left">
         <el-form-item label="管理员ID">
             <el-input v-model="formInline.id" placeholder="请输入管理员ID" class="adminInputEl"></el-input>
         </el-form-item>
-        <el-form-item label="管理员名称">
-            <el-input v-model="formInline.deleteFlag" placeholder="请输入管理员名称" class="adminInputEl"></el-input>
+        <el-form-item label="管理员姓名">
+            <el-input v-model="formInline.realName" placeholder="请输入管理员名称" class="adminInputEl"></el-input>
         </el-form-item>
         <el-form-item label="管理员状态">
             <el-select v-model="formInline.deleteFlag" placeholder="管理员状态" class="adminInputEl">
                 <el-option label="下架" value="0"></el-option>
                 <el-option label="上架" value="1"></el-option>
             </el-select>
+        </el-form-item>
+        <el-form-item label="管理员级别">
+            <el-select v-model="formInline.grade" placeholder="管理员状态" class="adminInputEl">
+                <el-option label="超级管理员" value="0"></el-option>
+                <el-option label="管理员" value="1"></el-option>
+                <el-option label="运营人员" value="2"></el-option>
+            </el-select>
+        </el-form-item>
+        <el-form-item label="身份证号">
+            <el-input v-model="formInline.identityNum" placeholder="请输入管理员身份证号" class="adminInputEl"></el-input>
+        </el-form-item>
+        <el-form-item label="联系方式">
+            <el-input v-model="formInline.phoneNum" placeholder="请输入管理员联系方式" class="adminInputEl"></el-input>
         </el-form-item>
         <el-form-item label="提交时间">
             <el-date-picker
@@ -52,17 +65,23 @@ export default {
     return {
       formInline: {
         updateUser: adminId,
-        status: '',
         id: '',
-        names: ''
+        grade: '',
+        phoneNum: '',
+        realName: '',
+        identityNum: '',
+        deleteFlag: ''
       },
       duringTime: [],
       updateDuringTime: [],
       originalForm: {
         updateUser: adminId,
-        status: '',
         id: '',
-        names: ''
+        grade: '',
+        phoneNum: '',
+        realName: '',
+        identityNum: '',
+        deleteFlag: ''
       },
       createPickerOptions: {
         shortcuts: [{

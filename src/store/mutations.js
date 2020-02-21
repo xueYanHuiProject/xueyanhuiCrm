@@ -25,8 +25,10 @@ const mutations = {
   },
   deleteTab (state, data) {
     const nowData = JSON.parse(JSON.stringify(state.nowTabData))
-    delete nowData[data.routerLink]
+    console.log(data.routerName)
+    delete nowData[data.routerName]
     state.nowTabData = nowData
+    console.log(state.nowTabData)
   },
   ContextOn (state) {
     state.Context = true

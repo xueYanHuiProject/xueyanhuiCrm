@@ -12,7 +12,7 @@
                 label="管理员ID">
             </el-table-column>
             <el-table-column
-                prop="deleteFlag"
+                prop="realName"
                 label="管理员姓名">
             </el-table-column>
             <el-table-column

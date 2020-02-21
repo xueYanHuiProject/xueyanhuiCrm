@@ -2,6 +2,9 @@
     <div class="block adminAuditControl">
         <el-form :inline="true" class="demo-form-inline">
             <el-form-item>
+                <el-button type="default" @click.native="resetPassword" v-if="grade===0">重置密码</el-button>
+            </el-form-item>
+            <el-form-item>
                 <el-button type="default" @click.native="changeStatus(1)">激活</el-button>
             </el-form-item>
             <el-form-item>
@@ -15,8 +18,10 @@ import axios from 'axios'
 export default {
   data () {
     const adminId = localStorage.getItem('adminId')
+    const grade = parseInt(localStorage.getItem('grade'), 10)
     return {
-      updateUser: adminId
+      updateUser: adminId,
+      grade: grade
     }
   },
   props: {
@@ -34,6 +39,14 @@ export default {
     }
   },
   methods: {
+    resetPassword () {
+      const _this = this
+      if ((_this.selectData.id === _this.updateUser) && (_this.grade === 0)) {
+        // 如果是超级管理员且是自己是不能操作数据得
+        _this.$message.error('您可以修改自己的密码')
+        return false
+      }
+    },
     changeStatus (status) {
       const _this = this
       console.log(_this.selectOnOff)
@@ -64,6 +77,7 @@ export default {
       if ((_this.selectData.id === _this.updateUser) && (grade === 0)) {
         // 如果是超级管理员且是自己是不能操作数据得
         _this.$message.error('超级管理员自己不能操作自己')
+        return false
       }
       axios({
         method: 'post',

@@ -12,6 +12,11 @@ export const testPhoneNum = (val) => {
   // return (/^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/).test(val);
   return (/^1\d{10}$/).test(val)
 }
+// 密码中必须包含字母（不区分大小写）、数字，至少8个字符，最多30个字符；
+export const testPassword = (val) => {
+  const pwdRegex = new RegExp('(?=.*[0-9])(?=.*[a-zA-Z]).{8,30}')
+  return pwdRegex.test(val)
+}
 export const testEmail = (str) => {
   const reg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/
   return reg.test(str)
