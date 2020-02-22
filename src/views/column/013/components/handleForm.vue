@@ -1,15 +1,39 @@
 <template>
     <el-form :inline="true" :model="formInline" class="demo-form-inline" label-width="80px" label-position="left">
-        <el-form-item label="仪器ID">
-            <el-input v-model="formInline.id" placeholder="请输入仪器ID" class="adminInputEl"></el-input>
+        <el-form-item label="需求ID">
+            <el-input v-model="formInline.id" placeholder="请输入需求ID" class="adminInputEl"></el-input>
         </el-form-item>
-        <el-form-item label="仪器名称">
-            <el-input v-model="formInline.names" placeholder="请输入仪器ID" class="adminInputEl"></el-input>
+        <el-form-item label="会员ID">
+            <el-input v-model="formInline.usrId" placeholder="请输入会员ID" class="adminInputEl"></el-input>
         </el-form-item>
-        <el-form-item label="仪器状态">
-            <el-select v-model="formInline.status" placeholder="仪器状态" class="adminInputEl">
+        <el-form-item label="联系人">
+            <el-input v-model="formInline.names" placeholder="请输入需求ID" class="adminInputEl"></el-input>
+        </el-form-item>
+        <el-form-item label="联系电话">
+            <el-input v-model="formInline.phone" placeholder="请输入联系电话" class="adminInputEl"></el-input>
+        </el-form-item>
+        <el-form-item label="电子邮件">
+            <el-input v-model="formInline.email" placeholder="请输入电子邮件" class="adminInputEl"></el-input>
+        </el-form-item>
+        <el-form-item label="需求状态">
+            <el-select v-model="formInline.status" placeholder="需求状态" class="adminInputEl">
                 <el-option label="下架" value="0"></el-option>
                 <el-option label="上架" value="1"></el-option>
+            </el-select>
+        </el-form-item>
+        <el-form-item label="回复状态">
+            <el-select v-model="formInline.isReturn" placeholder="需求回复状态" class="adminInputEl">
+                <el-option label="未回复" value="0"></el-option>
+                <el-option label="已回复" value="1"></el-option>
+            </el-select>
+        </el-form-item>
+        <el-form-item label="业务方向">
+            <el-select v-model="formInline.business" placeholder="需求业务方向" class="adminInputEl">
+                <el-option label="实验测试" value="0"></el-option>
+                <el-option label="科研绘图" value="1"></el-option>
+                <el-option label="数据分析" value="2"></el-option>
+                <el-option label="
+实验耗材" value="3"></el-option>
             </el-select>
         </el-form-item>
         <el-form-item label="提交时间">
@@ -53,15 +77,23 @@ export default {
       updateUser: adminId,
       formInline: {
         names: '',
+        usrId: '',
+        phone: '',
+        email: '',
+        isReturn: '',
+        business: '',
         updateUser: adminId,
-        remark: '',
         status: '',
         id: ''
       },
       originalForm: {
         names: '',
+        usrId: '',
+        phone: '',
+        email: '',
+        isReturn: '',
+        business: '',
         updateUser: adminId,
-        remark: '',
         status: '',
         id: ''
       },
