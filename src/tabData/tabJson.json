@@ -17,13 +17,19 @@
                         "index":"0-2",
                         "title":"会员反馈",
                         "icon":"el-icon-ump-ico_feedback",
-                        "routerName":"012"
+                        "routerName":"002"
                     },
                     {
                         "index":"0-3",
                         "title":"会员加盟",
                         "icon":"el-icon-ump-Audit",
                         "routerName":"003"
+                    },
+                    {
+                        "index":"0-4",
+                        "title":"发票管理",
+                        "icon":"el-icon-s-ticket",
+                        "routerName":"004"
                     }
                 ]
             },
