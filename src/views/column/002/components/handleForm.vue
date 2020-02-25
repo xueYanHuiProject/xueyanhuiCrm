@@ -7,36 +7,12 @@
             <el-input v-model="formInline.usrId" placeholder="请输入会员ID" class="adminInputEl"></el-input>
         </el-form-item>
         <el-form-item label="联系人">
-            <el-input v-model="formInline.names" placeholder="请输入反馈ID" class="adminInputEl"></el-input>
-        </el-form-item>
-        <el-form-item label="联系电话">
-            <el-input v-model="formInline.phone" placeholder="请输入联系电话" class="adminInputEl"></el-input>
-        </el-form-item>
-        <el-form-item label="电子邮件">
-            <el-input v-model="formInline.email" placeholder="请输入电子邮件" class="adminInputEl"></el-input>
-        </el-form-item>
-        <el-form-item label="反馈状态">
-            <el-select v-model="formInline.status" placeholder="反馈状态" class="adminInputEl">
-                <el-option label="下架" value="0"></el-option>
-                <el-option label="上架" value="1"></el-option>
-            </el-select>
+            <el-input v-model="formInline.usrName" placeholder="请输入反馈ID" class="adminInputEl"></el-input>
         </el-form-item>
         <el-form-item label="回复状态">
-            <el-select v-model="formInline.isReturn" placeholder="反馈回复状态" class="adminInputEl">
+            <el-select v-model="formInline.feedStatus" placeholder="反馈回复状态" class="adminInputEl">
                 <el-option label="未回复" value="0"></el-option>
                 <el-option label="已回复" value="1"></el-option>
-            </el-select>
-        </el-form-item>
-        <el-form-item label="业务方向">
-            <el-select v-model="formInline.business" placeholder="反馈业务方向" class="adminInputEl">
-                <el-option label="实验测试" value="0"></el-option>
-                <el-option label="科研绘图" value="1"></el-option>
-                <el-option label="数据分析" value="2"></el-option>
-                <el-option label="实验耗材" value="3"></el-option>
-                <el-option label="计算模拟" value="4"></el-option>
-                <el-option label="其他" value="5"></el-option>
-                <el-option label="
-实验耗材" value="3"></el-option>
             </el-select>
         </el-form-item>
         <el-form-item label="提交时间">
@@ -79,25 +55,17 @@ export default {
     return {
       updateUser: adminId,
       formInline: {
-        names: '',
+        usrName: '',
         usrId: '',
-        phone: '',
-        email: '',
-        isReturn: '',
-        business: '',
+        feedStatus: '',
         updateUser: adminId,
-        status: '',
         id: ''
       },
       originalForm: {
-        names: '',
+        usrName: '',
         usrId: '',
-        phone: '',
-        email: '',
-        isReturn: '',
-        business: '',
+        feedStatus: '',
         updateUser: adminId,
-        status: '',
         id: ''
       },
       duringTime: [],
@@ -162,11 +130,11 @@ export default {
     onSubmit () {
       const _this = this
       console.log(_this.duringTime)
-      const beginTime = _this.duringTime.length ? createTime(_this.duringTime[0]) : ''
-      const endTime = _this.duringTime.length ? createTime(_this.duringTime[1]) : ''
-      const updateBeginTime = _this.updateDuringTime.length ? createTime(_this.updateDuringTime[0]) : ''
-      const updateEndTime = _this.updateDuringTime.length ? createTime(_this.updateDuringTime[1]) : ''
-      _this.$emit('getTableList', { ..._this.formInline, beginTime, endTime, updateBeginTime, updateEndTime })
+      const feedBeginTime = _this.duringTime.length ? createTime(_this.duringTime[0]) : ''
+      const feedEndTime = _this.duringTime.length ? createTime(_this.duringTime[1]) : ''
+      const replyBeginTime = _this.updateDuringTime.length ? createTime(_this.updateDuringTime[0]) : ''
+      const replyEndTime = _this.updateDuringTime.length ? createTime(_this.updateDuringTime[1]) : ''
+      _this.$emit('getTableList', { ..._this.formInline, feedBeginTime, feedEndTime, replyBeginTime, replyEndTime })
     },
     resetList () {
       const t = this

@@ -16,35 +16,19 @@
                 label="会员ID">
             </el-table-column>
             <el-table-column
-                prop="names"
-                label="联系人">
+                prop="usrName"
+                label="会员名称">
             </el-table-column>
             <el-table-column
-                prop="phone"
-                label="联系电话">
+                prop="feedContext"
+                label="反馈内容">
             </el-table-column>
             <el-table-column
-                prop="email"
-                label="电子信箱">
+                prop="replyContext"
+                label="回复内容">
             </el-table-column>
             <el-table-column
-                prop="remark"
-                label="反馈备注">
-            </el-table-column>
-            <el-table-column
-                prop="business"
-                :formatter="formatBusiness"
-                label="业务方向">
-            </el-table-column>
-            <el-table-column
-                label="反馈文件">
-                <template slot-scope="scope">
-                    <a :href="scope.row.fileUrl" v-if="scope.row.fileUrl"><el-button>下载查看</el-button></a>
-                    <span v-else>无模板</span>
-                </template>
-            </el-table-column>
-            <el-table-column
-                prop="isReturn"
+                prop="feedStatus"
                 :formatter="formatIsReturn"
                 label="回复专状态">
             </el-table-column>
@@ -60,7 +44,7 @@
                 label="创建时间">
             </el-table-column>
             <el-table-column
-                prop="updateTime"
+                prop="replyTime"
                 sortable
                 :formatter="formatterUpdateTime"
                 label="更新时间">
@@ -98,7 +82,7 @@ export default {
       _this.$emit('setSelectData', data)
     },
     formatIsReturn (row, column) {
-      const status = row.isReturn
+      const status = row.feedStatus
       return parseInt(status, 10) === 1 ? '未回复' : '已回复'
     },
     formatBusiness (row, column) {
@@ -135,7 +119,7 @@ export default {
       return formatDate(time)
     },
     formatterUpdateTime (row, column) {
-      const time = row.updateTime || row.createTime
+      const time = row.replyTime || row.createTime
       return formatDate(time)
     }
   }
