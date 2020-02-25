@@ -3,18 +3,40 @@
         <el-form-item label="订单ID">
             <el-input v-model="formInline.id" placeholder="请输入订单ID" class="adminInputEl"></el-input>
         </el-form-item>
-        <el-form-item label="订单名称">
-            <el-input v-model="formInline.names" placeholder="请输入订单ID" class="adminInputEl"></el-input>
+        <el-form-item label="会员ID">
+            <el-input v-model="formInline.usrId
+" placeholder="请输入会员ID" class="adminInputEl"></el-input>
+        </el-form-item>
+        <el-form-item label="产品ID">
+            <el-input v-model="formInline.prodId" placeholder="请输入产品ID" class="adminInputEl"></el-input>
+        </el-form-item>
+        <el-form-item label="优惠券ID">
+            <el-input v-model="formInline.couponId" placeholder="请输入优惠券ID" class="adminInputEl"></el-input>
+        </el-form-item>
+        <el-form-item label="管理员ID">
+            <el-input v-model="formInline.acceptId" placeholder="请输入优惠券ID" class="adminInputEl"></el-input>
+        </el-form-item>
+        <el-form-item label="栏目ID">
+            <el-input v-model="formInline.columnId" placeholder="请输入优惠券ID" class="adminInputEl"></el-input>
         </el-form-item>
         <el-form-item label="订单状态">
-            <el-select v-model="formInline.status" placeholder="订单状态" class="adminInputEl">
-                <el-option label="下架" value="0"></el-option>
-                <el-option label="上架" value="1"></el-option>
+            <el-select v-model="formInline.orderState" placeholder="订单状态" class="adminInputEl">
+                <el-option label="未支付" value="1"></el-option>
+                <el-option label="待实验" value="2"></el-option>
+                <el-option label="实验中" value="3"></el-option>
+                <el-option label="已完成" value="4"></el-option>
+                <el-option label="已退款" value="5"></el-option>
             </el-select>
         </el-form-item>
-        <el-form-item label="提交时间">
+        <el-form-item label="报价状态">
+            <el-select v-model="formInline.isOffer" placeholder="报价状态" class="adminInputEl">
+                <el-option label="已报价" value="1"></el-option>
+                <el-option label="未报价" value="2"></el-option>
+            </el-select>
+        </el-form-item>
+        <el-form-item label="下单时间">
             <el-date-picker
-                v-model="formInline.createDuringTime"
+                v-model="duringTime"
                 type="datetimerange"
                 :picker-options="createPickerOptions"
                 range-separator="至"
@@ -23,9 +45,9 @@
                 align="right">
             </el-date-picker>
          </el-form-item>
-        <el-form-item label="更新时间">
+        <el-form-item label="支付时间">
             <el-date-picker
-                v-model="formInline.updateDuringTime"
+                v-model="updateDuringTime"
                 type="datetimerange"
                 :picker-options="updatePickerOptions"
                 range-separator="至"
@@ -52,22 +74,28 @@ export default {
     return {
       updateUser: adminId,
       formInline: {
-        names: '',
+        usrId: '',
+        orderState: '',
+        isOffer: '',
+        prodId: '',
+        couponId: '',
+        acceptId: '',
+        columnId: '',
         updateUser: adminId,
-        remark: '',
-        status: '',
-        id: '',
-        createDuringTime: [],
-        updateDuringTime: []
+        id: ''
       },
+      duringTime: [],
+      updateDuringTime: [],
       originalForm: {
-        names: '',
+        usrId: '',
+        orderState: '',
+        isOffer: '',
+        prodId: '',
+        couponId: '',
+        acceptId: '',
+        columnId: '',
         updateUser: adminId,
-        remark: '',
-        status: '',
-        id: '',
-        createDuringTime: [],
-        updateDuringTime: []
+        id: ''
       },
       createPickerOptions: {
         shortcuts: [{
@@ -131,9 +159,7 @@ export default {
       console.log(_this.duringTime)
       const beginTime = _this.duringTime.length ? createTime(_this.duringTime[0]) : ''
       const endTime = _this.duringTime.length ? createTime(_this.duringTime[1]) : ''
-      const updateBeginTime = _this.updateDuringTime.length ? createTime(_this.updateDuringTime[0]) : ''
-      const updateEndTime = _this.updateDuringTime.length ? createTime(_this.updateDuringTime[1]) : ''
-      _this.$emit('getTableList', { ..._this.formInline, beginTime, endTime, updateBeginTime, updateEndTime })
+      _this.$emit('getTableList', { ..._this.formInline, beginTime, endTime })
     },
     resetList () {
       const t = this

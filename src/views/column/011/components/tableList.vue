@@ -78,12 +78,12 @@
                 label="优惠券ID">
             </el-table-column>
             <el-table-column
-                prop="actualMoney"
-                label="订单价格">
+                prop="payMoney"
+                label="订单报价">
             </el-table-column>
             <el-table-column
-                prop="payMoney"
-                label="支付金额">
+                prop="actualMoney"
+                label="实际支付">
             </el-table-column>
             <el-table-column
                 prop="orderState"

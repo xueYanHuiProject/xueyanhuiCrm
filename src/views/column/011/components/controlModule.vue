@@ -76,9 +76,34 @@ export default {
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            _this.$message({
-              type: 'success',
-              message: '删除成功!'
+            axios({
+              method: 'post',
+              url: '/api/ordOrder/update',
+              headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+              },
+              data: {
+                id: _this.selectData.id,
+                isOffer: 1,
+                updateUser: _this.updateUser,
+                payMoney: value
+              }
+            }).then(function (response) {
+              console.log('进入成功')
+              const reqData = response.data
+              if (parseInt(reqData.code, 10) === 200) {
+                _this.$message({
+                  type: 'success',
+                  message: '报价成功!'
+                })
+              }
+              console.log(response.data)
+            }).catch((res) => {
+              console.log(res)
+              _this.$message({
+                type: 'info',
+                message: '操作失败'
+              })
             })
           })
         })
