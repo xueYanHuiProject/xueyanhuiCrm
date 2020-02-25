@@ -16,7 +16,7 @@ import TableList from './components/tableList'
 import Pagination from './components/pagination'
 import ControlModule from './components/controlModule'
 const xhrUrl = {
-  getTableList: '/api/proTemplate/query'
+  getTableList: '/api/ordOrder/query'
 }
 export default {
   name: 'manageBanner',

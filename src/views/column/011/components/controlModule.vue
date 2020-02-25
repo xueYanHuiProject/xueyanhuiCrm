@@ -2,7 +2,7 @@
     <div class="block adminAuditControl">
         <el-form :inline="true" class="demo-form-inline">
             <el-form-item>
-                <el-button type="default" @click.native="changeStatus(1)">上架</el-button>
+                <el-button type="default" @click.native="changeStatus(1)">修改订单价格</el-button>
             </el-form-item>
             <el-form-item>
                 <el-button type="default" @click.native="changeStatus(0)">下架</el-button>
@@ -65,20 +65,22 @@ export default {
       if (!_this.selectOnOff) {
         _this.$message.error('请选择一条数据')
       } else {
-        console.log('逻辑')
-        let des = ''
-        if (parseInt(status, 10) === 0) {
-          des = '确定要下架该模板？'
-        } else {
-          des = '确定要上架该模板？'
-        }
-        _this.$alert(des, '！提示信息', {
+        _this.$prompt('请输入价格', '提示', {
           confirmButtonText: '确定',
-          callback: action => {
-            _this.valid(status + '', () => {
-              _this.$emit('getTableList')
+          cancelButtonText: '取消',
+          inputPattern: /(^[1-9]\d*$)/,
+          inputErrorMessage: '价格格式不正确'
+        }).then(({ value }) => {
+          _this.$confirm('您确定提交该报价,用户支付后报价将不可修改?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            _this.$message({
+              type: 'success',
+              message: '删除成功!'
             })
-          }
+          })
         })
       }
     },
