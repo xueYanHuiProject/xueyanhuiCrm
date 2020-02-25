@@ -86,6 +86,7 @@ export default {
                 id: _this.selectData.id,
                 isOffer: 1,
                 updateUser: _this.updateUser,
+                acceptId: _this.updateUser,
                 payMoney: value
               }
             }).then(function (response) {
@@ -96,6 +97,7 @@ export default {
                   type: 'success',
                   message: '报价成功!'
                 })
+                _this.$emit('getTableList')
               }
               console.log(response.data)
             }).catch((res) => {

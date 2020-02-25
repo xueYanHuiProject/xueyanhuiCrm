@@ -249,7 +249,7 @@ export default {
         const reqData = response.data
         console.log(reqData)
         if (reqData.success && reqData.code === 200) {
-
+          t.registerOnOff = false
         }
         console.log(response.data)
       })
@@ -292,6 +292,9 @@ export default {
                 type: 'success',
                 message: message
               })
+              setTimeout(() => {
+                location.reload()
+              }, 1000)
             } else {
               t.$message.error(message)
             }

@@ -15,12 +15,6 @@
         <el-form-item label="电子邮件">
             <el-input v-model="formInline.email" placeholder="请输入电子邮件" class="adminInputEl"></el-input>
         </el-form-item>
-        <el-form-item label="加盟状态">
-            <el-select v-model="formInline.status" placeholder="加盟状态" class="adminInputEl">
-                <el-option label="下架" value="0"></el-option>
-                <el-option label="上架" value="1"></el-option>
-            </el-select>
-        </el-form-item>
         <el-form-item label="回复状态">
             <el-select v-model="formInline.isReturn" placeholder="加盟回复状态" class="adminInputEl">
                 <el-option label="未回复" value="0"></el-option>
@@ -35,8 +29,6 @@
                 <el-option label="实验耗材" value="3"></el-option>
                 <el-option label="计算模拟" value="4"></el-option>
                 <el-option label="其他" value="5"></el-option>
-                <el-option label="
-实验耗材" value="3"></el-option>
             </el-select>
         </el-form-item>
         <el-form-item label="提交时间">

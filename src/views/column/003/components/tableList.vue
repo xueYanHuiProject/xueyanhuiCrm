@@ -37,20 +37,8 @@
                 label="业务方向">
             </el-table-column>
             <el-table-column
-                label="加盟文件">
-                <template slot-scope="scope">
-                    <a :href="scope.row.fileUrl" v-if="scope.row.fileUrl"><el-button>下载查看</el-button></a>
-                    <span v-else>无模板</span>
-                </template>
-            </el-table-column>
-            <el-table-column
                 prop="isReturn"
                 :formatter="formatIsReturn"
-                label="回复专状态">
-            </el-table-column>
-            <el-table-column
-                prop="status"
-                :formatter="formatStatus"
                 label="回复专状态">
             </el-table-column>
             <el-table-column

@@ -43,6 +43,10 @@
                 label="管理员ID">
             </el-table-column>
             <el-table-column
+                prop="acceptName"
+                label="管理员名称">
+            </el-table-column>
+            <el-table-column
                 prop="prodName"
                 label="产品名称">
             </el-table-column>

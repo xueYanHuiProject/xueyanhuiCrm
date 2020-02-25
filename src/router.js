@@ -9,6 +9,7 @@ import password from './views/column/053/index.vue'// 管理企业简介
 import publish from './views/column/013/index.vue'// 管理企业简介
 import school from './views/column/024/index.vue'// 管理企业简介
 import demand from './views/column/003/index.vue'// 管理企业简介
+import replyDemand from './views/column/003/components/replyDemand.vue'// 管理企业简介
 import product from './views/column/023/index.vue'// 管理企业简介
 import integral from './views/column/025/index.vue'// 管理企业简介
 import coupon from './views/column/026/index.vue'// 管理企业简介
@@ -73,6 +74,10 @@ export default {
     {
       path: '/003',
       component: demand
+    },
+    {
+      path: '/replyDemand',
+      component: replyDemand
     },
     {
       path: '/addCoupon',

@@ -49,7 +49,6 @@ export default {
               const item = reqData.result.tabList[num]
               const innerResult = []
               for (let innerNum = 0; innerNum < item.tabList.length; innerNum++) {
-                console.log('内部循环')
                 const grade = parseInt(localStorage.getItem('grade'), 10)
                 const innerItem = item.tabList[innerNum]
                 if (grade === 0) {

@@ -15,6 +15,7 @@
 </template>
 <script>
 import axios from 'axios'
+import md5 from 'blueimp-md5'
 export default {
   data () {
     const adminId = localStorage.getItem('adminId')
@@ -41,10 +42,48 @@ export default {
   methods: {
     resetPassword () {
       const _this = this
-      if ((_this.selectData.id === _this.updateUser) && (_this.grade === 0)) {
-        // 如果是超级管理员且是自己是不能操作数据得
-        _this.$message.error('您可以修改自己的密码')
-        return false
+      if (!_this.selectOnOff) {
+        _this.$message.error('请选择一条数据')
+      } else {
+        if ((_this.selectData.id === _this.updateUser) && (_this.grade === 0)) {
+          // 如果是超级管理员且是自己是不能操作数据得
+          _this.$message.error('您可以修改自己的密码')
+          return false
+        }
+        _this.$confirm('您确定要重置改用户密码?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          axios({
+            method: 'post',
+            url: '/api/sysUser/update',
+            headers: {
+              'X-Requested-With': 'XMLHttpRequest'
+            },
+            data: {
+              id: _this.selectData.id,
+              updateUser: _this.updateUser,
+              password: md5('xueyanhui123456')
+            }
+          }).then(function (response) {
+            console.log('进入成功')
+            const reqData = response.data
+            if (parseInt(reqData.code, 10) === 200) {
+              _this.$message({
+                type: 'success',
+                message: '修改成功'
+              })
+            }
+            console.log(response.data)
+          }).catch((res) => {
+            console.log(res)
+            _this.$message({
+              type: 'info',
+              message: '操作失败'
+            })
+          })
+        })
       }
     },
     changeStatus (status) {

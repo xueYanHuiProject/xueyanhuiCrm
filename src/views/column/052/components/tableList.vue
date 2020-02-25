@@ -77,7 +77,7 @@ export default {
       _this.$emit('setSelectData', data)
     },
     formatStatus (row, column) {
-      const status = row.status
+      const status = row.deleteFlag
       return parseInt(status, 10) === 0 ? '无效' : '激活'
     },
     formatterTime (row, column) {
@@ -104,7 +104,7 @@ export default {
       const gender = parseInt(row.gender, 10)
       let genderName = ''
       switch (gender) {
-        case 0:
+        case 2:
           genderName = '女'
           break
         case 1:

@@ -4,13 +4,16 @@
     <section class="admin-main-inner">
         <el-form   :model="formInline" class="demo-form-inline" label-width="80px" label-position="left">
             <el-form-item label="会员名称">
-                <el-input v-model="formInline.usrName" placeholder="请输入产品名称" class="adminInputEl" disabled></el-input>
+                <el-input v-model="formInline.names" placeholder="请输入产品名称" class="adminInputEl" disabled></el-input>
             </el-form-item>
-            <el-form-item label="反馈内容">
-                <el-input v-model="formInline.feedContext" placeholder="请输入产品描述" class="adminInputEl" disabled></el-input>
+            <el-form-item label="加盟方向">
+                <el-input v-model="formInline.business" placeholder="请输入产品名称" class="adminInputEl" disabled></el-input>
+            </el-form-item>
+            <el-form-item label="备注">
+                <el-input v-model="formInline.remark" placeholder="请输入产品描述" class="adminInputEl" disabled></el-input>
             </el-form-item>
             <el-form-item label="回复内容">
-                <el-input v-model="formInline.replyContext" placeholder="请输入产品描述" class="adminInputEl"></el-input>
+                <el-input v-model="formInline.returnContext" placeholder="请输入产品描述" class="adminInputEl"></el-input>
             </el-form-item>
             <div class="admin-handleBar demo-form-inline">
                 <el-form-item class="form-button">
@@ -37,7 +40,7 @@
 import axios from 'axios'
 const xhrUrl = {
   getTableList: '/api/usrFeed/query',
-  updateProduct: '/api/usrFeed/feed'
+  updateProduct: '/api/usrJoin/reply'
 }
 export default {
   name: 'addProduct',
@@ -51,14 +54,16 @@ export default {
       dialogImageUrl: '',
       id: id,
       formInline: {
-        usrName: '',
-        feedContext: '',
-        replyContext: ''
+        names: '',
+        remark: '',
+        business: '',
+        returnContext: ''
       },
       originalForm: {
-        usrName: '',
-        feedContext: '',
-        replyContext: ''
+        names: '',
+        remark: '',
+        business: '',
+        returnContext: ''
       }
     }
   },
@@ -98,7 +103,7 @@ export default {
     },
     returnBack () {
       const _this = this
-      _this.$router.push({ path: '/002' })
+      _this.$router.push({ path: '/003' })
     },
     handlePictureCardPreview () {
       const _this = this
