@@ -5,7 +5,7 @@
                 <el-button type="default" @click.native="changeStatus(1)">修改订单价格</el-button>
             </el-form-item>
             <el-form-item>
-                <el-button type="default" @click.native="changeStatus(0)">下架</el-button>
+                <el-button type="default" @click.native="upLoadResult">上传交付文件</el-button>
             </el-form-item>
         </el-form>
     </div>
@@ -43,14 +43,14 @@ export default {
         }
       })
     },
-    editColumn () {
+    upLoadResult () {
       const _this = this
       console.log(_this.selectOnOff + '开关状态')
       if (!_this.selectOnOff) {
         _this.$message.error('请选择一条数据')
       } else {
         _this.$router.push({
-          path: '/addProTemplate',
+          path: '/upLoadResult',
           query: {
             type: 1,
             id: _this.selectData.id,
