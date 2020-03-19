@@ -712,6 +712,15 @@ export default {
           }
         }
       }
+        &.sample-form-check {
+            .wrap {
+                .radio-item {
+                    i {
+                        border-radius: unset;
+                    }
+                }
+            }
+        }
       &.sample-form-add{
         display: flex;
         flex-direction: row;
