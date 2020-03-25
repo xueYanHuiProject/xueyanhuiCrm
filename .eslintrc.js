@@ -19,9 +19,9 @@ module.exports = {
         "echarts":true
     },
     rules: {
-        'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',//非开发环境下禁止使用console
-        'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',//非开发环境下禁止使用debugger
-        'no-alert': process.env.NODE_ENV === 'production' ? 'error' : 'off',//非开发环境下禁止使用alert
+        //'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',//非开发环境下禁止使用console
+        //'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',//非开发环境下禁止使用debugger
+        //'no-alert': process.env.NODE_ENV === 'production' ? 'error' : 'off',//非开发环境下禁止使用alert
         "no-tabs": 2,// 禁止使用tabs
         "no-useless-escape": 0,
         "no-empty": 0,// 块语句中的内容不能为空

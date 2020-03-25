@@ -53,6 +53,7 @@ import axios from 'axios'
 const xhrUrl = {
   addProTemplate: '/api/proTemplate/insert',
   getTableList: '/api/proTemplate/query',
+  addForm: '/api/proSpecimen/batchInsert',
   updateProTemplate: '/api/proTemplate/update'
 }
 export default {

@@ -77,6 +77,10 @@ export default {
       component: publish
     },
     {
+      path: '/012',
+      component: publish
+    },
+    {
       path: '/003',
       component: demand
     },

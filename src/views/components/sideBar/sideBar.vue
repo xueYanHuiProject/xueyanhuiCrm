@@ -18,7 +18,7 @@
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import axios from 'axios'
+import sideBarData from '../../../utils/sideBarData'
 export default {
   computed: {
     ...mapGetters(['toggleOnOff', 'columnList'])
@@ -33,54 +33,41 @@ export default {
   methods: {
     ...mapActions(['addTab', 'outLoginOne', 'saveColumnList']),
     getSideData () {
-      const t = this
-      axios.get('/src/tabData/tabJson.json', {
-        params: {}
-      })
-        .then(function (response) {
-          const reqData = response.data
-          console.log('=================')
-          console.log(reqData.result)
-          if (reqData.result) {
-            t.tabList = reqData.result
-            const result = []
-            console.log(reqData.result)
-            for (let num = 0; num < reqData.result.tabList.length; num++) {
-              const item = reqData.result.tabList[num]
-              const innerResult = []
-              for (let innerNum = 0; innerNum < item.tabList.length; innerNum++) {
-                const grade = parseInt(localStorage.getItem('grade'), 10)
-                const innerItem = item.tabList[innerNum]
-                if (grade === 0) {
-                  // 超级管理员
-                  innerResult.push(innerItem)
-                } else if (grade === 1) {
-                  // 普通管理员
-                  if (parseInt(innerItem.auth, 10) === 0) {
-                    continue
-                  } else {
-                    innerResult.push(innerItem)
-                  }
-                } else if (grade === 2) {
-                  // 运营人员
-                  if (parseInt(innerItem.auth, 10) === 0) {
-                    continue
-                  } else {
-                    innerResult.push(innerItem)
-                  }
-                }
-              }
-              console.log(innerResult)
-              item.tabList = innerResult
-              result.push(item)
+      const _this = this
+      _this.tabList = sideBarData.result
+      const result = []
+      console.log(sideBarData.result)
+      for (let num = 0; num < sideBarData.result.tabList.length; num++) {
+        const item = sideBarData.result.tabList[num]
+        const innerResult = []
+        for (let innerNum = 0; innerNum < item.tabList.length; innerNum++) {
+          const grade = parseInt(localStorage.getItem('grade'), 10)
+          const innerItem = item.tabList[innerNum]
+          if (grade === 0) {
+            // 超级管理员
+            innerResult.push(innerItem)
+          } else if (grade === 1) {
+            // 普通管理员
+            if (parseInt(innerItem.auth, 10) === 0) {
+              continue
+            } else {
+              innerResult.push(innerItem)
             }
-            console.log(result)
-            t.saveColumnList(result)
+          } else if (grade === 2) {
+            // 运营人员
+            if (parseInt(innerItem.auth, 10) === 0) {
+              continue
+            } else {
+              innerResult.push(innerItem)
+            }
           }
-        })
-        .catch(function (error) {
-          console.log(error)
-        })
+        }
+        console.log(innerResult)
+        item.tabList = innerResult
+        result.push(item)
+      }
+      console.log(result)
+      _this.saveColumnList(result)
     },
     runFn (v) {
       const t = this
