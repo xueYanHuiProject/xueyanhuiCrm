@@ -2,15 +2,17 @@
 <section class="admin-main">
     <h1 class="admin-title">添加优惠券</h1>
     <section class="admin-main-inner">
-        <el-form   :model="formInline" class="demo-form-inline" label-width="80px" label-position="left">
+        <el-form   :model="formInline" class="demo-form-inline" label-width="120px" label-position="left">
             <el-form-item label="优惠券名称">
                 <el-input v-model="formInline.couTitle" placeholder="请输入优惠券名称" class="adminInputEl"></el-input>
             </el-form-item>
             <el-form-item label="优惠券价格">
                 <el-input v-model="formInline.couPrice" placeholder="请输入优惠券价格" class="adminInputEl"></el-input>
             </el-form-item>
-            <el-form-item label="优惠券积分">
-                <el-input v-model="formInline.couIntegral" placeholder="请输入优惠券积分" class="adminInputEl"></el-input>
+            <el-form-item label="积分规则">
+                <el-select v-model="formInline.graRuleId" placeholder="请选择积分规则" class="adminInputEl">
+                    <el-option :label="item.scene" :value="item.id" :key="item.id" v-for="(item) in rulesList"></el-option>
+                </el-select>
             </el-form-item>
             <el-form-item label="优惠券描述">
                 <el-input v-model="formInline.couContext" placeholder="请输入优惠券描述" class="adminInputEl"></el-input>
@@ -39,6 +41,7 @@
 <script>
 import axios from 'axios'
 const xhrUrl = {
+  getRulesList: '/api/graRule/query',
   addSchool: '/api/proCoupon/insert',
   getTableList: '/api/proCoupon/query',
   updateSchool: '/api/proCoupon/update'
@@ -53,6 +56,7 @@ export default {
     return {
       dialogVisible: false,
       updateUser: adminId,
+      rulesList: [],
       dialogImageUrl: '',
       id: id,
       editType: editType,
@@ -60,14 +64,14 @@ export default {
         couTitle: '',
         couContext: '',
         couPrice: '',
-        couIntegral: '',
+        graRuleId: '',
         status: '0'
       },
       originalForm: {
         couTitle: '',
         couContext: '',
         couPrice: '',
-        couIntegral: '',
+        graRuleId: '',
         status: '0'
       }
     }
@@ -76,8 +80,32 @@ export default {
     const _this = this
     console.log(_this.editType)
     _this.editType && _this.getData()
+    _this.getTableList()
   },
   methods: {
+    getTableList () {
+      const _this = this
+      console.log('--------------------')
+      console.log(_this.formInline)
+      axios.get(xhrUrl.getRulesList, {
+        params: {
+          updateUser: _this.updateUser,
+          pageSize: 10000,
+          status: 1,
+          pageNum: 1
+        }
+      })
+        .then(function (response) {
+          console.log(response)
+          if (response.data.code === 200) {
+            _this.rulesList = response.data.result.list
+            console.log(_this.rulesList)
+          }
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
+    },
     resetList () {
       const t = this
       t.formInline = JSON.parse(JSON.stringify(t.originalForm))

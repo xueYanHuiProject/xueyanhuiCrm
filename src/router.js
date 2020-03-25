@@ -7,6 +7,7 @@ import factoryProduce from './views/column/033/index.vue'// 管理企业简介
 import banner from './views/column/031/index.vue'// 管理企业简介
 import password from './views/column/053/index.vue'// 管理企业简介
 import publish from './views/column/013/index.vue'// 管理企业简介
+import machine from './views/column/012/index.vue'// 管理企业简介
 import school from './views/column/024/index.vue'// 管理企业简介
 import demand from './views/column/003/index.vue'// 管理企业简介
 import replyDemand from './views/column/003/components/replyDemand.vue'// 管理企业简介
@@ -78,7 +79,7 @@ export default {
     },
     {
       path: '/012',
-      component: publish
+      component: machine
     },
     {
       path: '/003',

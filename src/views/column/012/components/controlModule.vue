@@ -2,22 +2,13 @@
     <div class="block adminAuditControl">
         <el-form :inline="true" class="demo-form-inline">
             <el-form-item>
-                <el-button type="default" @click.native="addColumn">添加</el-button>
+                <el-button type="default" @click.native="changeStatus()">修改订单价格</el-button>
             </el-form-item>
             <el-form-item>
-                <el-button type="default" @click.native="editColumn">编辑</el-button>
+                <el-button type="default" @click.native="refund()">退款</el-button>
             </el-form-item>
             <el-form-item>
-                <el-button type="default" @click.native="editSample">样品模板</el-button>
-            </el-form-item>
-            <el-form-item>
-                <el-button type="default" @click.native="changePrice()">修改单价</el-button>
-            </el-form-item>
-            <el-form-item>
-                <el-button type="default" @click.native="changeStatus(1)">上架</el-button>
-            </el-form-item>
-            <el-form-item>
-                <el-button type="default" @click.native="changeStatus(0)">下架</el-button>
+                <el-button type="default" @click.native="upLoadResult">上传交付文件</el-button>
             </el-form-item>
         </el-form>
     </div>
@@ -49,13 +40,29 @@ export default {
     addColumn () {
       const _this = this
       _this.$router.push({
-        path: '/addProInstr',
+        path: '/addProTemplate',
         query: {
           type: 0
         }
       })
     },
-    changePrice () {
+    upLoadResult () {
+      const _this = this
+      console.log(_this.selectOnOff + '开关状态')
+      if (!_this.selectOnOff) {
+        _this.$message.error('请选择一条数据')
+      } else {
+        _this.$router.push({
+          path: '/upLoadResult',
+          query: {
+            type: 1,
+            id: _this.selectData.id,
+            updateUser: _this.updateUser
+          }
+        })
+      }
+    },
+    changeStatus () {
       const _this = this
       console.log(_this.selectOnOff)
       if (!_this.selectOnOff) {
@@ -74,14 +81,16 @@ export default {
           }).then(() => {
             axios({
               method: 'post',
-              url: '/api/proInstr/update',
+              url: '/api/ordOrder/update',
               headers: {
                 'X-Requested-With': 'XMLHttpRequest'
               },
               data: {
                 id: _this.selectData.id,
+                isOffer: 1,
                 updateUser: _this.updateUser,
-                price: value
+                acceptId: _this.updateUser,
+                payMoney: value
               }
             }).then(function (response) {
               console.log('进入成功')
@@ -105,56 +114,45 @@ export default {
         })
       }
     },
-    editSample () {
-      const _this = this
-      if (!_this.selectOnOff) {
-        _this.$message.error('请选择一条数据')
-      } else {
-        _this.$router.push({
-          path: '/editSample',
-          query: {
-            id: _this.selectData.id,
-            updateUser: _this.updateUser
-          }
-        })
-      }
-    },
-    editColumn () {
-      const _this = this
-      console.log(_this.selectOnOff + '开关状态')
-      if (!_this.selectOnOff) {
-        _this.$message.error('请选择一条数据')
-      } else {
-        _this.$router.push({
-          path: '/addProInstr',
-          query: {
-            type: 1,
-            id: _this.selectData.id,
-            updateUser: _this.updateUser
-          }
-        })
-      }
-    },
-    changeStatus (status) {
+    refund () {
       const _this = this
       console.log(_this.selectOnOff)
       if (!_this.selectOnOff) {
         _this.$message.error('请选择一条数据')
       } else {
-        console.log('逻辑')
-        let des = ''
-        if (parseInt(status, 10) === 0) {
-          des = '确定要下架该仪器？'
-        } else {
-          des = '确定要上架该仪器？'
-        }
-        _this.$alert(des, '！提示信息', {
+        _this.$confirm('您确定要退款该订单?', '提示', {
           confirmButtonText: '确定',
-          callback: action => {
-            _this.valid(status + '', () => {
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          axios({
+            method: 'post',
+            url: '/api/pay/refund/' + _this.selectData.id,
+            headers: {
+              'X-Requested-With': 'XMLHttpRequest'
+            },
+            data: {
+              id: _this.selectData.id,
+              updateUser: _this.updateUser
+            }
+          }).then(function (response) {
+            console.log('进入成功')
+            const reqData = response.data
+            if (parseInt(reqData.code, 10) === 200) {
+              _this.$message({
+                type: 'success',
+                message: '退款成功!'
+              })
               _this.$emit('getTableList')
+            }
+            console.log(response.data)
+          }).catch((res) => {
+            console.log(res)
+            _this.$message({
+              type: 'info',
+              message: '退款失败'
             })
-          }
+          })
         })
       }
     },
@@ -163,7 +161,7 @@ export default {
       console.log('操作')
       axios({
         method: 'post',
-        url: '/api/proInstr/update',
+        url: '/api/proTemplate/update',
         headers: {
           'X-Requested-With': 'XMLHttpRequest'
         },

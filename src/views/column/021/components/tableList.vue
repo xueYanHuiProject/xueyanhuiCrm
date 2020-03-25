@@ -14,7 +14,11 @@
             <el-table-column
                 prop="names"
                 label="仪器名称">
-            </el-table-column>、
+            </el-table-column>
+            <el-table-column
+                prop="price"
+                label="样品单价">
+            </el-table-column>
             <el-table-column
                 label="仪器封面">
                 <template slot-scope="scope">
