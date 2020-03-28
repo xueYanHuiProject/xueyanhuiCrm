@@ -9,33 +9,27 @@
             style="width: 100%">
             <el-table-column
                 prop="id"
-                fixed
                 label="订单ID">
             </el-table-column>
             <el-table-column
                 prop="usrId"
-                fixed
                 label="用户ID">
             </el-table-column>
             <el-table-column
                 prop="userName"
-                fixed
                 label="会员名称">
             </el-table-column>
             <el-table-column
                 prop="payType"
-                fixed
                 :formatter="formatPayType"
                 label="订单来源">
             </el-table-column>
             <el-table-column
                 prop="columnName"
-                fixed
                 label="所属栏目">
             </el-table-column>
             <el-table-column
                 prop="columnId"
-                fixed
                 label="所属栏目ID">
             </el-table-column>
             <el-table-column
@@ -60,20 +54,27 @@
             </el-table-column>
             <el-table-column
                 prop="isInvoice"
-                fixed
                 :formatter="formatInvoice"
                 label="发票状态">
             </el-table-column>
             <el-table-column
                 prop="isOffer"
-                fixed
                 :formatter="formatIsOffer"
                 label="用户已获取报价">
             </el-table-column>
             <el-table-column
+                width="150"
                 label="订单文件">
                 <template slot-scope="scope">
                     <a :href="scope.row.fileUrl" v-if="scope.row.fileUrl"><el-button>下载查看</el-button></a>
+                    <span v-else>未上传</span>
+                </template>
+            </el-table-column>
+            <el-table-column
+                width="150"
+                label="交付文件">
+                <template slot-scope="scope">
+                    <a :href="scope.row.endUrl" v-if="scope.row.endUrl"><el-button>下载查看</el-button></a>
                     <span v-else>未上传</span>
                 </template>
             </el-table-column>
@@ -97,7 +98,6 @@
             <el-table-column
                 prop="createTime"
                 sortable
-                fixed
                 :formatter="formatterCreateTime"
                 label="下单时间">
             </el-table-column>
@@ -110,7 +110,6 @@
             <el-table-column
                 prop="refundTime"
                 sortable
-                fixed
                 :formatter="formatterRefundTime"
                 label="退款时间">
             </el-table-column>

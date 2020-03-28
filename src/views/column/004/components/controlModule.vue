@@ -2,19 +2,7 @@
     <div class="block adminAuditControl">
         <el-form :inline="true" class="demo-form-inline">
             <el-form-item>
-                <el-button type="default" @click.native="changeStatus(1)">修改订单价格</el-button>
-            </el-form-item>
-            <el-form-item>
-                <el-button type="default" @click.native="refund()">退款</el-button>
-            </el-form-item>
-            <el-form-item>
-                <el-button type="default" @click.native="startOrder(3)">开始</el-button>
-            </el-form-item>
-            <el-form-item>
                 <el-button type="default" @click.native="upLoadResult">上传交付文件</el-button>
-            </el-form-item>
-            <el-form-item>
-                <el-button type="default" @click.native="startOrder(4)">结束</el-button>
             </el-form-item>
         </el-form>
     </div>
@@ -59,7 +47,7 @@ export default {
         _this.$message.error('请选择一条数据')
       } else {
         _this.$router.push({
-          path: '/upLoadResult',
+          path: '/upLoadInvoice',
           query: {
             type: 1,
             id: _this.selectData.id,
@@ -74,7 +62,7 @@ export default {
       if (!_this.selectOnOff) {
         _this.$message.error('请选择一条数据')
       } else {
-        _this.$confirm('您确定要退款该订单?', '提示', {
+        _this.$confirm('您确定要退款该发票?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -116,7 +104,7 @@ export default {
       if (!_this.selectOnOff) {
         _this.$message.error('请选择一条数据')
       } else {
-        _this.$confirm('您确定修改订单状态?', '提示', {
+        _this.$confirm('您确定修改发票状态?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'

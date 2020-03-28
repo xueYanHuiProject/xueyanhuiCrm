@@ -10,8 +10,10 @@ import publish from './views/column/013/index.vue'// 管理企业简介
 import machine from './views/column/012/index.vue'// 管理企业简介
 import school from './views/column/024/index.vue'// 管理企业简介
 import demand from './views/column/003/index.vue'// 管理企业简介
+import invoice from './views/column/004/index.vue'// 管理企业简介
 import replyDemand from './views/column/003/components/replyDemand.vue'// 管理企业简介
 import upLoadResult from './views/column/011/components/UpLoadResult.vue'// 管理企业简介
+import upLoadInvoice from './views/column/004/components/UpLoadResult.vue'// 管理企业简介
 import product from './views/column/023/index.vue'// 管理企业简介
 import integral from './views/column/025/index.vue'// 管理企业简介
 import coupon from './views/column/026/index.vue'// 管理企业简介
@@ -50,6 +52,10 @@ export default {
       component: upLoadResult
     },
     {
+      path: '/upLoadInvoice',
+      component: upLoadInvoice
+    },
+    {
       path: '/021',
       component: proInstr
     },
@@ -84,6 +90,10 @@ export default {
     {
       path: '/003',
       component: demand
+    },
+    {
+      path: '/004',
+      component: invoice
     },
     {
       path: '/replyDemand',

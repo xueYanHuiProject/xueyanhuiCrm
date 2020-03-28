@@ -29,28 +29,6 @@
             </el-form>
         </div>
         <el-dialog
-            title="绑定优惠券"
-            width="60%"
-            center
-            :visible.sync="dialogVisible"
-            :before-close="handleClose">
-            <div class="block">
-            <el-form :inline="true" :model="formInline" class="demo-form-inline" label-width="80px" label-position="left">
-                <el-form-item label="优惠券">
-                    <el-select v-model="formInline.conId" placeholder="优惠券" class="adminInputEl">
-                        <el-option :label="item.couTitle" :value="item.id" v-for="(item) in tableList" :key="item.id"></el-option>
-                    </el-select>
-                </el-form-item>
-                <div class="block">
-                    <el-form-item>
-                        <el-button type="primary" @click="onSubmit">确定</el-button>
-                        <el-button @click="dialogVisible=false">取消</el-button>
-                    </el-form-item>
-                </div>
-            </el-form>
-            </div>
-        </el-dialog>
-        <el-dialog
             title="绑定需求模板"
             width="60%"
             center
@@ -70,6 +48,28 @@
                         </el-form-item>
                     </div>
                 </el-form>
+            </div>
+        </el-dialog>
+        <el-dialog
+            title="绑定优惠券"
+            width="60%"
+            center
+            :visible.sync="dialogVisible"
+            :before-close="handleClose">
+            <div class="block">
+            <el-form :inline="true" :model="formInline" class="demo-form-inline" label-width="80px" label-position="left">
+                <el-form-item label="优惠券">
+                    <el-select v-model="formInline.conId" placeholder="优惠券" class="adminInputEl">
+                        <el-option :label="item.couTitle" :value="item.id" v-for="(item) in tableList" :key="item.id"></el-option>
+                    </el-select>
+                </el-form-item>
+                <div class="block">
+                    <el-form-item>
+                        <el-button type="primary" @click="onSubmit">确定</el-button>
+                        <el-button @click="dialogVisible=false">取消</el-button>
+                    </el-form-item>
+                </div>
+            </el-form>
             </div>
         </el-dialog>
         <el-dialog
@@ -111,8 +111,8 @@ export default {
     const adminId = localStorage.getItem('adminId')
     return {
       updateUser: adminId,
-      dialogVisible: false,
       temDialogVisible: false,
+      dialogVisible: false,
       unBind: false,
       tableList: [],
       tableTemList: [],

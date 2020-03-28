@@ -9,109 +9,65 @@
             style="width: 100%">
             <el-table-column
                 prop="id"
-                label="订单ID">
+                label="发票ID">
             </el-table-column>
             <el-table-column
                 prop="usrId"
                 label="用户ID">
             </el-table-column>
             <el-table-column
-                prop="userName"
-                label="会员名称">
-            </el-table-column>
-            <el-table-column
-                prop="payType"
-                :formatter="formatPayType"
-                label="订单来源">
-            </el-table-column>
-            <el-table-column
-                prop="columnName"
-                label="所属栏目">
-            </el-table-column>
-            <el-table-column
-                prop="columnId"
-                label="所属栏目ID">
-            </el-table-column>
-            <el-table-column
-                prop="acceptId"
-                label="管理员ID">
-            </el-table-column>
-            <el-table-column
                 prop="acceptName"
                 label="管理员名称">
             </el-table-column>
             <el-table-column
-                prop="prodName"
-                label="产品名称">
+                prop="orderIds"
+                label="订单ID">
             </el-table-column>
             <el-table-column
-                prop="prodId"
-                label="产品ID">
+                prop="invoiceMoney"
+                label="发票金额">
             </el-table-column>
             <el-table-column
-                prop="orderFromId"
-                label="微信订单ID">
+                prop="bankName"
+                label="开户行">
             </el-table-column>
             <el-table-column
-                prop="isInvoice"
-                :formatter="formatInvoice"
-                label="发票状态">
+                prop="bankNumber"
+                label="账号">
             </el-table-column>
             <el-table-column
-                prop="isOffer"
-                :formatter="formatIsOffer"
-                label="用户已获取报价">
+                prop="taxNumber"
+                label="纳税人识别号">
+            </el-table-column>
+            <el-table-column
+                prop="registerAdress"
+                label="地址">
+            </el-table-column>
+            <el-table-column
+                prop="phone"
+                label="手机号">
+            </el-table-column>
+            <el-table-column
+                prop="names"
+                label="发票抬头">
+            </el-table-column>
+            <el-table-column
+                prop="email"
+                label="邮箱">
             </el-table-column>
             <el-table-column
                 width="150"
-                label="订单文件">
+                label="发票文件">
                 <template slot-scope="scope">
-                    <a :href="scope.row.fileUrl" v-if="scope.row.fileUrl"><el-button>下载查看</el-button></a>
+                    <a :href="scope.row.invoiceFile" v-if="scope.row.invoiceFile"><el-button>下载查看</el-button></a>
                     <span v-else>未上传</span>
                 </template>
-            </el-table-column>
-            <el-table-column
-                width="150"
-                label="交付文件">
-                <template slot-scope="scope">
-                    <a :href="scope.row.endUrl" v-if="scope.row.endUrl"><el-button>下载查看</el-button></a>
-                    <span v-else>未上传</span>
-                </template>
-            </el-table-column>
-            <el-table-column
-                prop="couponId"
-                label="优惠券ID">
-            </el-table-column>
-            <el-table-column
-                prop="payMoney"
-                label="订单报价">
-            </el-table-column>
-            <el-table-column
-                prop="actualMoney"
-                label="实际支付">
-            </el-table-column>
-            <el-table-column
-                prop="orderState"
-                :formatter="formatterOrderState"
-                label="状态">
             </el-table-column>
             <el-table-column
                 prop="createTime"
                 sortable
                 :formatter="formatterCreateTime"
-                label="下单时间">
-            </el-table-column>
-            <el-table-column
-                prop="payTime"
-                sortable
-                :formatter="formatterPayTime"
-                label="支付时间">
-            </el-table-column>
-            <el-table-column
-                prop="refundTime"
-                sortable
-                :formatter="formatterRefundTime"
-                label="退款时间">
+                label="申请时间">
             </el-table-column>
         </el-table>
     </div>
@@ -184,7 +140,7 @@ export default {
       return parseInt(status, 10) === 1 ? '是' : '否'
     },
     formatterCreateTime (row, column) {
-      const time = row.placeTime
+      const time = row.createTime
       return checkInvalid(time) ? '' : formatDate(time)
     },
     formatterPayTime (row, column) {
