@@ -4,7 +4,6 @@
             <HandleForm @getTableList="getTableList"></HandleForm>
             <TableList :tableList="tableList" @setSelect="setSelect" @setSelectData="setSelectData"></TableList>
             <Pagination :pageNum="pageNum" :pageSize="pageSize" :total="total" @handleSizeChange="handleSizeChange" @handleCurrentChange="handleCurrentChange"></Pagination>
-            <ControlModule :selectOnOff="selectOnOff" :selectData="selectData"  @getTableList="getTableList"></ControlModule>
         </section>
     </section>
 </template>

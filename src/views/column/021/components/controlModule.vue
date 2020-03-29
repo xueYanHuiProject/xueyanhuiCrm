@@ -1,4 +1,5 @@
 <template>
+    <section class="wrapper">
     <div class="block adminAuditControl">
         <el-form :inline="true" class="demo-form-inline">
             <el-form-item>
@@ -26,10 +27,12 @@
                 <el-button type="default" @click.native="changeStatus(0)">下架</el-button>
             </el-form-item>
         </el-form>
+    </div>
         <el-dialog
             title="绑定优惠券"
             width="60%"
             center
+            :append-to-body="true"
             :visible.sync="dialogVisible"
             :before-close="handleClose">
             <div class="block">
@@ -52,6 +55,7 @@
             title="解绑优惠券"
             width="60%"
             center
+            :append-to-body="true"
             :visible.sync="unBind"
             :before-close="handleClose">
             <div class="block">
@@ -70,7 +74,7 @@
                 </el-form>
             </div>
         </el-dialog>
-    </div>
+    </section>
 </template>
 <script>
 import axios from 'axios'
@@ -109,6 +113,16 @@ export default {
         return {}
       },
       type: Object
+    }
+  },
+  watch: {
+    unBind (n) {
+      const _this = this
+      if (n) {
+        _this.proConRelaList = _this.selectData.proConRelaList
+      } else {
+        _this.proConRelaList = []
+      }
     }
   },
   mounted () {

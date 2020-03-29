@@ -4,10 +4,12 @@ import feedBack from './views/column/002/index'// 管理全站栏目
 import replyFeedBack from './views/column/002/components/replyFeedBack'// 管理全站栏目
 import tabManage from './views/column/032/index.vue'// 管理全站栏目
 import factoryProduce from './views/column/033/index.vue'// 管理企业简介
+import factoryLink from './views/column/034/index.vue'// 管理企业简介
 import banner from './views/column/031/index.vue'// 管理企业简介
 import password from './views/column/053/index.vue'// 管理企业简介
 import publish from './views/column/013/index.vue'// 管理企业简介
 import machine from './views/column/012/index.vue'// 管理企业简介
+import sampleInfo from './views/column/012/components/samplePage.vue'// 管理企业简介
 import school from './views/column/024/index.vue'// 管理企业简介
 import demand from './views/column/003/index.vue'// 管理企业简介
 import invoice from './views/column/004/index.vue'// 管理企业简介
@@ -23,6 +25,7 @@ import order from './views/column/011/index.vue'// 管理企业简介
 import proTemplate from './views/column/022/index.vue'// 管理企业简介
 import proInstr from './views/column/021/index.vue'// 管理企业简介
 import editProduce from './views/column/033/components/editProduce.vue'// 管理全站栏目
+import editLinkUs from './views/column/034/components/editProduce.vue'// 管理全站栏目
 import editProlnstr from './views/column/021/components/editProlnstr'// 管理全站栏目
 import addTab from './views/column/032/components/addTab'// 管理全站栏目
 import addBanner from './views/column/031/components/addBanner'// 管理全站轮播
@@ -88,6 +91,10 @@ export default {
       component: machine
     },
     {
+      path: '/sampleInfo',
+      component: sampleInfo
+    },
+    {
       path: '/003',
       component: demand
     },
@@ -128,6 +135,10 @@ export default {
       component: factoryProduce
     },
     {
+      path: '/034',
+      component: factoryLink
+    },
+    {
       path: '/031',
       component: banner
     },
@@ -166,6 +177,10 @@ export default {
     {
       path: '/editProduce',
       component: editProduce
+    },
+    {
+      path: '/editLinkUs',
+      component: editLinkUs
     },
     {
       path: '/editProlnstr',

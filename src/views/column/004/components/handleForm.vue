@@ -7,7 +7,7 @@
             <el-input v-model="formInline.usrId
 " placeholder="请输入会员ID" class="adminInputEl"></el-input>
         </el-form-item>
-        <el-form-item label="下单时间">
+        <el-form-item label="申请时间">
             <el-date-picker
                 v-model="duringTime"
                 type="datetimerange"

@@ -41,12 +41,16 @@
                 label="管理员名称">
             </el-table-column>
             <el-table-column
-                prop="prodName"
+                prop="instrName"
                 label="产品名称">
             </el-table-column>
             <el-table-column
                 prop="prodId"
                 label="产品ID">
+            </el-table-column>
+            <el-table-column
+                prop="remarks"
+                label="用户留言">
             </el-table-column>
             <el-table-column
                 prop="orderFromId"

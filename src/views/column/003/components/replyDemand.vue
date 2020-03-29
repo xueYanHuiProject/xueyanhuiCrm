@@ -39,7 +39,7 @@
 <script>
 import axios from 'axios'
 const xhrUrl = {
-  getTableList: '/api/usrFeed/query',
+  getTableList: '/api/usrJoin/query',
   updateProduct: '/api/usrJoin/reply'
 }
 export default {

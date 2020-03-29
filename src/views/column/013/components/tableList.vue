@@ -46,12 +46,7 @@
             <el-table-column
                 prop="isReturn"
                 :formatter="formatIsReturn"
-                label="回复专状态">
-            </el-table-column>
-            <el-table-column
-                prop="status"
-                :formatter="formatStatus"
-                label="回复专状态">
+                label="回复状态">
             </el-table-column>
             <el-table-column
                 prop="createTime"

@@ -11,6 +11,9 @@
                 <el-button type="default" @click.native="startOrder(3)">开始</el-button>
             </el-form-item>
             <el-form-item>
+                <el-button type="default" @click.native="reviewSample()">查看样品资料</el-button>
+            </el-form-item>
+            <el-form-item>
                 <el-button type="default" @click.native="upLoadResult">上传交付文件</el-button>
             </el-form-item>
             <el-form-item>
@@ -63,7 +66,26 @@ export default {
           query: {
             type: 1,
             id: _this.selectData.id,
-            updateUser: _this.updateUser
+            updateUser: _this.updateUser,
+            acceptId: _this.updateUser
+          }
+        })
+      }
+    },
+    reviewSample () {
+      const _this = this
+      console.log(_this.selectOnOff + '开关状态')
+      if (!_this.selectOnOff) {
+        _this.$message.error('请选择一条数据')
+      } else {
+        _this.$router.push({
+          path: '/sampleInfo',
+          query: {
+            type: 1,
+            id: _this.selectData.id,
+            specimenId: _this.selectData.specimenId,
+            updateUser: _this.updateUser,
+            acceptId: _this.updateUser
           }
         })
       }
@@ -85,6 +107,7 @@ export default {
             id: _this.selectData.id,
             orderState: n,
             updateUser: _this.updateUser,
+            acceptId: _this.updateUser,
             sysUserId: _this.updateUser
           }
           axios({

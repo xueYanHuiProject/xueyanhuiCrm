@@ -123,6 +123,12 @@ const param = {
             title: '企业简介',
             icon: 'el-icon-reading',
             routerName: '033'
+          },
+          {
+            index: '3-4',
+            title: '联系我们',
+            icon: 'el-icon-phone',
+            routerName: '034'
           }
         ]
       },

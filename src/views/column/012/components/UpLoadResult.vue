@@ -137,6 +137,7 @@ export default {
         params: {
           id: _this.id,
           updateUser: _this.updateUser,
+            acceptId: _this.updateUser,
             columnId: _this.columnId
         }
       })

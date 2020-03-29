@@ -16,9 +16,6 @@
         <el-form-item label="管理员ID">
             <el-input v-model="formInline.acceptId" placeholder="请输入优惠券ID" class="adminInputEl"></el-input>
         </el-form-item>
-        <el-form-item label="栏目ID">
-            <el-input v-model="formInline.columnId" placeholder="请输入优惠券ID" class="adminInputEl"></el-input>
-        </el-form-item>
         <el-form-item label="订单状态">
             <el-select v-model="formInline.orderState" placeholder="订单状态" class="adminInputEl">
                 <el-option label="未支付" value="1"></el-option>
@@ -80,7 +77,7 @@ export default {
         prodId: '',
         couponId: '',
         acceptId: '',
-        columnId: '',
+        columnId: '624182a8-1384-449b-bad1-41b0c43b71cc',
         updateUser: adminId,
         id: ''
       },
@@ -93,7 +90,7 @@ export default {
         prodId: '',
         couponId: '',
         acceptId: '',
-        columnId: '',
+        columnId: '624182a8-1384-449b-bad1-41b0c43b71cc',
         updateUser: adminId,
         id: ''
       },

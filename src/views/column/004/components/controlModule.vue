@@ -2,7 +2,7 @@
     <div class="block adminAuditControl">
         <el-form :inline="true" class="demo-form-inline">
             <el-form-item>
-                <el-button type="default" @click.native="upLoadResult">上传交付文件</el-button>
+                <el-button type="default" @click.native="upLoadResult">上传发票</el-button>
             </el-form-item>
         </el-form>
     </div>

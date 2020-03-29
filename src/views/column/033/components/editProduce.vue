@@ -9,7 +9,7 @@
                         <el-button type="primary" :inline="true" @click.native="submitInfo">提交</el-button>
                     </el-form-item>
                     <el-form-item class="form-button">
-                        <el-button type="default">返回</el-button>
+                        <el-button type="default" @click.native="returnBack">返回</el-button>
                     </el-form-item>
                 </div>
             </el-form>
@@ -55,6 +55,10 @@ export default {
     _this.initEdit()
   },
   methods: {
+    returnBack () {
+      const _this = this
+      _this.$router.push({ path: '/033' })
+    },
     initEdit () {
       const _this = this
       const E = require('wangeditor')
@@ -106,6 +110,7 @@ export default {
       const _this = this
       axios.get(xhrUrl.getHtml, {
         params: {
+          types: 1,
           updateUser: _this.updateUser,
           id: _this.id
         }
@@ -131,6 +136,7 @@ export default {
         },
         data: {
           id: _this.id,
+          types: 1,
           context: _this.editor.txt.html(),
           updateUser: _this.updateUser
         }
@@ -144,7 +150,7 @@ export default {
             message: '修改成功'
           })
           _this.$router.push({
-            path: '/033'
+            path: '/034'
           })
         }
         console.log(response.data)

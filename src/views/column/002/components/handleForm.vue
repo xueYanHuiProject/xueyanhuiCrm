@@ -6,13 +6,13 @@
         <el-form-item label="会员ID">
             <el-input v-model="formInline.usrId" placeholder="请输入会员ID" class="adminInputEl"></el-input>
         </el-form-item>
-        <el-form-item label="联系人">
+        <el-form-item label="会员名称">
             <el-input v-model="formInline.usrName" placeholder="请输入反馈ID" class="adminInputEl"></el-input>
         </el-form-item>
         <el-form-item label="回复状态">
             <el-select v-model="formInline.feedStatus" placeholder="反馈回复状态" class="adminInputEl">
-                <el-option label="未回复" value="0"></el-option>
-                <el-option label="已回复" value="1"></el-option>
+                <el-option label="未回复" value="1"></el-option>
+                <el-option label="已回复" value="2"></el-option>
             </el-select>
         </el-form-item>
         <el-form-item label="提交时间">

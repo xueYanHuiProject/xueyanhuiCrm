@@ -35,7 +35,7 @@ export default {
     editProduce () {
       const _this = this
       _this.$router.push({
-        path: '/editProduce',
+        path: '/editLinkUs',
         query: {
           id: _this.id
         }
@@ -45,7 +45,7 @@ export default {
       const _this = this
       axios.get(xhrUrl.getHtml, {
         params: {
-          types: 1,
+          types: 2,
           updateUser: _this.updateUser
         }
       })

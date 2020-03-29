@@ -53,6 +53,10 @@
                 label="微信订单ID">
             </el-table-column>
             <el-table-column
+                prop="remarks"
+                label="用户留言">
+            </el-table-column>
+            <el-table-column
                 prop="isInvoice"
                 :formatter="formatInvoice"
                 label="发票状态">

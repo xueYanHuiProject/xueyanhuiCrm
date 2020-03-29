@@ -9,6 +9,7 @@
 </template>
 <script>
 import axios from 'axios'
+import { checkInvalid } from '../../../../utils/common'
 export default {
   data () {
     const adminId = localStorage.getItem('adminId')
@@ -62,13 +63,20 @@ export default {
       if (!_this.selectOnOff) {
         _this.$message.error('请选择一条数据')
       } else {
-        _this.$router.push({
-          path: '/replyFeedBack',
-          query: {
-            id: _this.selectData.id,
-            updateUser: _this.updateUser
-          }
-        })
+        if (checkInvalid(_this.selectData.replyContext)) {
+          _this.$router.push({
+            path: '/replyFeedBack',
+            query: {
+              id: _this.selectData.id,
+              updateUser: _this.updateUser
+            }
+          })
+        } else {
+          _this.$message({
+            type: 'info',
+            message: '已回复'
+          })
+        }
       }
     },
     valid (status, callback) {

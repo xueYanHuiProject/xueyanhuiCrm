@@ -39,9 +39,6 @@
                 <el-option label="个人" value="5"></el-option>
             </el-select>
         </el-form-item>
-        <el-form-item label="职业">
-            <el-input v-model="formInline.userWork" placeholder="请输入会员名称" class="adminInputEl"></el-input>
-        </el-form-item>
         <el-form-item label="提交时间">
             <el-date-picker
                 v-model="duringTime"

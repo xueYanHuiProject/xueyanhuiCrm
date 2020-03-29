@@ -34,9 +34,10 @@
                         <img v-if="formInline.imgUrl" :src="formInline.imgUrl" class="avatar">
                         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                     </el-upload>
+                    <div style="margin-bottom: 10px;width: 300px;color:#333;">建议尺寸：305*280或更高倍数的</div>
                 </div>
             </el-form-item>
-            <div class="admin-handleBar demo-form-inline">
+            <div class="admin-handleBar demo-form-inline" style="margin-top: 40px;">
                 <el-form-item class="form-button">
                     <el-button type="primary" :inline="true" @click.native="addColumn">提交</el-button>
                 </el-form-item>
