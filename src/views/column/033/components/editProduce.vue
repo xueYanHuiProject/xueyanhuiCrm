@@ -149,9 +149,11 @@ export default {
             type: 'success',
             message: '修改成功'
           })
-          _this.$router.push({
-            path: '/034'
-          })
+          setTimeout(() => {
+            _this.$router.push({
+              path: '/034'
+            })
+          }, 1000)
         }
         console.log(response.data)
       }).catch((res) => {

@@ -166,6 +166,10 @@ export default {
         if (parseInt(reqData.code, 10) === 200) {
           console.log('添加成功')
           _this.resetList()
+          _this.$message({
+            type: 'success',
+            message: '操作成功'
+          })
         }
         console.log(response.data)
       }).catch((res) => {
